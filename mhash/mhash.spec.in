@@ -1,8 +1,8 @@
 %define prefix   /usr
 
 Summary: Thread-safe hash library
-Name: mhash
-Version: 0.8.13
+Name: @PACKAGE@
+Version: @VERSION@
 Release: 1
 Copyright: LGPL
 Group: System Environment/Libraries

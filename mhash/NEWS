@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2002/01/26 09:09:44 $)
+mhash ChangeLog ($Date: 2002/02/10 10:10:08 $)
 ===============================================================================
 
 People
@@ -9,7 +9,6 @@ People
 Version ?.?.?
 - mhash_deinit() and mhash_hmac_deinit() now accept a null digest parameter
 - Corrected memory leaks (patch by Gustavo Niemeyer <niemeyer@conectiva.com>)
-
 
 Version 0.8.13 (released November 18 2001)
 - Added ADLER32 algorithm (implementation by Manuel Kasper <mk@neon1.net>)
