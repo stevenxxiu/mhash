@@ -19,7 +19,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.13 2000/12/15 12:42:33 nmav Exp $ */
+/* $Id: mhash.c,v 1.14 2001/01/03 21:55:22 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -60,7 +60,7 @@ static mhash_hash_entry algorithms[] = {
 	MHASH_ENTRY(MHASH_HAVAL192, 24, 128),
 	MHASH_ENTRY(MHASH_HAVAL224, 28, 128),
 	MHASH_ENTRY(MHASH_RIPEMD160, 20, 64),
-	MHASH_ENTRY(MHASH_TIGER, 192 >> 3, 64),
+	MHASH_ENTRY(MHASH_TIGER, 24, 64),
 	MHASH_ENTRY(MHASH_GOST, 32, 0),
 	MHASH_ENTRY(MHASH_CRC32B, 4, 0),
 	{0}
@@ -193,8 +193,9 @@ MHASH mhash_init_int(const hashid type)
 		ripemd_init((void *) ret->state);
 		break;
 	case MHASH_TIGER:
-		ret->state_size = 3 * sizeof(word64);
+		ret->state_size = sizeof(TIGER_CTX);
 		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		tiger_init((void*) ret->state);
 		break;
 	case MHASH_GOST:
 		ret->state_size = sizeof(GostHashCtx);
@@ -260,7 +261,7 @@ int mhash(MHASH thread, const void *plaintext, size_t size)
 			      size);
 		break;
 	case MHASH_TIGER:
-		tiger(plaintext, size, (void *) thread->state);
+		tiger_update((void*)thread->state, (void*)plaintext, size);
 		break;
 	case MHASH_GOST:
 		gosthash_update((void *) thread->state, plaintext, size);
@@ -318,10 +319,10 @@ WIN32DLL_DEFINE
 		rtmp = digest;
 		break;
 	case MHASH_TIGER:
-		digest = hash_malloc(192 >> 3);
+		tiger_final((void*) thread->state);
+		digest = hash_malloc(TIGER_DIGESTSIZE);
 		if (digest == NULL) return NULL;
-		memcpy(digest, (void *) thread->state, 192 >> 3);
-		mhash_32bit_conversion(digest, 192 >> 5);
+		tiger_digest((void *) thread->state, digest);
 		rtmp = digest;
 		break;
 	case MHASH_GOST:
@@ -431,9 +432,10 @@ WIN32DLL_DEFINE
 		return_val = digest;
 		break;
 	case MHASH_TIGER:
-		digest = hash_malloc(192 >> 3);
+		digest = hash_malloc(TIGER_DIGESTSIZE);
 		if (digest == NULL) return NULL;
-		memcpy(digest, (void *) thread->state, 192 >> 3);
+		tiger_final((void *) thread->state);
+		tiger_digest((void *) thread->state, digest);
 		return_val = digest;
 		break;
 	case MHASH_GOST:
