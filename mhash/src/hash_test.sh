@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# $Id: hash_test.sh,v 1.7 2000/04/03 14:03:58 nikos Exp $
+# $Id: hash_test.sh,v 1.1.1.1 2000/04/04 10:34:57 nmav Exp $
 
 if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
   if (echo $ac_n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
@@ -125,13 +125,6 @@ test_hash 8 "This is message, length=32 bytes" \
 		B1C466D37519B82E8319819FF32595E047A28CB6F83EFF1C6916A815A637FFFA
 test_hash 8 "Suppose the original message has length = 50 bytes" \
 		471ABA57A60A770D3A76130635C1FBEA4EF14DE51F78B4AE57DD893B62F55208
-echo ""
-
-echo $ac_n "testing MD2 $ac_c"
-test_hash 10 "abcdefghijklmnopqrstuvwxyz" \
-		4E8DDFF3650292AB5A4108C3AA47940B
-test_hash 10 "Suppose the original message has length = 50 bytes" \
-		65378BE7544F94E9A967DA1BB7A8A53B
 echo ""
 
 

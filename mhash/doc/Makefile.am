@@ -1,6 +1,6 @@
 
 EXTRA_DIST = mhash.pod md5-rfc1321.txt \
-		mhash.html mhash.0 mhash.3 md2-rfc1319.txt md2.license
+		mhash.html mhash.0 mhash.3
 
 man_MANS = $(srcdir)/mhash.3
 

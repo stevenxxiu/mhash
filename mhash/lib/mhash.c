@@ -19,7 +19,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.12 2000/04/03 14:03:57 nikos Exp $ */
+/* $Id: mhash.c,v 1.1.1.1 2000/04/04 10:34:30 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -37,7 +37,6 @@
 #include "mhash_tiger.h"
 #include "mhash_ripemd.h"
 #include "gosthash.h"
-#include "mhash_md2.h"
 
 /* 19/03/2000 Changes for better thread handling --nikos */
 
@@ -53,9 +52,6 @@ struct mhash_hash_entry {
 
 static mhash_hash_entry algorithms[] = {
 	MHASH_ENTRY(MHASH_CRC32, 4, 0),
-#ifndef MHASH_DISABLE_MD2
-	MHASH_ENTRY(MHASH_MD2, 16, 0),
-#endif
 	MHASH_ENTRY(MHASH_MD5, 16, 64),
 	MHASH_ENTRY(MHASH_SHA1, 20, 64),
 	MHASH_ENTRY(MHASH_HAVAL256, 32, 128),
@@ -121,12 +117,6 @@ MHASH mhash_init_int(const hashid type)
 		ret->state = malloc(sizeof(MD5_CTX));
 		MD5Init((void *) ret->state);
 		break;
-#ifndef MHASH_DISABLE_MD2
-	case MHASH_MD2:
-		ret->state = malloc(sizeof(MD2_CTX));
-		MD2Init((void *) ret->state);
-		break;
-#endif
 	case MHASH_SHA1:
 		ret->state = malloc(sizeof(SHA_CTX));
 		sha_init((void *) ret->state);
@@ -201,11 +191,6 @@ int mhash(MHASH thread, const void *plaintext, size_t size)
 	case MHASH_MD5:
 		MD5Update((void *) thread->state, plaintext, size);
 		break;
-#ifndef MHASH_DISABLE_MD2
-	case MHASH_MD2:
-		MD2Update((void *) thread->state, plaintext, size);
-		break;
-#endif
 	case MHASH_SHA1:
 		sha_update((void *) thread->state, (void *) plaintext,
 			   size);
@@ -248,15 +233,6 @@ void *mhash_end(MHASH thread)
 		MD5Final(digest, (void *) thread->state);
 		rtmp=digest;
 		break;
-#ifndef MHASH_DISABLE_MD2
-	case MHASH_MD2:
-		digest =
-		    malloc(mhash_get_block_size(thread->algorithm_given));
-
-		MD2Final(digest, (void *) thread->state);
-		rtmp = digest;
-		break;
-#endif
 	case MHASH_SHA1:
 		sha_final((void *) thread->state);
 		digest = malloc(SHA_DIGESTSIZE);
@@ -355,14 +331,6 @@ void *mhash_hmac_end(MHASH thread)
 		MD5Final(digest, (void *) thread->state);
 		return_val = digest;
 		break;
-#ifndef MHASH_DISABLE_MD2
-	case MHASH_MD2:
-		digest =
-		    malloc(mhash_get_block_size(thread->algorithm_given));
-		MD2Final(digest, (void *) thread->state);
-		return_val = digest;
-		break;
-#endif
 	case MHASH_SHA1:
 		digest = malloc(SHA_DIGESTSIZE);
 		sha_final((void *) thread->state);
