@@ -19,7 +19,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.2 2000/04/11 11:58:33 nmav Exp $ */
+/* $Id: mhash.c,v 1.3 2000/04/11 12:11:38 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -411,6 +411,7 @@ MHASH mhash_hmac_init(const hashid type, void *key, int keysize, int block)
 			ipad = malloc(ret->hmac_block);
 
 			if (keysize > ret->hmac_block) {
+				fprintf(stderr, "keysize %d larger to %d\n", keysize, block);
 				tmptd = mhash_init(type);
 				mhash(tmptd, key, keysize);
 				ret->hmac_key_size =
