@@ -19,7 +19,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.4 2000/04/11 12:20:14 nmav Exp $ */
+/* $Id: mhash.c,v 1.5 2000/04/11 12:23:13 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -417,7 +417,6 @@ MHASH mhash_hmac_init(const hashid type, void *key, int keysize, int block)
 				    mhash_get_block_size(type);
 				ret->hmac_key = mhash_end(tmptd);
 			} else {
-//				ret->hmac_key_size = keysize;
 				ret->hmac_key = calloc(1, ret->hmac_block);
 				memmove(ret->hmac_key, key, keysize);
 				ret->hmac_key_size = ret->hmac_block;
