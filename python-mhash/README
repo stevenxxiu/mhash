@@ -1,0 +1,40 @@
+This is the README file of python-mhash.
+
+Description
+-----------
+
+The python mhash module provides an interface for the mhash library.
+The mhash library provides an easy way to access strong hashes such as
+MD5, SHA1 and other algorithms.
+
+Features
+--------
+
+The python-mhash module provides the following features:
+
+o  Free software (GNU Lesser General Public License)
+o  Reentrancy support (*)
+o  Support for known strong algorithms (*)
+o  Support for less-known algorithms such as GOST (*)
+o  Support for HMAC hashing (*)
+o  Support for Python newstyle classes, allowing subclassing
+o  Unittests testing functionality provided by the module
+
+(*) mhash library features
+
+Disclaimer
+----------
+
+Please read the file LICENSE before using python-mhash.
+
+New Versions
+------------
+
+Information on how to retrieve new versions of mhash and python-mhash
+can be found on http://mhash.sourceforge.net.
+
+Credits
+-------
+
+Please read the file AUTHORS.
+
