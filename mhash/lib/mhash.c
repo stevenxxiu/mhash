@@ -19,7 +19,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.6 2000/04/14 08:44:53 nmav Exp $ */
+/* $Id: mhash.c,v 1.7 2000/04/14 19:09:06 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -107,6 +107,8 @@ MHASH mhash_init_int(const hashid type)
 
 	ret = malloc(sizeof(MHASH_INSTANCE));
 	ret->algorithm_given = type;
+	ret->hmac_key = NULL;
+	ret->state = NULL;
 
 	switch (type) {
 	case MHASH_CRC32:
@@ -274,7 +276,9 @@ void *mhash_end(MHASH thread)
 		break;
 	}
 
-	free(thread->state);
+	if (NULL != thread->state) {
+		free(thread->state);
+	}
 	free(thread);
 
 	return rtmp;
@@ -378,7 +382,12 @@ void *mhash_hmac_end(MHASH thread)
 	mhash(tmptd, return_val,
 	      mhash_get_block_size(thread->algorithm_given));
 
+	if (NULL != return_val) {
+		free(return_val);
+	}
+	
 	free(thread->state);
+	free(opad);
 	mhash_bzero( thread->hmac_key, thread->hmac_key_size);
 	free(thread->hmac_key);
 	free(thread);
@@ -440,6 +449,8 @@ MHASH mhash_hmac_init(const hashid type, void *key, int keysize, int block)
 			}
 
 			mhash(ret, ipad, ret->hmac_block);
+			
+			free(ipad);
 		}
 
 
