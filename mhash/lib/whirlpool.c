@@ -55,9 +55,11 @@
  * the origanl code are in the public domain.
  *
  */
-                                                                                                                                                              
 
 #include "libdefs.h"
+
+#ifdef ENABLE_WHIRLPOOL
+
 #include "mhash_whirlpool.h"
 
 /*
@@ -969,3 +971,5 @@ void whirlpool_digest(const struct whirlpool_ctx * ctx,
         *digest++ = (byte)(ctx->hash[i]      );
     }
 }
+
+#endif /* ENABLE_WHIRLPOOL */

@@ -23,7 +23,7 @@
 #ifndef MHASH_H
 #define MHASH_H
 
-/* $Id: mhash.h,v 1.22 2004/05/02 20:03:10 imipak Exp $ */
+/* $Id: mhash.h,v 1.23 2005/01/12 16:54:25 imipak Exp $ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -70,6 +70,9 @@ extern "C" {
 		MHASH_RIPEMD128,
 		MHASH_RIPEMD256,
 		MHASH_RIPEMD320,
+		MHASH_SNEFRU128,  /* 8 passes */
+		MHASH_SNEFRU256,  /* 8 passes */
+		MHASH_MD2,
 	};
 
 	enum keygenid {

@@ -314,17 +314,18 @@ void sha256_sha224_final(struct sha256_sha224_ctx *ctx)
 	sha256_sha224_transform(ctx->state, data);
 }
 
-void sha256_sha224_digest(const struct sha256_sha224_ctx *ctx, byte * s, int len)
+static void sha256_sha224_digest(const struct sha256_sha224_ctx *ctx, 
+				 byte * s, int len)
 {
-	int i;
-
-	if (s!=NULL)
-		for (i = 0; i < len; i++) {
-			*s++ = ctx->state[i] >> 24;
-			*s++ = 0xff & (ctx->state[i] >> 16);
-			*s++ = 0xff & (ctx->state[i] >> 8);
-			*s++ = 0xff & ctx->state[i];
-		}
+  int i;
+  
+  if (s!=NULL)
+    for (i = 0; i < len; i++) {
+      *s++ = ctx->state[i] >> 24;
+      *s++ = 0xff & (ctx->state[i] >> 16);
+      *s++ = 0xff & (ctx->state[i] >> 8);
+      *s++ = 0xff & ctx->state[i];
+    }
 }
 
 void sha256_digest(const struct sha256_sha224_ctx *ctx, byte * s)

@@ -22,7 +22,6 @@
  * Niels Möller and Peter Gutmann (see sha256_sha224.c of the mhash library)
  */ 
 
-
 #include "libdefs.h"
 
 #ifdef ENABLE_SHA512_SHA384
@@ -352,22 +351,22 @@ void sha512_sha384_final(struct sha512_sha384_ctx *ctx)
 	sha512_sha384_transform(ctx->state, data);
 }
 
-void 
+static void 
 sha512_sha384_digest(const struct sha512_sha384_ctx *ctx, byte * s, int len)
 {
-	int i;
+  int i;
 
-	if (s!=NULL)
-		for (i = 0; i < len; i++) {
-			*s++ = ctx->state[i] >> 56;
-			*s++ = 0xff & (ctx->state[i] >> 48);
-			*s++ = 0xff & (ctx->state[i] >> 40);
-			*s++ = 0xff & (ctx->state[i] >> 32);
-			*s++ = 0xff & (ctx->state[i] >> 24);
-			*s++ = 0xff & (ctx->state[i] >> 16);
-			*s++ = 0xff & (ctx->state[i] >> 8);
-			*s++ = 0xff & ctx->state[i];
-		}
+  if (s!=NULL)
+    for (i = 0; i < len; i++) {
+      *s++ = ctx->state[i] >> 56;
+      *s++ = 0xff & (ctx->state[i] >> 48);
+      *s++ = 0xff & (ctx->state[i] >> 40);
+      *s++ = 0xff & (ctx->state[i] >> 32);
+      *s++ = 0xff & (ctx->state[i] >> 24);
+      *s++ = 0xff & (ctx->state[i] >> 16);
+      *s++ = 0xff & (ctx->state[i] >> 8);
+      *s++ = 0xff & ctx->state[i];
+    }
 }
 
 void sha512_digest(const struct sha512_sha384_ctx *ctx, byte * s)

@@ -20,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.36 2004/05/02 20:03:10 imipak Exp $ */
+/* $Id: mhash.c,v 1.37 2005/01/12 16:54:25 imipak Exp $ */
 
 #include <stdlib.h>
 
@@ -42,6 +42,10 @@
 
 #ifdef ENABLE_MD4
 # include "mhash_md4.h"
+#endif
+
+#ifdef ENABLE_MD2
+# include "mhash_md2.h"
 #endif
 
 #ifdef ENABLE_SHA1
@@ -76,6 +80,10 @@
 # include "mhash_whirlpool.h"
 #endif
 
+#ifdef ENABLE_SNEFRU
+# include "mhash_snefru.h"
+#endif
+
 /* 19/03/2000 Changes for better thread handling --nikos 
  * Actually it is thread safe.
  */
@@ -84,8 +92,8 @@
 
 #define MHASH_ENTRY(name, blksize, hash_pblock, state_size, init_func, \
 	hash_func, final_func, deinit_func) \
-	{ #name, name, blksize, hash_pblock, state_size, init_func,\
-		hash_func, final_func, deinit_func }
+	{ #name, name, blksize, hash_pblock, state_size, (INIT_FUNC) init_func,\
+	(HASH_FUNC) hash_func, (FINAL_FUNC) final_func, (DEINIT_FUNC) deinit_func }
 
 struct mhash_hash_entry {
 	char *name;
@@ -121,6 +129,11 @@ static const mhash_hash_entry algorithms[] = {
 #ifdef ENABLE_MD4
 	MHASH_ENTRY(MHASH_MD4, 16, 64, sizeof(MD4_CTX), MD4Init, 
 		MD4Update, NULL, MD4Final),
+#endif
+
+#ifdef ENABLE_MD2
+	MHASH_ENTRY(MHASH_MD2, 16, 16, sizeof(MD2_CTX), md2_init,
+		md2_update, NULL, md2_digest),
 #endif
 
 #ifdef ENABLE_SHA1
@@ -184,6 +197,14 @@ static const mhash_hash_entry algorithms[] = {
 	MHASH_ENTRY(MHASH_WHIRLPOOL, 64, 64, sizeof(WHIRLPOOL_CTX), whirlpool_init, 
 		    whirlpool_update, whirlpool_final, whirlpool_digest),
 #endif
+
+#ifdef ENABLE_SNEFRU
+	MHASH_ENTRY(MHASH_SNEFRU128, 16, 64, sizeof(SNEFRU_CTX), snefru_init, 
+		    snefru128_update, snefru128_final, snefru128_digest),
+	MHASH_ENTRY(MHASH_SNEFRU256, 32, 64, sizeof(SNEFRU_CTX), snefru_init, 
+		    snefru256_update, snefru256_final, snefru256_digest),
+#endif
+
 	{0}
 };
 
