@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2001/10/29 03:03:20 $)
+mhash ChangeLog ($Date: 2001/11/12 14:14:24 $)
 ===============================================================================
 
 People
@@ -6,7 +6,7 @@ People
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
 
-Version 0.8.13
+Version 0.8.13 (released November 18 2001)
 - Added ADLER32 algorithm (implementation by Manuel Kasper <mk@neon1.net>)
 
 Version 0.8.12 (released October 29 2001)

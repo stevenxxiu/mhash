@@ -54,9 +54,14 @@ B< Finalizing Functions >
 B< Available Hashes >
 
 I<CRC32>:
-The crc32 algorithm used to compute checksums. The two variants used
+The crc32 algorithm is used to compute checksums. The two variants used
 in mhash are: B<MHASH_CRC32> (like the one used in ethernet) and B<MHASH_CRC32B>
 (like the one used in ZIP programs).
+
+I<ADLER32>:
+The adler32 algorithm is used to compute checksums. It is faster than
+CRC32 and it is considered to be as reliable as CRC32. This algorithm
+is defined as B<MHASH_ADLER32>.
 
 I<MD5>: The MD5 algorithm by Ron Rivest and RSA. In mhash this algorithm is defined
 as B<MHASH_MD5>.
