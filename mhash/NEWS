@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2002/03/11 18:55:13 $)
+mhash ChangeLog ($Date: 2002/03/28 19:32:23 $)
 ===============================================================================
 
 People
@@ -6,7 +6,7 @@ People
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
 
-Version 0.8.14
+Version 0.8.14 (release March 28 2002)
 - mhash_deinit() and mhash_hmac_deinit() now accept a null digest parameter
 - Corrected memory leaks (patch by Gustavo Niemeyer <niemeyer@conectiva.com>)
 - Corrected bug in Gost hash algorithm (pointed out by Mike Gorchak <mike@malva.ua>)
