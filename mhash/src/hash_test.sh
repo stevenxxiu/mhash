@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# $Id: hash_test.sh,v 1.6 2001/02/24 22:41:35 nmav Exp $
+# $Id: hash_test.sh,v 1.7 2001/04/06 12:44:31 nmav Exp $
 
 if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
   if (echo $ac_n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
@@ -149,13 +149,13 @@ test_hash 8 "Suppose the original message has length = 50 bytes" \
 echo ""
 
 echo $ac_n "testing MD4 $ac_c"
-test_hash 16 "" 31d6cfe0d16ae931b73c59d7e0c089c0
-test_hash 16 a bde52cb31de33e46245e05fbdbd6fb24
-test_hash 16 abc a448017aaf21d8525fc10ae87aa6729d
-test_hash 16 "message digest" d9130a8164549fe818874806e1c7014b
-test_hash 16 abcdefghijklmnopqrstuvwxyz d79e1c308aa5bbcdeea8ed63df412da9
+test_hash 16 "" 31D6CFE0D16AE931B73C59D7E0C089C0
+test_hash 16 a BDE52CB31DE33E46245E05FBDBD6FB24
+test_hash 16 abc A448017AAF21D8525FC10AE87AA6729D
+test_hash 16 "message digest" D9130A8164549FE818874806E1C7014B
+test_hash 16 abcdefghijklmnopqrstuvwxyz D79E1C308AA5BBCDEEA8ED63DF412DA9
 test_hash 16 12345678901234567890123456789012345678901234567890123456789012345678901234567890 \
-		e33b4ddc9c38f2199c3e7b164fcc0536
+		E33B4DDC9C38F2199C3E7B164FCC0536
 echo ""
 
 
