@@ -1,3 +1,25 @@
+2001-01-21  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/buildconf, /cvsroot/mhash/mhash/ChangeLog, /cvsroot/mhash/mhash/lib/keygen_hex.c, /cvsroot/mhash/mhash/lib/Makefile.am, /cvsroot/mhash/mhash/lib/md5.c, /cvsroot/mhash/mhash/lib/mhash_md5.h, /cvsroot/mhash/mhash/lib/mhash_tiger.h, /cvsroot/mhash/mhash/lib/tiger.c, /cvsroot/mhash/mhash/NEWS, /cvsroot/mhash/mhash/README, /cvsroot/mhash/mhash/src/hash_test.sh, /cvsroot/mhash/mhash/TODO:
+	changes for MD4, TIGER160 and TIGER128
+
+	* /cvsroot/mhash/mhash/lib/mhash.h, /cvsroot/mhash/mhash/lib/mhash_int.h:
+	added MD4, TIGER160, TIGER128
+
+	* /cvsroot/mhash/mhash/lib/mhash.c: added MD4, TIGER128 and TIGER160
+
+	* /cvsroot/mhash/mhash/lib/md4.c, /cvsroot/mhash/mhash/lib/mhash_md4.h:
+	Added MD4 algorithm
+
+	* /cvsroot/mhash/mhash/configure.in: *** empty log message ***
+
+	* /cvsroot/mhash/mhash/NEWS: more news!
+
+	* /cvsroot/mhash/mhash/src/hash_test.sh: corrected tiger vectors
+
+	* /cvsroot/mhash/mhash/lib/mhash.c, /cvsroot/mhash/mhash/lib/mhash_tiger.h, /cvsroot/mhash/mhash/lib/ripemd.c, /cvsroot/mhash/mhash/lib/tiger.c, /cvsroot/mhash/mhash/lib/tiger_sboxes.c, /cvsroot/mhash/mhash/lib/gosthash.c:
+	corrected tiger implementation and minor fixes
+
 2001-01-03  Nikos Mavroyanopoulos  <nmav@crystal>
 
 	* /cvsroot/mhash/mhash/NEWS: *** empty log message ***

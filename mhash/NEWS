@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2001/01/21 17:17:09 $)
+mhash ChangeLog ($Date: 2001/01/21 19:30:36 $)
 ===============================================================================
 
 People
@@ -6,10 +6,13 @@ People
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
 
-Version 0.8.6
+Version 0.8.7 (released on January 28 2001)
+- MD4 and MD5 now compile on big endian machines
+
+Version 0.8.6 (released on January 21 2001)
 - Corrected Tiger implementation (NM, bug pointed out by Gordon Mohr <gojomo@usa.net>)
-- Added MD4
-- Added TIGER128 and TIGER160
+- Added MD4 (NM)
+- Added TIGER128 and TIGER160 (NM)
 
 Version 0.8.5 (released on January 2001)
 - added checks for malloc failures (NM, some patches by Sami Farin <sfarin@ratol.fi>)

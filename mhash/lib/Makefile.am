@@ -1,4 +1,4 @@
-AUTOMAKE_OPTIONS = foreign
+#AUTOMAKE_OPTIONS = foreign
 
 noinst_HEADERS = mhash_ripemd.h gosthash.h mhash_crc32.h mhash_md5.h mhash_tiger.h libdefs.h mhash_haval.h mhash_sha1.h keygen.h mhash_int.h mhash_md4.h
  
