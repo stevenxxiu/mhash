@@ -20,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.26 2001/11/19 11:52:17 nmav Exp $ */
+/* $Id: mhash.c,v 1.27 2002/01/26 09:09:45 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -178,77 +178,120 @@ MHASH mhash_init_int(const hashid type)
 	case MHASH_CRC32:
 	case MHASH_CRC32B:
 		ret->state_size = sizeof(word32);
-		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		if ( (ret->state = malloc(ret->state_size)) == NULL) {
+			free(ret);
+			return MHASH_FAILED;
+		}
 		mhash_clear_crc32((void *) ret->state);
 		break;
 	case MHASH_ADLER32:
 		ret->state_size = sizeof(word32);
-		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		if ( (ret->state = malloc(ret->state_size)) == NULL) {
+			free(ret);
+			return MHASH_FAILED;
+		}
 		mhash_clear_adler32((void *) ret->state);
 		break;
 	case MHASH_MD5:
 		ret->state_size = sizeof(MD5_CTX);
-		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		if ( (ret->state = malloc(ret->state_size)) == NULL) {
+			free(ret);
+			return MHASH_FAILED;
+		}
 		MD5Init((void *) ret->state);
 		break;
 	case MHASH_MD4:
 		ret->state_size = sizeof(MD4_CTX);
-		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		if ( (ret->state = malloc(ret->state_size)) == NULL) {
+			free(ret);
+			return MHASH_FAILED;
+		}
 		MD4Init((void *) ret->state);
 		break;
 	case MHASH_SHA1:
 		ret->state_size = sizeof(SHA_CTX);
-		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		if ( (ret->state = malloc(ret->state_size)) == NULL) {
+			free(ret);
+			return MHASH_FAILED;
+		}
 		sha_init((void *) ret->state);
 		break;
 	case MHASH_SHA256:
 		ret->state_size = sizeof( SHA256_CTX);
-		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		if ( (ret->state = malloc(ret->state_size)) == NULL) {
+			free(ret);
+			return MHASH_FAILED;
+		}
 		sha256_init((void *) ret->state);
 		break;
 	case MHASH_HAVAL256:
 		ret->state_size = sizeof(havalContext);
-		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		if ( (ret->state = malloc(ret->state_size)) == NULL) {
+			free(ret);
+			return MHASH_FAILED;
+		}
 		havalInit((void *) ret->state, 3, 256);
 		break;
 	case MHASH_HAVAL224:
 		ret->state_size = sizeof(havalContext);
-		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		if ( (ret->state = malloc(ret->state_size)) == NULL) {
+			free(ret);
+			return MHASH_FAILED;
+		}
 		havalInit((void *) ret->state, 3, 224);
 		break;
 	case MHASH_HAVAL192:
 		ret->state_size = sizeof(havalContext);
-		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		if ( (ret->state = malloc(ret->state_size)) == NULL) {
+			free(ret);
+			return MHASH_FAILED;
+		}
 		havalInit((void *) ret->state, 3, 192);
 		break;
 	case MHASH_HAVAL160:
 		ret->state_size = sizeof(havalContext);
-		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		if ( (ret->state = malloc(ret->state_size)) == NULL) {
+			free(ret);
+			return MHASH_FAILED;
+		}
 		havalInit((void *) ret->state, 3, 160);
 		break;
 	case MHASH_HAVAL128:
 		ret->state_size = sizeof(havalContext);
-		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		if ( (ret->state = malloc(ret->state_size)) == NULL) {
+			free(ret);
+			return MHASH_FAILED;
+		}
 		havalInit((void *) ret->state, 3, 128);
 		break;
 	case MHASH_RIPEMD160:
 		ret->state_size = sizeof(RIPEMD_CTX);
-		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		if ( (ret->state = malloc(ret->state_size)) == NULL) {
+			free(ret);
+			return MHASH_FAILED;
+		}
 		ripemd_init((void *) ret->state);
 		break;
 	case MHASH_TIGER:
 	case MHASH_TIGER128:
 	case MHASH_TIGER160:
 		ret->state_size = sizeof(TIGER_CTX);
-		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		if ( (ret->state = malloc(ret->state_size)) == NULL) {
+			free(ret);
+			return MHASH_FAILED;
+		}
 		tiger_init((void*) ret->state);
 		break;
 	case MHASH_GOST:
 		ret->state_size = sizeof(GostHashCtx);
-		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		if ( (ret->state = malloc(ret->state_size)) == NULL) {
+			free(ret);
+			return MHASH_FAILED;
+		}
 		gosthash_reset((void *) ret->state);
 		break;
 	default:
+		free(ret);
 		ret = MHASH_FAILED;
 		break;
 	}
