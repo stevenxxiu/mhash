@@ -1,4 +1,4 @@
-mhash README ($Date: 2000/04/04 10:34:20 $)
+mhash README ($Date: 2001/01/21 19:30:36 $)
 ===============================================================================
 
   OVERVIEW
@@ -14,8 +14,7 @@ mhash README ($Date: 2000/04/04 10:34:20 $)
 
   The mhash library provides the following features:
 
-   o  Open-Source software (GNU Lesser General Public License)
-   o  Useable for both commercial and non-commercial use
+   o  Free software (GNU Lesser General Public License)
    o  Reentrancy support
    o  Support for known strong algorithms
    o  Support for less-known algorithms such as GOST

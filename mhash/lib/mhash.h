@@ -22,7 +22,7 @@
 #ifndef MHASH_H
 #define MHASH_H
 
-/* $Id: mhash.h,v 1.7 2000/12/15 12:42:33 nmav Exp $ */
+/* $Id: mhash.h,v 1.8 2001/01/21 19:28:49 nmav Exp $ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -34,6 +34,7 @@ extern "C" {
    be removed at some time */
 #ifdef MHASH_BACKWARDS_COMPATIBLE
 # define MHASH_HAVAL MHASH_HAVAL256
+# define MHASH_TIGER192 MHASH_TIGER
 # define hmac_mhash_init mhash_hmac_init
 # define hmac_mhash_end mhash_hmac_end
 #endif

@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2001/02/01 18:38:42 $)
+mhash ChangeLog ($Date: 2001/02/04 10:25:51 $)
 ===============================================================================
 
 People
@@ -8,6 +8,7 @@ People
 
 Version 0.8.9 (released on February 04 2001)
 - TIGER runs on alpha (NM)
+- Documentation updated
 
 Version 0.8.8 (released on January 29 2001)
 - MD4 and MD5 now compile on big endian machines (NM)

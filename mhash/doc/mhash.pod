@@ -45,39 +45,59 @@ B< Finalizing Functions >
 
 B< Available Hashes >
 
- enum hashid {
-	MHASH_CRC32,
-	MHASH_MD5,
-	MHASH_SHA1,
-	MHASH_HAVAL256,	/* 3 passes */
-	MHASH_RIPEMD160 = 5,
-	MHASH_TIGER = 7,
-	MHASH_GOST,
-	MHASH_CRC32B,
-	MHASH_HAVAL224 = 10,
-	MHASH_HAVAL192,
-	MHASH_HAVAL160,
-	MHASH_HAVAL128,
-	MHASH_TIGER128,
-	MHASH_TIGER160,
-	MHASH_MD4
- };
- typedef enum hashid hashid;
+I<CRC32>:
+The crc32 algorithm used to compute checksums. The two variants used
+in mhash are: B<MHASH_CRC32> (like the one used in ethernet) and B<MHASH_CRC32B>
+(like the one used in ZIP programs).
+
+I<MD5>: The MD5 algorithm by Ron Rivest and RSA. In mhash this algorithm is defined
+as B<MHASH_MD5>.
+
+I<MD4>: The MD4 algorithm by Ron Rivest and RSA. This algorithm
+is considered old. In mhash this algorithm is defined
+as B<MHASH_MD4>.
+
+I<SHA1>: The SHA algorithm by US. NIST/NSA. This algorithm is specified
+for use in the NIST's Digital Signature Standard. In mhash this algorithm is defined
+as B<MHASH_SHA1>.
+
+I<HAVAL>:
+HAVAL is a one-way hashing algorithm with variable length of output.
+HAVAL is a modification of MD5. 
+Defined in mhash as: B<MHASH_HAVAL256, MHASH_HAVAL192, MHASH_HAVAL160, MHASH_HAVAL128>.
+
+I<RIPEMD160>: 
+RIPEMD-160 is a 160-bit cryptographic hash function, designed by Hans Dobbertin, Antoon Bosselaers, and Bart Preneel. It is intended to be used as a secure replacement
+for the 128-bit hash functions MD4, MD5, and RIPEMD. MD4 and MD5 were developed by Ron Rivest for RSA Data Security, while RIPEMD was developed in the
+framework of the EU project RIPE (RACE Integrity Primitives Evaluation, 1988-1992).
+In mhash this algorithm is defined as B<MHASH_RIPEMD160>.
+
+I<TIGER>: Tiger is a fast hash function, by Eli Biham and Ross Anderson.
+Tiger was designed to be very fast on modern computers, and in particular on the state-of-the-art 64-bit computers,
+while it is still not slower than other suggested hash functions on 32-bit machines. 
+In mhash this algorithm is defined as: B<MHASH_TIGER192, MHASH_TIGER160, MHASH_TIGER128>.
+
+I<GOST>: GOST algorithm is a russian standard and it uses the
+GOST encryption algorithm to produce a 256 bit hash value. This algorithm
+is specified for use in the Russian Digital Signature Standard.
+In mhash this algorithm is defined as B<MHASH_GOST>.
 
 B< Available Key Generation algorithms >
 
- enum keygenid {
-	KEYGEN_MCRYPT,     /* The key generator used in mcrypt */
-	KEYGEN_ASIS,       /* Just returns the password as binary key */
-	KEYGEN_HEX,        /* Just converts a hex key into a binary one */
-	KEYGEN_PKDES,      /* The transformation used in Phil Karn's DES
-	                    * encryption program */
-	KEYGEN_S2K_SIMPLE, /* The OpenPGP (rfc2440) Simple S2K */
-	KEYGEN_S2K_SALTED, /* The OpenPGP Salted S2K */
-	KEYGEN_S2K_ISALTED /* The OpenPGP Iterated Salted S2K */
- };
+I<KEYGEN_MCRYPT>: The key generator used in mcrypt.
 
- typedef enum keygenid keygenid;
+I<KEYGEN_ASIS>: Just returns the password as binary key.
+
+I<KEYGEN_HEX>: Just converts a hex key into a binary one.
+
+I<KEYGEN_PKDES>: The transformation used in Phil Karn's DES encryption program.
+
+I<KEYGEN_S2K_SIMPLE>: The OpenPGP (rfc2440) Simple S2K.
+
+I<KEYGEN_S2K_SALTED>: The OpenPGP Salted S2K.
+
+I<KEYGEN_S2K_ISALTED>: The OpenPGP Iterated Salted S2K.
+
 
 =head1 DESCRIPTION
 
