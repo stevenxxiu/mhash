@@ -20,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.20 2001/10/16 18:19:47 nmav Exp $ */
+/* $Id: mhash.c,v 1.21 2001/10/19 21:46:27 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -125,7 +125,10 @@ WIN32DLL_DEFINE char *mhash_get_hash_name(hashid type)
 	char *ret = NULL;
 
 	/* avoid prefix */
-	MHASH_ALG_LOOP( ret = p->name + sizeof("MHASH_") - 1);
+	MHASH_ALG_LOOP( ret = p->name);
+
+	if (ret!=NULL) ret += sizeof("MHASH_") - 1;
+	
 	return mystrdup(ret);
 }
 
@@ -134,7 +137,10 @@ WIN32DLL_DEFINE const char *mhash_get_hash_name_static(hashid type)
 	char *ret = NULL;
 
 	/* avoid prefix */
-	MHASH_ALG_LOOP( ret = p->name + sizeof("MHASH_") - 1);
+	MHASH_ALG_LOOP( ret = p->name);
+	
+	if ( ret !=NULL) ret+= sizeof("MHASH_") - 1;
+
 	return ret;
 }
 

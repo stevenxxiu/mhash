@@ -119,7 +119,8 @@ char *mhash_get_keygen_name(hashid type)
 	char *ret = NULL;
 
 	/* avoid prefix */
-	KEYGEN_ALG_LOOP(ret = p->name + sizeof("KEYGEN_") - 1);
+	KEYGEN_ALG_LOOP(ret = p->name);
+	if ( ret!=NULL) ret += sizeof("KEYGEN_") - 1;
 
 	return mystrdup(ret);
 }
@@ -130,7 +131,8 @@ const char *mhash_get_keygen_name_static(hashid type)
 	char *ret = NULL;
 
 	/* avoid prefix */
-	KEYGEN_ALG_LOOP(ret = p->name + sizeof("KEYGEN_") - 1);
+	KEYGEN_ALG_LOOP(ret = p->name);
+	if (ret!=NULL) ret += sizeof("KEYGEN_") - 1;
 
 	return ret;
 }
