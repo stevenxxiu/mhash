@@ -20,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.19 2001/09/21 13:49:05 nmav Exp $ */
+/* $Id: mhash.c,v 1.20 2001/10/16 18:19:47 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -80,11 +80,15 @@ static mhash_hash_entry algorithms[] = {
 #define MHASH_ALG_LOOP(a) \
 	MHASH_LOOP( if(p->id == type) { a; break; } )
 
+#ifndef MMAX
+# define MMAX(x,y) (x>y?x:y)
+#endif
+
 WIN32DLL_DEFINE size_t mhash_count(void)
 {
-	size_t count = 0;
+	hashid count = 0;
 
-	MHASH_LOOP(count++);
+	MHASH_LOOP( count = MMAX( p->id, count) );
 
 	return count;
 }
@@ -102,6 +106,8 @@ WIN32DLL_DEFINE size_t mhash_get_block_size(hashid type)
 char *mystrdup(char *str)
 {
 	char *ret;
+	if (str==NULL) return NULL;
+	
 	if ( (ret = malloc(strlen(str) + 1)) == NULL) return NULL;
 	strcpy(ret, str);
 
@@ -119,8 +125,17 @@ WIN32DLL_DEFINE char *mhash_get_hash_name(hashid type)
 	char *ret = NULL;
 
 	/* avoid prefix */
-	MHASH_ALG_LOOP(ret = p->name + sizeof("MHASH_") - 1);
+	MHASH_ALG_LOOP( ret = p->name + sizeof("MHASH_") - 1);
 	return mystrdup(ret);
+}
+
+WIN32DLL_DEFINE const char *mhash_get_hash_name_static(hashid type)
+{
+	char *ret = NULL;
+
+	/* avoid prefix */
+	MHASH_ALG_LOOP( ret = p->name + sizeof("MHASH_") - 1);
+	return ret;
 }
 
 MHASH mhash_cp(MHASH from) {

@@ -144,6 +144,11 @@ If I<type> exists, this returns the name of the hash I<type>. Otherwise, a
 C<NULL> pointer is returned. The string is allocated with malloc(3) seperately,
 so do not forget to free(3) it.
 
+=item const char *B<mhash_get_hash_name_static>(hashid I<type>);
+
+If I<type> exists, this returns the name of the hash I<type>. Otherwise, a
+C<NULL> pointer is returned. 
+
 =item size_t B<mhash_get_hash_pblock>(hashid I<type>);
 
 It returns the block size that the algorithm operates. This is used
@@ -294,6 +299,11 @@ Algorithms are numbered from 0 to C<mhash_keygen_count()>.
 If I<type> exists, this returns the name of the keygen I<type>. Otherwise, a
 C<NULL> pointer is returned. The string is allocated with malloc(3) seperately,
 so do not forget to free(3) it.
+
+=item const char *B<mhash_get_keygen_name_static>(keygenid I<type>);
+
+If I<type> exists, this returns the name of the keygen I<type>. Otherwise, a
+C<NULL> pointer is returned. 
 
 =back
 

@@ -81,12 +81,17 @@ int mhash_keygen_uses_salt(keygenid type)
 	return ret;
 }
 
+#ifndef MMAX
+# define MMAX(x,y) (x>y?x:y)
+#endif
 
 WIN32DLL_DEFINE
 size_t mhash_keygen_count(void)
 {
-	size_t count = 0;
-	KEYGEN_LOOP(count++);
+	keygenid count = 0;
+
+	KEYGEN_LOOP(count = MMAX(p->id, count) );
+
 	return count;
 }
 
@@ -117,6 +122,17 @@ char *mhash_get_keygen_name(hashid type)
 	KEYGEN_ALG_LOOP(ret = p->name + sizeof("KEYGEN_") - 1);
 
 	return mystrdup(ret);
+}
+
+WIN32DLL_DEFINE
+const char *mhash_get_keygen_name_static(hashid type)
+{
+	char *ret = NULL;
+
+	/* avoid prefix */
+	KEYGEN_ALG_LOOP(ret = p->name + sizeof("KEYGEN_") - 1);
+
+	return ret;
 }
 
 

@@ -23,7 +23,7 @@
 #ifndef MHASH_H
 #define MHASH_H
 
-/* $Id: mhash.h,v 1.13 2001/09/21 13:49:05 nmav Exp $ */
+/* $Id: mhash.h,v 1.14 2001/10/16 18:19:47 nmav Exp $ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,7 +31,7 @@ extern "C" {
 
 #include <sys/types.h>
 
-#define MHASH_API_VERSION 20001215
+#define MHASH_API_VERSION 20011020
 
 /* these are for backwards compatibility and will 
    be removed at some time */
@@ -94,6 +94,7 @@ extern "C" {
 	size_t mhash_count(void);
 	size_t mhash_get_block_size(hashid type);
 	char *mhash_get_hash_name(hashid type);
+	const char *mhash_get_hash_name_static(hashid type);
 	void mhash_free(void *ptr);
 
 /* initializing prototypes */

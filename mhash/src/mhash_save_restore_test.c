@@ -19,7 +19,7 @@ int main(void) {
 
 	/* NOTE: For laziness sake, I just loop through the enum, skipping invalid integers.
 	   If the enum should change, this loop will have to change! */
-	for (alg = MHASH_CRC32; alg < MHASH_MD4; ++alg) {
+	for (alg = 0; alg <= mhash_count(); ++alg) {
 		
 		if (alg == 6 || alg == 4)
 			continue;
