@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2001/07/09 07:31:58 $)
+mhash ChangeLog ($Date: 2001/09/09 09:58:13 $)
 ===============================================================================
 
 People
@@ -7,7 +7,8 @@ People
    SS - Sascha Schumann <sascha@schumann.cx>
 
 Version ?.?.?
-- mhash_*_get_name() functions now return a constant string (not allocated)
+- added mhash_save_state_mem() and mhash_restore_state_mem() functions,
+  initial patches and idea by Blake Stephen <Stephen.Blake@veritect.com>
 
 Version 0.8.10 
 - New mhash_deinit() and mhash_hmac_deinit() functions based on the

@@ -25,3 +25,5 @@ mhash_cp
 mhash_get_mhash_algo
 mhash_deinit
 mhash_hmac_deinit
+mhash_save_state_mem
+mhash_restore_state_mem

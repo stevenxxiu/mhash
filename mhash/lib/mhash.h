@@ -1,6 +1,7 @@
 /*
  *    Copyright (C) 1998 Nikos Mavroyanopoulos
- *    Copyright (C) 1999,2000,2001 Sascha Schumman, Nikos Mavroyanopoulos
+ *    Copyright (C) 1999,2000 Sascha Schumman, Nikos Mavroyanopoulos
+ *    Copyright (C) 2001 Nikos Mavroyanopoulos
  *
  *    This library is free software; you can redistribute it and/or modify it 
  *    under the terms of the GNU Library General Public License as published 
@@ -22,7 +23,7 @@
 #ifndef MHASH_H
 #define MHASH_H
 
-/* $Id: mhash.h,v 1.12 2001/09/09 09:58:13 nmav Exp $ */
+/* $Id: mhash.h,v 1.13 2001/09/21 13:49:05 nmav Exp $ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -125,6 +126,9 @@ extern "C" {
 	void *mhash_hmac_end(MHASH thread);
 	int mhash_hmac_deinit(MHASH thread, void *result);
 
+/* Save state functions */
+	int mhash_save_state_mem(MHASH thread, void *mem, int* mem_size );
+	MHASH mhash_restore_state_mem(void* mem);
 
 /* Key generation functions */
 	int mhash_keygen(keygenid algorithm, hashid opt_algorithm,

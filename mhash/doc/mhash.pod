@@ -36,6 +36,11 @@ B< Update Functions >
 
  int      mhash(MHASH thread, const void *plaintext, size_t size);
 
+B< Save/Restore Functions >
+
+ int      mhash_save_state_mem(MHASH thread, void *mem, int* mem_size );
+ MHASH    mhash_restore_state_mem(void* mem);
+
 B< Finalizing Functions >
 
  void    mhash_deinit(MHASH thread, void *result);
@@ -78,7 +83,7 @@ In mhash this algorithm is defined as B<MHASH_RIPEMD160>.
 I<TIGER>: Tiger is a fast hash function, by Eli Biham and Ross Anderson.
 Tiger was designed to be very fast on modern computers, and in particular on the state-of-the-art 64-bit computers,
 while it is still not slower than other suggested hash functions on 32-bit machines. 
-In mhash this algorithm is defined as: B<MHASH_TIGER192, MHASH_TIGER160, MHASH_TIGER128>.
+In mhash this algorithm is defined as: B<MHASH_TIGER, MHASH_TIGER160, MHASH_TIGER128>.
 
 I<GOST>: GOST algorithm is a russian standard and it uses the
 GOST encryption algorithm to produce a 256 bit hash value. This algorithm
@@ -174,6 +179,18 @@ This setups a new context using the state of I<src>.
 
 This updates the context described by I<thread> with I<plaintext>. I<size> is
 the length of I<plaintext> which may be binary data.
+
+=item int B<mhash_save_state_mem>( MHASH I<thread>, void *I<mem>, int* I<mem_size>);
+
+Saves the state of a hashing algorithm such that it can be restored at 
+some later point in time using B<mhash_restore_state_mem>(). I<mem_size> should 
+contain the size of the given I<mem> pointer. If it is not enough to hold
+the buffer the required value will be copied there.
+
+=item MHASH B<mhash_restore_state_mem>(void* I<mem>);
+
+Restores the state of a hashing algorithm that was saved using 
+B<mhash_save_state_mem>(). Use like B<mhash_init>().
 
 =item void *B<mhash_end>(MHASH I<thread>);
 

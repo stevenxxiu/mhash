@@ -1,6 +1,7 @@
 /*
  *    Copyright (C) 1998 Nikos Mavroyanopoulos
  *    Copyright (C) 1999,2000 Sascha Schumman, Nikos Mavroyanopoulos
+ *    Copyright (C) 2001 Nikos Mavroyanopoulos
  *
  *    This library is free software; you can redistribute it and/or modify it 
  *    under the terms of the GNU Library General Public License as published 
@@ -19,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.18 2001/09/09 09:58:13 nmav Exp $ */
+/* $Id: mhash.c,v 1.19 2001/09/21 13:49:05 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -145,7 +146,7 @@ MHASH mhash_init_int(const hashid type)
 	MHASH ret;
 	int i;
 
-	if ( (ret = malloc(sizeof(MHASH_INSTANCE))) == NULL) return MHASH_FAILED;
+	if ( (ret = malloc( sizeof(MHASH_INSTANCE))) == NULL) return MHASH_FAILED;
 	ret->algorithm_given = type;
 	ret->hmac_key = NULL;
 	ret->state = NULL;
@@ -294,6 +295,7 @@ WIN32DLL_DEFINE
     void mhash_deinit(MHASH thread, void *result)
 {
 
+	if (result!=NULL)
 	switch (thread->algorithm_given) {
 	case MHASH_CRC32:
 	case MHASH_CRC32B:
@@ -413,6 +415,7 @@ WIN32DLL_DEFINE
 	tmptd = mhash_init(thread->algorithm_given);
 	mhash(tmptd, opad, thread->hmac_block);
 
+	if (result!=NULL)
 	switch (thread->algorithm_given) {
 	case MHASH_CRC32:
 	case MHASH_CRC32B:
@@ -460,7 +463,7 @@ WIN32DLL_DEFINE
 	      mhash_get_block_size(thread->algorithm_given));
 
 	free(thread->state);
-	
+
 	if (opad_alloc!=0) free(opad);
 	
 	mhash_bzero(thread->hmac_key, thread->hmac_key_size);
@@ -562,3 +565,112 @@ WIN32DLL_DEFINE void mhash_free(void *ptr)
 {
 	free(ptr);
 }
+
+/*
+  Saves the state of a hashing algorithm such that it can be
+  restored at some later point in time using
+  mhash_restore_state().
+  
+  mem_size should contain the size of the given _mem pointer.
+  Otherwise the required size will be copied there.
+
+  Original version and idea by Blake Stephen <Stephen.Blake@veritect.com>
+*/
+WIN32DLL_DEFINE int mhash_save_state_mem(MHASH thread, void *_mem, int* mem_size )
+{
+	int fd;
+	int tot_size, pos;
+	unsigned char* mem = _mem;
+	
+	tot_size = sizeof(thread->algorithm_given) + sizeof(thread->hmac_key_size)
+		+ sizeof(thread->hmac_block) + thread->hmac_key_size +
+		+ sizeof(thread->state_size) + thread->state_size;
+	
+	if ( *mem_size < tot_size) {
+		*mem_size = tot_size;
+		return -1;
+	}
+	
+	if ( mem != NULL) {
+		pos = 0;
+		memcpy( mem, &thread->algorithm_given, sizeof(thread->algorithm_given));
+		pos = sizeof( thread->algorithm_given);
+		
+		memcpy( &mem[pos], &thread->hmac_key_size, sizeof(thread->hmac_key_size));
+		pos += sizeof(thread->hmac_key_size);
+
+		memcpy( &mem[pos], &thread->hmac_block, sizeof(thread->hmac_block));
+		pos += sizeof(thread->hmac_block);
+
+		memcpy( &mem[pos], thread->hmac_key, thread->hmac_key_size);
+		pos += thread->hmac_key_size;
+
+		memcpy( &mem[pos], &thread->state_size, sizeof(thread->state_size));
+		pos += sizeof(thread->state_size);
+
+		memcpy( &mem[pos], thread->state, thread->state_size);
+		pos += thread->state_size;
+
+	}
+	return 0;
+}
+
+
+/*
+  Restores the state of a hashing algorithm that was saved
+  using mhash_save_state(). Use like mhash_init.
+*/
+WIN32DLL_DEFINE MHASH mhash_restore_state_mem(void* _mem)
+{
+	unsigned char* mem = _mem;
+	hashid algorithm_given;
+	MHASH ret = MHASH_FAILED;
+	int pos;
+
+	if (mem==NULL)
+		return ret;
+
+	memcpy( &algorithm_given, mem, sizeof(algorithm_given));
+	
+	if ((ret = mhash_init(algorithm_given)) == MHASH_FAILED) {
+		return ret;
+	}
+
+	ret->algorithm_given = algorithm_given;
+	
+	pos = sizeof(algorithm_given);
+
+ 	memcpy( &ret->hmac_key_size, &mem[pos], sizeof(ret->hmac_key_size));
+	pos += sizeof( ret->hmac_key_size);
+		
+	memcpy( &ret->hmac_block, &mem[pos], sizeof(ret->hmac_block));
+	pos += sizeof(ret->hmac_block);
+
+	if (ret->hmac_key_size != 0) {
+		ret->hmac_key = malloc( ret->hmac_key_size);
+		if (ret->hmac_key==NULL) goto freeall;
+	
+		memcpy( ret->hmac_key, &mem[pos], ret->hmac_key_size);
+		pos += sizeof(ret->hmac_key_size);
+	}
+
+	memcpy( &ret->state_size, &mem[pos], sizeof(ret->state_size));
+	pos += sizeof( ret->state_size);
+
+	ret->state = malloc( ret->state_size);
+	if (ret->state==NULL) goto freeall;
+
+	memcpy( ret->state, &mem[pos], ret->state_size);
+	pos += ret->state_size;
+
+	return ret;
+
+	freeall:
+		/* This uses too much internals
+		 */
+		free( ret->state);
+		free( ret->hmac_key);
+		free( ret);
+		return MHASH_FAILED;
+}
+
