@@ -20,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.31 2002/05/26 17:08:47 nmav Exp $ */
+/* $Id: mhash.c,v 1.32 2002/05/26 17:46:16 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -189,7 +189,7 @@ WIN32DLL_DEFINE size_t mhash_get_block_size(hashid type)
 
 WIN32DLL_DEFINE int _mhash_get_state_size(hashid type)
 {
-	int size;
+	int size = -1;
 
 	MHASH_ALG_LOOP(size = p->state_size);
 	return size;
@@ -295,6 +295,11 @@ MHASH mhash_init_int(const hashid type)
 	ret->hmac_key_size = 0;
 
 	ret->state_size = _mhash_get_state_size( type);
+	if (ret->state_size <= 0) {
+		free(ret);
+		return MHASH_FAILED;
+	}
+	
 	if ( (ret->state = malloc(ret->state_size)) == NULL) {
 		free(ret);
 		return MHASH_FAILED;

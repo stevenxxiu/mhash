@@ -1,5 +1,5 @@
 /*
- *    Copyright (C) 1998 Nikos Mavroyanopoulos
+ *    Copyright (C) 1998,2002 Nikos Mavroyanopoulos
  *    Copyright (C) 1999,2000 Sascha Schumman, Nikos Mavroyanopoulos
  *
  *    This library is free software; you can redistribute it and/or modify it 
@@ -44,12 +44,14 @@ int _mhash_gen_key_hex(void *keyword, int key_size,
 	int i;
 
 	mhash_bzero( keyword, key_size);
-	/* The chain should have 2*n characters */
-	if (plen % 2 != 0)
+	/* The chain should have 2*n characters 
+	 */
+	if (plen % 2 != 0 || plen > key_size*2)
 		return -1;
 	if (check_hex(chain, plen) == -1)
 		return -1;
 
+	memset( keyword, 0, key_size);
 	for (i = 0; i < plen; i += 2) {
 		memcpy(tmp, &chain[i], 2);
 		tmp[2]='\0';

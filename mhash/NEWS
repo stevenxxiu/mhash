@@ -1,10 +1,14 @@
-mhash ChangeLog ($Date: 2002/05/27 20:43:48 $)
+mhash ChangeLog ($Date: 2002/05/29 06:35:14 $)
 ===============================================================================
 
 People
 
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
+
+Version 0.8.17
+- Corrected the HEX key mode. Refuses to convert hex strings longer
+  than the given key size.
 
 Version 0.8.16 (released May 29 2002)
 - Code cleanups and optimizations
