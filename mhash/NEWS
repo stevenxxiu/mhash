@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2002/05/26 17:46:15 $)
+mhash ChangeLog ($Date: 2002/05/27 20:43:48 $)
 ===============================================================================
 
 People
@@ -6,7 +6,7 @@ People
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
 
-Version 0.8.16
+Version 0.8.16 (released May 29 2002)
 - Code cleanups and optimizations
 - Added configure time options to disable certain algorithms
 
