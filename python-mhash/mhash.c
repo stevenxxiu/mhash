@@ -21,10 +21,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 #include <mhash.h>
-/* work around typo in mhash.h */
-#if MHASH_API_VERSION == 20020524
-#define MHASH_WHIRLPOOL MHSH_WHIRLPOOL
+
+/* Fixes a stupid warning */
+
+#if defined(_POSIX_C_SOURCE)
+#undef _POSIX_C_SOURCE
 #endif
+
 #include "Python.h"
 #include "structmember.h"
 
@@ -64,49 +67,9 @@ MHASH_dealloc(MHASHObject *self)
 	self->ob_type->tp_free((PyObject *)self);
 }
 
-/* FIXME: There has to be a better way to populate the hashid_array[]. */
-
-hashid hashid_array[] = {
-	MHASH_CRC32,
-	MHASH_MD5,
-	MHASH_SHA1,
-	MHASH_HAVAL256,
-	MHASH_RIPEMD160,
-	MHASH_TIGER,
-	MHASH_GOST,
-	MHASH_CRC32B,
-	MHASH_HAVAL224,
-	MHASH_HAVAL192,
-	MHASH_HAVAL160,
-	MHASH_HAVAL128,
-	MHASH_TIGER128,
-	MHASH_TIGER160,
-	MHASH_MD4,
-#if MHASH_API_VERSION >= 20011020
-	MHASH_SHA256,
-	MHASH_ADLER32,
-#endif
-#if MHASH_API_VERSION >= 20020524
-	MHASH_SHA224,
-	MHASH_SHA512,
-	MHASH_SHA384,
-	MHASH_WHIRLPOOL,
-	MHASH_RIPEMD128,
-	MHASH_RIPEMD256,
-	MHASH_RIPEMD320,
-	MHASH_SNEFRU128,
-	MHASH_SNEFRU256,
-	MHASH_MD2,
-#endif
-};
-
-int valid_hash(hashid type)
+static int valid_hash(hashid type)
 {
-	int i;
-	for (i = 0; i != sizeof(hashid_array)/sizeof(hashid); i++)
-		if (hashid_array[i] == type)
-			return 1;
-	return 0;
+	return(mhash_get_hash_name_static(type) != NULL);
 }
 
 static int
@@ -636,6 +599,7 @@ DL_EXPORT(void)
 initmhash(void)
 {
 	PyObject *m, *d;
+	int res;
 
 	MHASH_Type.ob_type = &PyType_Type;
 
@@ -647,53 +611,59 @@ initmhash(void)
 	m = Py_InitModule3("mhash", mhash_methods, mhash__doc__);
 	d = PyModule_GetDict(m);
 	Py_INCREF(&MHASH_Type);
-	PyDict_SetItemString(d, "MHASH", (PyObject *)&MHASH_Type);
+	res = PyDict_SetItemString(d, "MHASH", (PyObject *)&MHASH_Type);
 	Py_INCREF(&HMAC_Type);
-	PyDict_SetItemString(d, "HMAC", (PyObject *)&HMAC_Type);
-	PyDict_SetItemString(d, "__author__",
+	res = PyDict_SetItemString(d, "HMAC", (PyObject *)&HMAC_Type);
+	res = PyDict_SetItemString(d, "__author__",
 			     PyString_FromString(__author__));
-	PyDict_SetItemString(d, "__version__",
+	res = PyDict_SetItemString(d, "__version__",
 			     PyString_FromString(VERSION));
 
 #define INSINT(x) PyModule_AddIntConstant(m, #x, x)
 
 	/* Hash algorithms */
-	INSINT(MHASH_CRC32);
-	INSINT(MHASH_MD5);
-	INSINT(MHASH_SHA1);
-	INSINT(MHASH_HAVAL256);
-	INSINT(MHASH_RIPEMD160);
-	INSINT(MHASH_TIGER);
-	INSINT(MHASH_GOST);
-	INSINT(MHASH_CRC32B);
-	INSINT(MHASH_HAVAL224);
-	INSINT(MHASH_HAVAL192);
-	INSINT(MHASH_HAVAL160);
-	INSINT(MHASH_HAVAL128);
-	INSINT(MHASH_TIGER128);
-	INSINT(MHASH_TIGER160);
-	INSINT(MHASH_MD4);
+	(void) INSINT(MHASH_CRC32);
+	(void) INSINT(MHASH_MD5);
+	(void) INSINT(MHASH_SHA1);
+	(void) INSINT(MHASH_HAVAL256);
+	(void) INSINT(MHASH_RIPEMD160);
+	(void) INSINT(MHASH_TIGER);
+	(void) INSINT(MHASH_GOST);
+	(void) INSINT(MHASH_CRC32B);
+	(void) INSINT(MHASH_HAVAL224);
+	(void) INSINT(MHASH_HAVAL192);
+	(void) INSINT(MHASH_HAVAL160);
+	(void) INSINT(MHASH_HAVAL128);
+	(void) INSINT(MHASH_TIGER128);
+	(void) INSINT(MHASH_TIGER160);
+	(void) INSINT(MHASH_MD4);
 #if MHASH_API_VERSION >= 20011020
-	INSINT(MHASH_SHA256);
-	INSINT(MHASH_ADLER32);
+	(void) INSINT(MHASH_SHA256);
+	(void) INSINT(MHASH_ADLER32);
 #endif
 #if MHASH_API_VERSION >= 20020524
-	INSINT(MHASH_SHA224);
-	INSINT(MHASH_SHA512);
-	INSINT(MHASH_SHA384);
-	INSINT(MHASH_WHIRLPOOL);
-	INSINT(MHASH_RIPEMD128);
-	INSINT(MHASH_RIPEMD256);
-	INSINT(MHASH_RIPEMD320);
+	(void) INSINT(MHASH_SHA224);
+	(void) INSINT(MHASH_SHA512);
+	(void) INSINT(MHASH_SHA384);
+	(void) INSINT(MHASH_WHIRLPOOL);
+	(void) INSINT(MHASH_RIPEMD128);
+	(void) INSINT(MHASH_RIPEMD256);
+	(void) INSINT(MHASH_RIPEMD320);
+#if defined(MHASH_SNEFRU)
+	(void) INSINT(MHASH_SNEFRU);
+	(void) INSINT(MHASH_MD2);
+#endif
 #endif
 
 	/* Keygen algorithms */
-	INSINT(KEYGEN_MCRYPT);
-	INSINT(KEYGEN_ASIS);
-	INSINT(KEYGEN_HEX);
-	INSINT(KEYGEN_PKDES);
-	INSINT(KEYGEN_S2K_SIMPLE);
-	INSINT(KEYGEN_S2K_SALTED);
-	INSINT(KEYGEN_S2K_ISALTED);
-	
+	(void) INSINT(KEYGEN_MCRYPT);
+	(void) INSINT(KEYGEN_ASIS);
+	(void) INSINT(KEYGEN_HEX);
+	(void) INSINT(KEYGEN_PKDES);
+	(void) INSINT(KEYGEN_S2K_SIMPLE);
+	(void) INSINT(KEYGEN_S2K_SALTED);
+	(void) INSINT(KEYGEN_S2K_ISALTED);
+
+	PyObject_Del(d);
+	PyObject_Del(m);
 }
