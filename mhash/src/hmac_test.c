@@ -122,7 +122,7 @@ int main()
 	free(data);
 	free(tmp);
 
-	fprintf(stderr, "HMAC-Test: Succeed\n");
+	fprintf(stderr, "MD5 HMAC-Test: Ok\n");
 
 	return 0;
 }

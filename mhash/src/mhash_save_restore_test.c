@@ -76,7 +76,7 @@ int main(void) {
 		printf("\n");
 */
 		if (memcmp(hash1, hash2, mhash_get_block_size(alg)) == 0) {
-			printf("OK\n");
+			printf("Ok\n");
 		} else {
 			printf("Failed\n");
 			exit(1);
