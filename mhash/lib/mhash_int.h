@@ -32,7 +32,7 @@ typedef enum hashid hashid;
 typedef enum keygenid keygenid;
 
 typedef struct keygen {
-	hashid 		hash_algorithm[2];
+	hashid 		hash_algorithm[1];
 	unsigned int 	count;
 	void*		salt;
 	int		salt_size;

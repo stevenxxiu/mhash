@@ -22,7 +22,7 @@
 #ifndef MHASH_H
 #define MHASH_H
 
-/* $Id: mhash.h,v 1.3 2000/04/11 11:58:33 nmav Exp $ */
+/* $Id: mhash.h,v 1.4 2000/04/11 12:00:08 nmav Exp $ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -72,7 +72,7 @@ extern "C" {
 	typedef struct mhash_hash_entry mhash_hash_entry;
 
 	typedef struct keygen {
-		hashid 		hash_algorithm[2];
+		hashid 		hash_algorithm[1];
 		unsigned int	count;
 		void*		salt;
 		int		salt_size;
