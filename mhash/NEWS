@@ -1,10 +1,14 @@
-mhash ChangeLog ($Date: 2000/05/12 17:04:19 $)
+mhash ChangeLog ($Date: 2000/10/20 14:32:22 $)
 ===============================================================================
 
 People
 
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
+
+Version 0.8.3
+- Compiles under Win32 using cygwin (with -mno-cygwin)
+- Bugfixes in KEYGEN_ASIS
 
 Version 0.8.2 (released on May 12 2000)
 - Corrected Memory leaks in HMAC implementation (NM, contributed by Marios Hadjieleftheriou <marioh@cs.ucr.edu>)
