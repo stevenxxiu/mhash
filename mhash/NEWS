@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2000/10/30 13:13:11 $)
+mhash ChangeLog ($Date: 2000/12/15 12:42:32 $)
 ===============================================================================
 
 People
@@ -6,10 +6,11 @@ People
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
 
-Version 0.8.4
+Version 0.8.4 (released on December 15 2000)
 - added mhash_hmac_end_m() and mhash_end_m() functions which allow to specify the malloc function.
 - added mhash_cp() - Copy a context
 - added mhash_get_mhash_algo() - Returns the name of the algorithm of the context
+- fixes in crc32b and gost (for multithreaded applications)
 
 Version 0.8.3 (released on October 25 2000)
 - Compiles under Win32 using cygwin (with -mno-cygwin) (NM)
