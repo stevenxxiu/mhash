@@ -10,6 +10,11 @@ typedef struct {
 	word32 temp[8];				/* temporary buffer */
 } havalContext;
 
+int havalInit256( havalContext *hcp);
+int havalInit224( havalContext *hcp);
+int havalInit192( havalContext *hcp);
+int havalInit160( havalContext *hcp);
+int havalInit128( havalContext *hcp);
 
 int havalInit (havalContext *hcp, int passes, int length);
 	/* Initialize a HAVAL hashing context according to the desired	*/
@@ -32,6 +37,8 @@ int havalFinal (havalContext *hcp, byte *digest);
 	/* 0: no error.													*/
 	/* 1: hcp is NULL.												*/
 	/* 2: digest is NULL.											*/
+
+
 
 #endif /* __HAVAL_H */
 

@@ -155,7 +155,7 @@ static const word32 crc32_table[256] =
 
 
 void
-clear_crc32(word32 * crc)
+mhash_clear_crc32(word32 * crc)
 {
 	*crc = 0xffffffff;			
 /*
@@ -164,7 +164,7 @@ clear_crc32(word32 * crc)
 }
 
 void
-get_crc32(void* ret, const word32 * crc)
+mhash_get_crc32( const word32 * crc, void* ret)
 {
 	word32 tmp;
 	tmp = ~(*crc);
@@ -179,7 +179,7 @@ get_crc32(void* ret, const word32 * crc)
 }
 
 void
-crc32(word32 * crc, const void *given_buf, int len)
+mhash_crc32(word32 * crc, const void *given_buf, int len)
 {
 	const unsigned char *p;
 
@@ -189,7 +189,7 @@ crc32(word32 * crc, const void *given_buf, int len)
 }
 
 void
-crc32b(word32 * crc, const void *buf, int len)
+mhash_crc32b(word32 * crc, const void *buf, int len)
 {
 	const byte *p;
 

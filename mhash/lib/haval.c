@@ -640,6 +640,21 @@ static void havalTransform5 (word32 E[8], const byte D[128], word32 T[8])
 
 } /* havalTransform5 */
 
+int havalInit256( havalContext *hcp) {
+	return havalInit( hcp, 3, 256);
+}
+int havalInit224( havalContext *hcp) {
+	return havalInit( hcp, 3, 224);
+}
+int havalInit192( havalContext *hcp) {
+	return havalInit( hcp, 3, 192);
+}
+int havalInit160( havalContext *hcp) {
+	return havalInit( hcp, 3, 160);
+}
+int havalInit128( havalContext *hcp) {
+	return havalInit( hcp, 3, 128);
+}
 
 int havalInit (havalContext *hcp, int passes, int hashLength)
 {

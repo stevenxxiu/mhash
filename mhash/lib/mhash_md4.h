@@ -10,7 +10,7 @@ struct MD4Context {
 void MD4Init(struct MD4Context *context);
 void MD4Update(struct MD4Context *context, unsigned char const *buf,
 	       unsigned len);
-void MD4Final(unsigned char digest[16], struct MD4Context *context);
+void MD4Final( struct MD4Context *context, unsigned char *digest);
 void MD4Transform(word32 buf[4], word32 const in[16]);
 
 typedef struct MD4Context MD4_CTX;

@@ -123,7 +123,7 @@ void MD4Update(struct MD4Context *ctx, unsigned char const *buf,
  * Final wrapup - pad to 64-byte boundary with the bit pattern 
  * 1 0* (64-bit count of bits processed, MSB-first)
  */
-void MD4Final(unsigned char* digest, struct MD4Context *ctx)
+void MD4Final(struct MD4Context *ctx, unsigned char* digest)
 {
 	unsigned int count;
 	unsigned char *p;

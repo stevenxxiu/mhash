@@ -28,7 +28,7 @@ void mhash_clear_adler32(word32 * adler)
 	*adler = 0x1;
 }
 
-void mhash_get_adler32(void *ret, const word32 * adler)
+void mhash_get_adler32( const word32 * adler, void* ret)
 {
 	word32 tmp = *adler;
 

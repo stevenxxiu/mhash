@@ -1,10 +1,13 @@
-mhash ChangeLog ($Date: 2002/03/28 19:38:58 $)
+mhash ChangeLog ($Date: 2002/05/24 16:40:58 $)
 ===============================================================================
 
 People
 
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
+
+Version ?.?.?
+- Code cleanups
 
 Version 0.8.15 (released May 24 2002)
 - Corrected Iterated S2K
