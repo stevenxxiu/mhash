@@ -1,7 +1,7 @@
 #include "libdefs.h"
 
-#if SIZEOF_UNSIGNED_LONG_INT == 8
-word64 table[4*256] = {
+#if 0 /* 64 bit - not ready yet */
+word64 tiger_table[4*256] = {
     0x02AAB17CF7E90C5ELL   /*    0 */,    0xAC424B03E243A8ECLL   /*    1 */,
     0x72CD5BE30DD5FCD3LL   /*    2 */,    0x6D019B93F6F97F3ALL   /*    3 */,
     0xCD9978FFD21F9193LL   /*    4 */,    0x7573A1C9708029E2LL   /*    5 */,
