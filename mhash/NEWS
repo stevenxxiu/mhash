@@ -1,0 +1,57 @@
+mhash ChangeLog ($Date: 2000/04/02 17:19:34 $)
+===============================================================================
+
+People
+
+   NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
+   SS - Sascha Schumann <sascha@schumann.cx>
+
+Version 0.8.0 (released on Mar ??? 2000)
+- No longer needs posix thread locks to be thread safe (NM)
+- Supports unlimited number of MHASH threads (NM)
+- Improved the key generation algorithm API (NM)
+- Corrected Haval implementation. (NM)
+  Now mhash uses Paulo Barreto's implementation
+  Added HAVAL256, HAVAL192, HAVAL160, HAVAL128 (3 passes haval)
+- License was changed to GNU Lesser GPL (NM)
+
+Version 0.7.0 (released on Mar 3rd 2000)
+- cleaned up binary interface (SS)
+- improved POSIX Threads detection (SS)
+- added keygen API (NM)
+- added new improved RIPEMD160 implementation (NM)
+- removed RIPEMD128 (NM)
+- added RPM .spec file by work@scripty.com (SS)
+
+Version 0.6.1 (released on Oct 23th 1999)
+- fixed Tiger algorithm on 32-bit architectures (NM)
+
+Version 0.6.0 (released on Oct 11th 1999)
+- export only symbols of the public interface (SS)
+- MHASH_API_VERSION has been changed to 19991004 (SS)
+- API change: All algorithm names have been prefixed with MHASH_
+  to avoid namespace pollution (SS)
+- added mhash_get_hash_pblock() by NM, reimplemented by SS
+- improved data structure handling (NM)
+- use "--silent" libtool option (SS)
+- added hmac functions (SS, contributed by NM)
+
+Version 0.5.2 (released on Jul 14th 1999)
+- fix VPATH build (SS)
+- upgrade to libtool 1.3.3 (SS)
+- rework directory layout (simplified) (SS)
+- change test script to work with Bourne shells (SS)
+- fix some big endian issues in RIPEMD160, RIPEMD128 and TIGER (SS)
+	
+Version 0.5 (relased on May 22nd 1999)
+- put under CVS control
+- change get_block_size to mhash_get_block_size (NM)
+- add --disable-pthreads option (NM)
+- add libtool and automake support (SS)
+- add several algorithms (SS)
+  HAVAL, RIPEMD128, RIPEMD160, TIGER, GOST, CRC32B
+- add mhash_get_hash_name (SS)
+- add mhash_count (SS)
+- documentation revamp (SS)
+- renew API (SS)
+- add test vectors (SS)

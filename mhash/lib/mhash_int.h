@@ -1,0 +1,98 @@
+
+#include <unistd.h>
+
+
+
+enum hashid {
+	MHASH_CRC32,
+	MHASH_MD5,
+	MHASH_SHA1,
+	MHASH_HAVAL256,
+	MHASH_RIPEMD160 = 5,
+	MHASH_SNEFRU,
+	MHASH_TIGER,
+	MHASH_GOST,
+	MHASH_CRC32B,
+	MHASH_MD2 = 10,
+	MHASH_HAVAL192,
+	MHASH_HAVAL160,
+	MHASH_HAVAL128
+};
+
+enum keygenid {
+	KEYGEN_MCRYPT,		/* The key generator used in mcrypt */
+	KEYGEN_ASIS,		/* Just returns the password as binary key */
+	KEYGEN_HEX,		/* Just converts a hex key into a binary one */
+	KEYGEN_PKDES,		/* The transformation used in Phil Karn's DES
+				 * encryption program */
+	KEYGEN_S2K_SIMPLE,	/* The OpenPGP (rfc2440) Simple S2K */
+	KEYGEN_S2K_SALTED,	/* The OpenPGP Salted S2K */
+	KEYGEN_S2K_ISALTED	/* The OpenPGP Iterated Salted S2K */
+};
+
+typedef enum hashid hashid;
+typedef enum keygenid keygenid;
+
+typedef struct keygen {
+	hashid 		hash_algorithm[2];
+	unsigned int 	count;
+	void*		salt;
+	int		salt_size;
+} KEYGEN;
+
+
+typedef struct {
+	int hmac_key_size;
+	int hmac_block;
+	unsigned char *hmac_key;
+
+	word8 *state;
+	hashid algorithm_given;
+} MHASH_INSTANCE;
+
+typedef MHASH_INSTANCE * MHASH;
+
+
+typedef struct mhash_hash_entry mhash_hash_entry;
+
+#define MHASH_FAILED ((MHASH) 0x0)
+
+/* information prototypes */
+
+size_t mhash_count(void);
+size_t mhash_get_block_size(hashid type);
+char *mhash_get_hash_name(hashid type);
+
+/* initializing prototypes */
+
+MHASH mhash_init(hashid type);
+MHASH mhash_init_int(hashid type);
+
+/* update prototype */
+
+int mhash(MHASH thread, const void *plaintext, size_t size);
+
+/* finalizing prototype */
+
+void *mhash_end(MHASH thread);
+
+size_t mhash_get_hash_pblock(hashid type);
+MHASH hmac_mhash_init(const hashid type, void *key, int keysize,
+		      int block);
+void *hmac_mhash_end(MHASH thread);
+
+/* Key generation functions */
+int mhash_keygen(keygenid algorithm, hashid opt_algorithm,
+		 unsigned long count, void *keyword, int keysize,
+		 void *salt, int saltsize, unsigned char *password,
+		 int passwordlen);
+int mhash_keygen_ext(keygenid algorithm, KEYGEN data,
+	 void *keyword, int keysize,
+	 unsigned char *password, int passwordlen);
+
+char *mhash_get_keygen_name(hashid type);
+size_t mhash_get_keygen_salt_size(keygenid type);
+size_t mhash_keygen_count(void);
+int mhash_keygen_uses_salt(keygenid type);
+int mhash_keygen_uses_count(keygenid type);
+int mhash_keygen_uses_hash_algorithm(keygenid type);

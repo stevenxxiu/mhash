@@ -1,0 +1,14 @@
+## Process this file with automake to produce Makefile.in
+
+EXTRA_DIST = hash_test.sh 
+
+TESTS = hash_test.sh hmac_test keygen_test
+
+hmac_test_SOURCES = hmac_test.c
+hmac_test_LDADD = ../lib/libmhash.la
+keygen_test_SOURCES = keygen_test.c
+keygen_test_LDADD = ../lib/libmhash.la
+driver_SOURCES = driver.c
+driver_LDADD = ../lib/libmhash.la
+
+noinst_PROGRAMS = driver hmac_test keygen_test

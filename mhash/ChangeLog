@@ -1,0 +1,607 @@
+2000-04-03  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/Makefile.am: *** empty log message ***
+
+	* /cvs/libmhash/src/driver.c, /cvs/libmhash/src/hash_test.sh, /cvs/libmhash/src/keygen_test.c, /cvs/libmhash/src/Makefile.am, /cvs/libmhash/bzero.c, /cvs/libmhash/configure.in, /cvs/libmhash/crc-32b.c, /cvs/libmhash/crc32.c, /cvs/libmhash/doc/mhash.pod, /cvs/libmhash/driver.c, /cvs/libmhash/gosthash.c, /cvs/libmhash/gosthash.h, /cvs/libmhash/hash_test.sh, /cvs/libmhash/haval.c, /cvs/libmhash/keygen_asis.c, /cvs/libmhash/keygen.c, /cvs/libmhash/keygen.h, /cvs/libmhash/keygen_hex.c, /cvs/libmhash/keygen_mcrypt.c, /cvs/libmhash/keygen_s2k.c, /cvs/libmhash/lib/bzero.c, /cvs/libmhash/lib/crc-32b.c, /cvs/libmhash/lib/crc32.c, /cvs/libmhash/libdefs.h, /cvs/libmhash/lib/gosthash.c, /cvs/libmhash/lib/gosthash.h, /cvs/libmhash/lib/haval.c, /cvs/libmhash/lib/keygen_asis.c, /cvs/libmhash/lib/keygen.c, /cvs/libmhash/lib/keygen.h, /cvs/libmhash/lib/keygen_hex.c, /cvs/libmhash/lib/keygen_mcrypt.c, /cvs/libmhash/lib/keygen_s2k.c, /cvs/libmhash/lib/libdefs.h, /cvs/libmhash/lib/libmhash.sym, /cvs/libmhash/lib/Makefile.am, /cvs/libmhash/lib/md2c.c, /cvs/libmhash/lib/md5.c, /cvs/libmhash/lib/mhash.c, /cvs/libmhash/lib/mhash_crc32.h, /cvs/libmhash/lib/mhash.h, /cvs/libmhash/lib/mhash_haval.h, /cvs/libmhash/lib/mhash_int.h, /cvs/libmhash/lib/mhash_md2.h, /cvs/libmhash/lib/mhash_md5.h, /cvs/libmhash/lib/mhash_ripemd.h, /cvs/libmhash/lib/mhash_sha1.h, /cvs/libmhash/libmhash.sym, /cvs/libmhash/lib/mhash_tiger.h, /cvs/libmhash/lib/ripemd.c, /cvs/libmhash/lib/sha1.c, /cvs/libmhash/lib/snefru.c, /cvs/libmhash/lib/swap.c, /cvs/libmhash/lib/tiger.c, /cvs/libmhash/lib/tiger_sboxes.c, /cvs/libmhash/Makefile.am, /cvs/libmhash/md2c.c, /cvs/libmhash/md5.c, /cvs/libmhash/mhash.c, /cvs/libmhash/mhash_crc32.h, /cvs/libmhash/mhash.h, /cvs/libmhash/mhash_haval.h, /cvs/libmhash/mhash_int.h, /cvs/libmhash/mhash_md2.h, /cvs/libmhash/mhash_md5.h, /cvs/libmhash/mhash_ripemd.h, /cvs/libmhash/mhash_sha1.h, /cvs/libmhash/mhash_tiger.h, /cvs/libmhash/ripemd.c, /cvs/libmhash/sha1.c, /cvs/libmhash/snefru.c, /cvs/libmhash/swap.c, /cvs/libmhash/tiger.c, /cvs/libmhash/tiger_sboxes.c:
+	Reorganized directory/file structure.
+
+	* /cvs/libmhash/hmac_test.c, /cvs/libmhash/src/hmac_test.c:
+	Renamed hmac_test.c to src/hmac_test.c
+
+2000-04-02  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/keygen.c, /cvs/libmhash/keygen_crypt.c, /cvs/libmhash/Makefile.am, /cvs/libmhash/mhash.h, /cvs/libmhash/mhash_int.h:
+	Removed the crypt(3) key generation algorithm. It wasn't a real key
+	generation algorithm.
+
+	* /cvs/libmhash/NEWS, /cvs/libmhash/doc/mhash.pod, /cvs/libmhash/keygen_crypt.c:
+	*** empty log message ***
+
+	* /cvs/libmhash/md5.c, /cvs/libmhash/mhash.c, /cvs/libmhash/mhash_md5.h:
+	Added Colin Plumb's md5 implementation.
+
+	* /cvs/libmhash/README: *** empty log message ***
+
+	* /cvs/libmhash/doc/mhash.pod, /cvs/libmhash/keygen.c, /cvs/libmhash/mhash.h, /cvs/libmhash/README:
+	Added mhash_is_keygen_printable() function.
+
+2000-03-26  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/mhash.h, /cvs/libmhash/mhash_int.h, /cvs/libmhash/NEWS:
+	*** empty log message ***
+
+	* /cvs/libmhash/AUTHORS, /cvs/libmhash/bzero.c, /cvs/libmhash/COPYING, /cvs/libmhash/crc32.c, /cvs/libmhash/doc/mhash.pod, /cvs/libmhash/driver.c, /cvs/libmhash/gosthash.c, /cvs/libmhash/haval.c, /cvs/libmhash/hmac_test.c, /cvs/libmhash/keygen_asis.c, /cvs/libmhash/keygen.c, /cvs/libmhash/keygen_crypt.c, /cvs/libmhash/keygen_hex.c, /cvs/libmhash/keygen_mcrypt.c, /cvs/libmhash/keygen_s2k.c, /cvs/libmhash/libdefs.h, /cvs/libmhash/libmhash.sym, /cvs/libmhash/LICENSE, /cvs/libmhash/md5.c, /cvs/libmhash/mhash.c, /cvs/libmhash/NEWS, /cvs/libmhash/README, /cvs/libmhash/ripemd.c, /cvs/libmhash/swap.c, /cvs/libmhash/tiger.c:
+	Various cleanups. License was changed to GNU Library GPL.
+
+2000-03-24  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/Makefile.am, /cvs/libmhash/doc/Makefile.am, /cvs/libmhash/doc/mhash.pod, /cvs/libmhash/hash_test.sh, /cvs/libmhash/mhash.c, /cvs/libmhash/mhash.h, /cvs/libmhash/mhash_int.h, /cvs/libmhash/NEWS:
+	*** empty log message ***
+
+	* /cvs/libmhash/tiger.c:
+	Tiger license is included in the tiger.c file.
+
+	* /cvs/libmhash/mhash.h: *** empty log message ***
+
+	* /cvs/libmhash/doc/gost.license, /cvs/libmhash/doc/Makefile.am, /cvs/libmhash/doc/mhash.pod, /cvs/libmhash/gosthash.c, /cvs/libmhash/hash_test.sh, /cvs/libmhash/haval.c, /cvs/libmhash/hmac_test.c, /cvs/libmhash/libmhash.sym, /cvs/libmhash/mhash.c, /cvs/libmhash/mhash.h, /cvs/libmhash/mhash_int.h, /cvs/libmhash/NEWS:
+	Added HAVAL256, HAVAL160, HAVAL128 (3 passes).
+
+	* /cvs/libmhash/doc/Makefile.am, /cvs/libmhash/doc/test.c, /cvs/libmhash/doc/digest.c, /cvs/libmhash/doc/gost.license, /cvs/libmhash/doc/README.lib, /cvs/libmhash/doc/sha1.txt:
+	*** empty log message ***
+
+2000-03-23  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/libmhash.sym, /cvs/libmhash/Makefile.am:
+	*** empty log message ***
+
+	* /cvs/libmhash/AUTHORS, /cvs/libmhash/ChangeLog, /cvs/libmhash/hash_test.sh, /cvs/libmhash/haval.c, /cvs/libmhash/mhash.c, /cvs/libmhash/mhash_haval.h, /cvs/libmhash/NEWS:
+	added new haval implementation.
+
+2000-03-21  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/ChangeLog, /cvs/libmhash/configure.in, /cvs/libmhash/doc/mhash.pod, /cvs/libmhash/keygen.c, /cvs/libmhash/mhash.h, /cvs/libmhash/NEWS:
+	Added mhash_get_keygen_max_key_size() function.
+
+2000-03-20  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/AUTHORS, /cvs/libmhash/doc/mhash.pod:
+	documentation updated to show the current maintainer (nikos)
+
+	* /cvs/libmhash/NEWS: *** empty log message ***
+
+2000-03-19  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/mhash.c, /cvs/libmhash/mhash.h, /cvs/libmhash/mhash_int.h:
+	*** empty log message ***
+
+	* /cvs/libmhash/acconfig.h, /cvs/libmhash/configure.in, /cvs/libmhash/Makefile.am, /cvs/libmhash/mhash.c, /cvs/libmhash/mhash.h, /cvs/libmhash/threads.m4:
+	Better thread handling. Now mhash does not need thread locks in order to be
+	thread safe.
+
+2000-03-17  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/mhash.c: *** empty log message ***
+
+	* /cvs/libmhash/hash_test.sh, /cvs/libmhash/mhash.c:
+	Changed the locking again. Now it seems to be thread safe, but it is not
+	optimized for real parallel use.
+
+	* /cvs/libmhash/keygen.c, /cvs/libmhash/keygen_crypt.c, /cvs/libmhash/libdefs.h:
+	Key generation function now returns a number < 0, if the key generation
+	failed.
+
+2000-03-16  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/keygen.c, /cvs/libmhash/keygen_crypt.c, /cvs/libmhash/keygen.h, /cvs/libmhash/Makefile.am, /cvs/libmhash/mhash.h:
+	Added the unix crypt key tranformation (using ufc crypt).
+
+2000-03-12  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/mhash.c:
+	Some extra locks were added.
+
+2000-03-07  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/configure.in, /cvs/libmhash/threads.m4:
+	Improve flags checking
+
+2000-03-05  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/haval.c:
+	Removed some unneeded functions which made the library not to
+	compile using cygwin.
+
+2000-03-04  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/Makefile.am: add threads.m4 to the distribution
+
+	* /cvs/libmhash/configure.in:
+	Make --enable-posix-threads alias for --enable-pthreads
+
+2000-03-03  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/NEWS: NEWS
+
+	* /cvs/libmhash/buildconf: No GNU make deps
+
+	* /cvs/libmhash/threads.m4: Fix
+
+	* /cvs/libmhash/doc/Makefile.am: Fix for BSD make
+
+2000-02-27  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/keygen.c, /cvs/libmhash/keygen.h, /cvs/libmhash/keygen_mcrypt.c, /cvs/libmhash/mhash.h:
+	Added the key transformation used in Phil Karn's DES program.
+
+	* /cvs/libmhash/crc32.c, /cvs/libmhash/hash_test.sh, /cvs/libmhash/mhash_md2.h:
+	Removed an unneeded include in mhash_md2.h.
+	Modified crc32.c so that it produces the same output in bigendian
+	and little endian machines.
+
+2000-02-26  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/doc/mhash.pod:
+	Documentation update. A description of hmac and key generation was added.
+
+	* /cvs/libmhash/libdefs.h, /cvs/libmhash/swap.c:
+	Some uneeded functions and definitions were removed.
+
+2000-02-25  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/ChangeLog: .ChangeLog
+
+	* /cvs/libmhash/ChangeLog: update
+
+	* /cvs/libmhash/libdefs.h, /cvs/libmhash/mhash_crc32.h, /cvs/libmhash/mhash_haval.h, /cvs/libmhash/mhash_md2.h, /cvs/libmhash/mhash_md5.h, /cvs/libmhash/mhash_ripemd.h, /cvs/libmhash/mhash_sha1.h, /cvs/libmhash/mhash_tiger.h:
+	Avoid poluting global namespace by prefixing symbol names with mhash_
+
+	* /cvs/libmhash/md2c.c, /cvs/libmhash/mhash.c:
+	_DISABLE_MD2 -> MHASH_DISABLE_MD2
+
+	* /cvs/libmhash/keygen_hex.c: Make check_hex() static
+
+	* /cvs/libmhash/driver.c: style(9)-fication
+
+	* /cvs/libmhash/configure.in: * improved PTHREADS check
+	* use AC_DEFINE to define MHASH_DISABLE_MD2
+
+	* /cvs/libmhash/threads.m4: Add threads.m4
+
+	* /cvs/libmhash/NEWS: update
+
+2000-02-20  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/mhash_ripemd.h, /cvs/libmhash/ripemd.h:
+	Added some files needed to compile (they were not commited before accidentally)
+
+2000-02-18  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/ripemd.c: *** empty log message ***
+
+2000-02-16  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/doc/mhash.pod, /cvs/libmhash/ripemd.c:
+	Some (minor) updates in the documentation.
+
+2000-02-16  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/AUTHORS, /cvs/libmhash/bzero.c, /cvs/libmhash/COPYING, /cvs/libmhash/driver.c, /cvs/libmhash/LICENSE, /cvs/libmhash/mhash.c, /cvs/libmhash/mhash.h, /cvs/libmhash/swap.c:
+	Some LICENSE changes:
+
+	* ss@2ns.de -> sascha@schumann.cx
+	* remove advertising clauses
+	* ITS -> HIS
+
+	* /cvs/libmhash/README: Refer to LICENSE
+
+	* /cvs/libmhash/NEWS: Update
+
+2000-02-15  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/libmhash.sym: Add new API entries
+
+	* /cvs/libmhash/mhash.spec: Add RPM spec by work@scripty.com
+
+2000-02-15  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/hash_test.sh, /cvs/libmhash/mhash.h:
+	Changed enumeration so the library is binary compatible with the previous releases.
+	(except for ripemd128 which is removed)
+
+2000-02-14  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/md2c.c:
+	Some pointless definitions were removed.
+
+	* /cvs/libmhash/configure.in:
+	Changed version number (0.7.0)
+	MD2 is disabled by default, in order for the library to be free.
+
+2000-02-12  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/doc/mhash.pod, /cvs/libmhash/mhash.h:
+	A brief description of the key generation algorithms was added.
+
+	* /cvs/libmhash/COPYING, /cvs/libmhash/ripemd.c:
+	*** empty log message ***
+
+	* /cvs/libmhash/hash_test.sh, /cvs/libmhash/Makefile.am, /cvs/libmhash/mhash.h, /cvs/libmhash/ripemd.c:
+	Tests were updated.
+
+	* /cvs/libmhash/doc/mhash.pod, /cvs/libmhash/Makefile.am, /cvs/libmhash/mhash.c, /cvs/libmhash/ripemd.c, /cvs/libmhash/rmd128.c, /cvs/libmhash/rmd128.h, /cvs/libmhash/rmd160.c, /cvs/libmhash/rmd160.h:
+	The old RIPEMD sources were removed. RIPEMD-128 is no longer available.
+	Documentation updates.
+
+	* /cvs/libmhash/sha1.c: *** empty log message ***
+
+	* /cvs/libmhash/mhash.c:
+	Changed in order to comply with the new ripemd implementation.
+
+	* /cvs/libmhash/Makefile.am, /cvs/libmhash/ripemd.c, /cvs/libmhash/ripemd.h:
+	New ripemd implementation.
+
+2000-02-11  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/keygen.c, /cvs/libmhash/mhash.h:
+	New functions added for key generation algorithms.
+
+	* /cvs/libmhash/doc/mhash.pod:
+	Documentation updated.
+
+2000-02-10  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/doc/Makefile.am:
+	makefile was updated in order to find md2-rfc1319.txt
+
+	* /cvs/libmhash/doc/mhash.pod, /cvs/libmhash/keygen.c, /cvs/libmhash/keygen.h, /cvs/libmhash/keygen_mcrypt.c, /cvs/libmhash/keygen_s2k.c, /cvs/libmhash/Makefile.am, /cvs/libmhash/mhash.h:
+	OpenPGP S2K (string to key) algorithms added. Not much tested.
+
+	* /cvs/libmhash/doc/mhash.pod:
+	Updated documentation.
+
+2000-02-09  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/keygen_asis.c, /cvs/libmhash/keygen.c:
+	Bugfixes in key generation. Some break statements were not there, causing
+	some modes not to work.
+
+2000-02-08  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/configure.in, /cvs/libmhash/doc/mhash.pod, /cvs/libmhash/keygen_asis.c, /cvs/libmhash/keygen.c, /cvs/libmhash/keygen.h, /cvs/libmhash/keygen_hex.c, /cvs/libmhash/keygen_mcrypt.c, /cvs/libmhash/Makefile.am, /cvs/libmhash/mhash.h:
+
+	libmhash now supports key generation. Like the one found in libmcrypt.
+
+2000-01-17  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/driver.c, /cvs/libmhash/hash_test.sh, /cvs/libmhash/mhash.c, /cvs/libmhash/mhash_sha1.h, /cvs/libmhash/sha1.c:
+	SHA-1 implementation was replaced by a better one (the old one failed in some cases)
+	The "make check" was changed in order to allow the md2 disable option.
+
+	* /cvs/libmhash/configure.in: *** empty log message ***
+
+	* /cvs/libmhash/configure.in, /cvs/libmhash/doc/md2-rfc1319.txt, /cvs/libmhash/doc/md2.txt, /cvs/libmhash/md2c.c, /cvs/libmhash/mhash.c:
+	MD2 can be optionally removed.
+
+1999-11-10  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/doc/Makefile.am, /cvs/libmhash/doc/md2.license, /cvs/libmhash/doc/md2.txt, /cvs/libmhash/hash_test.sh, /cvs/libmhash/Makefile.am, /cvs/libmhash/md2c.c, /cvs/libmhash/mhash.c, /cvs/libmhash/mhash.h, /cvs/libmhash/mhash_md2.h:
+
+	MD2 was added, although according to its license it is not free.
+
+1999-10-23  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/ChangeLog: .
+
+	* /cvs/libmhash/configure.in: Update version (0.6.0 => 0.6.1)
+
+	* /cvs/libmhash/NEWS: update
+
+1999-10-21  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/mhash.c:
+	Bugfix in TIGER algorithm handling.
+
+1999-10-11  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/README:
+	Update URL to point to the new location of the mhash website.
+
+1999-10-10  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/doc/Makefile.am: Generate all files in srcdir
+
+	* /cvs/libmhash/doc/mhash.pod:
+	Resolve conflicts (accidentially committed).
+
+	* /cvs/libmhash/ChangeLog: .
+
+	* /cvs/libmhash/NEWS: Update release date
+
+1999-10-10  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/doc/mhash.pod, /cvs/libmhash/mhash.c:
+
+	nmav@hellur.gr -> nmav@hellug.gr
+
+	TIGER is now used in HMAC with block size of 64 bytes.
+
+1999-10-08  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/ChangeLog: Add last changes
+
+	* /cvs/libmhash/doc/Makefile.am: Generate documentation files in srcdir
+
+	* /cvs/libmhash/configure.in: Change to final version number
+
+	* /cvs/libmhash/NEWS: update
+
+	* /cvs/libmhash/ChangeLog:
+	This file contains all changes as tracked by CVS
+
+	* /cvs/libmhash/NEWS: This file contains user-visible changes
+
+	* /cvs/libmhash/doc/mhash.pod:     Minor editing.
+
+1999-10-04  Nikos Mavroyanopoulos  <nmav@hellug.gr>
+
+	* /cvs/libmhash/Makefile.am:
+
+	Added test suite for hmac.
+
+	* /cvs/libmhash/hmac_test.c:
+
+	Test program, for the HMAC-MD5 mode.
+
+	* /cvs/libmhash/doc/mhash.pod:
+
+	Added description for HMAC functions, and an example.
+
+1999-10-04  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/buildconf, /cvs/libmhash/configure.in:     Heh.
+
+	* /cvs/libmhash/configure.in:
+	    Kick out -lpthreads, this doesn't work reliable.
+
+	* /cvs/libmhash/mhash.c:     Remove MHASH_ prefix from returned name.
+
+	* /cvs/libmhash/.cvsignore:     Updates
+
+	* /cvs/libmhash/mhash.c:
+	    libdefs.h includes mhash_config.h which we need before that.
+
+	* /cvs/libmhash/buildconf:     Automatically install missing files.
+
+	* /cvs/libmhash/config.guess, /cvs/libmhash/config.sub, /cvs/libmhash/install-sh, /cvs/libmhash/ltconfig, /cvs/libmhash/ltmain.sh, /cvs/libmhash/missing, /cvs/libmhash/mkinstalldirs:
+	    Cleanup
+
+	* /cvs/libmhash/configure.in, /cvs/libmhash/libdefs.h, /cvs/libmhash/Makefile.am, /cvs/libmhash/mhash.c:
+	    More cleanup
+
+	* /cvs/libmhash/ChangeLog, /cvs/libmhash/configure.in, /cvs/libmhash/libmhash.sym, /cvs/libmhash/Makefile.am:
+	    Export only a few symbols.
+
+	* /cvs/libmhash/.cvsignore:     acconfig.h is not a generated file.
+
+	* /cvs/libmhash/acconfig.h, /cvs/libmhash/configure.in, /cvs/libmhash/mhash.c:
+	    HAVE_LIBPTHREAD => MHASH_PTHREADS
+
+	* /cvs/libmhash/ChangeLog, /cvs/libmhash/Makefile.am:     Updates
+
+	* /cvs/libmhash/configure.in:
+	    Better POSIX thread checks (works now on Tru64 as well).
+
+	* /cvs/libmhash/mhash.c, /cvs/libmhash/sha1.c:     .
+
+	* /cvs/libmhash/ChangeLog, /cvs/libmhash/mhash.c, /cvs/libmhash/mhash.h:
+	    Add new hmac function and API cleanup
+
+1999-10-02  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/ChangeLog, /cvs/libmhash/mhash.c:
+	    * improved data structure handling
+	      Submitted by: NM
+
+1999-09-16  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/ChangeLog: .
+
+	* /cvs/libmhash/configure.in: version update
+
+	* /cvs/libmhash/acinclude.m4, /cvs/libmhash/configure.in, /cvs/libmhash/mhash.c:
+	- fix typo wrt hmac
+	- silence libtool
+
+1999-09-13  ralf  <ralf@crystal>
+
+	* /cvs/libmhash/doc/Makefile.am: no message
+
+1999-08-31  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/mhash.c, /cvs/libmhash/mhash.h, /cvs/libmhash/ChangeLog:
+	new hmac functions
+
+1999-08-29  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/LICENSE: .
+
+1999-08-03  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/LICENSE: update email address
+
+1999-07-14  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/configure.in: forgot that one
+
+	* /cvs/libmhash/ChangeLog: update
+
+	* /cvs/libmhash/libdefs.h, /cvs/libmhash/mhash.c, /cvs/libmhash/mhash_tiger.h, /cvs/libmhash/tiger.c, /cvs/libmhash/tiger_sboxes.c:
+	final version
+
+	* /cvs/libmhash/tiger.c: include 32bit version of Tiger
+
+	* /cvs/libmhash/mhash.c: tiger fix
+
+	* /cvs/libmhash/ChangeLog: original? should be ugly or unusable
+
+	* /cvs/libmhash/ChangeLog: up it to 0.5.2
+
+	* /cvs/libmhash/tiger.c: redundant
+
+	* /cvs/libmhash/mhash.c: some fixes
+
+	* /cvs/libmhash/ChangeLog, /cvs/libmhash/ltconfig, /cvs/libmhash/ltmain.sh, /cvs/libmhash/doc/.cvsignore:
+	update
+
+	* /cvs/libmhash/mhash.c: that should work
+
+	* /cvs/libmhash/bzero.c, /cvs/libmhash/COPYING, /cvs/libmhash/crc-32b.c, /cvs/libmhash/crc32.c, /cvs/libmhash/gosthash.c, /cvs/libmhash/gosthash.h, /cvs/libmhash/haval.c, /cvs/libmhash/md5.c, /cvs/libmhash/mhash.c, /cvs/libmhash/sha1.c, /cvs/libmhash/snefru.c, /cvs/libmhash/swap.c, /cvs/libmhash/tiger.c, /cvs/libmhash/tiger_sboxes.c:
+	fourth batch
+
+	* /cvs/libmhash/include/.cvsignore, /cvs/libmhash/include/gosthash.h, /cvs/libmhash/include/libdefs.h, /cvs/libmhash/include/mhash_crc32.h, /cvs/libmhash/include/mhash_haval.h, /cvs/libmhash/include/mhash_md5.h, /cvs/libmhash/include/mhash_sha1.h, /cvs/libmhash/include/mhash_tiger.h, /cvs/libmhash/include/rmd128.h, /cvs/libmhash/include/rmd160.h:
+	third batch
+
+	* /cvs/libmhash/lib/bzero.c, /cvs/libmhash/lib/crc-32b.c, /cvs/libmhash/lib/crc32.c, /cvs/libmhash/lib/.cvsignore, /cvs/libmhash/lib/gosthash.c, /cvs/libmhash/lib/haval.c, /cvs/libmhash/lib/Makefile.am, /cvs/libmhash/lib/md5.c, /cvs/libmhash/lib/mhash.c, /cvs/libmhash/lib/mhash.h, /cvs/libmhash/lib/rmd128.c, /cvs/libmhash/lib/rmd160.c, /cvs/libmhash/lib/sha1.c, /cvs/libmhash/lib/snefru.c, /cvs/libmhash/lib/swap.c, /cvs/libmhash/lib/tiger.c, /cvs/libmhash/lib/tiger_sboxes.c, /cvs/libmhash/src/.cvsignore, /cvs/libmhash/src/driver.c, /cvs/libmhash/src/hash_test.sh, /cvs/libmhash/src/Makefile.am:
+	second batch
+
+	* /cvs/libmhash/buildconf, /cvs/libmhash/config.guess, /cvs/libmhash/config.sub, /cvs/libmhash/configure.in, /cvs/libmhash/doc/Makefile.am, /cvs/libmhash/driver.c, /cvs/libmhash/hash_test.sh, /cvs/libmhash/libdefs.h, /cvs/libmhash/ltconfig, /cvs/libmhash/ltmain.sh, /cvs/libmhash/Makefile.am, /cvs/libmhash/mhash_crc32.h, /cvs/libmhash/mhash.h, /cvs/libmhash/mhash_haval.h, /cvs/libmhash/mhash_md5.h, /cvs/libmhash/mhash_sha1.h, /cvs/libmhash/mhash_tiger.h, /cvs/libmhash/NEWS, /cvs/libmhash/rmd128.c, /cvs/libmhash/rmd128.h, /cvs/libmhash/rmd160.c, /cvs/libmhash/rmd160.h:
+	first batch
+
+	* /cvs/libmhash/ChangeLog: update
+
+1999-06-22  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/src/driver.c: shouldn't hurt
+
+	* /cvs/libmhash/doc/Makefile.am, /cvs/libmhash/doc/mhash.pod: .
+
+1999-06-10  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/ChangeLog: .
+
+	* /cvs/libmhash/src/hash_test.sh: add Bourne shell compat fixes
+
+1999-05-21  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/doc/.cvsignore, /cvs/libmhash/doc/Makefile, /cvs/libmhash/doc/Makefile.am:
+	cleanup
+
+	* /cvs/libmhash/configure.in, /cvs/libmhash/doc/Makefile, /cvs/libmhash/doc/mhash.pod, /cvs/libmhash/lib/mhash.c, /cvs/libmhash/Makefile.am, /cvs/libmhash/src/hash_test.sh:
+	- bugfix
+	- cleanup
+
+	* /cvs/libmhash/lib/swap.c, /cvs/libmhash/lib/tiger.c, /cvs/libmhash/lib/tiger_sboxes.c, /cvs/libmhash/src/driver.c, /cvs/libmhash/src/hash_test.sh, /cvs/libmhash/buildconf, /cvs/libmhash/configure.in, /cvs/libmhash/include/gosthash.h, /cvs/libmhash/include/libdefs.h, /cvs/libmhash/include/mhash_crc32.h, /cvs/libmhash/include/mhash_haval.h, /cvs/libmhash/include/mhash_md5.h, /cvs/libmhash/include/mhash_sha1.h, /cvs/libmhash/include/rmd128.h, /cvs/libmhash/include/rmd160.h, /cvs/libmhash/lib/bzero.c, /cvs/libmhash/lib/crc-32b.c, /cvs/libmhash/lib/crc32.c, /cvs/libmhash/lib/gosthash.c, /cvs/libmhash/lib/haval.c, /cvs/libmhash/lib/Makefile.am, /cvs/libmhash/lib/md5.c, /cvs/libmhash/lib/mhash.c, /cvs/libmhash/lib/mhash.h, /cvs/libmhash/lib/rmd128.c, /cvs/libmhash/lib/rmd160.c, /cvs/libmhash/lib/sha1.c, /cvs/libmhash/lib/snefru.c, /cvs/libmhash/LICENSE, /cvs/libmhash/Makefile.am, /cvs/libmhash/README:
+	many changes
+
+	* /cvs/libmhash/doc/mhash.pod, /cvs/libmhash/include/libdefs.h, /cvs/libmhash/include/mhash_bzero.h, /cvs/libmhash/include/mhash_swap.h, /cvs/libmhash/lib/mhash.c, /cvs/libmhash/lib/swap.c, /cvs/libmhash/AUTHORS, /cvs/libmhash/ChangeLog, /cvs/libmhash/COPYING, /cvs/libmhash/LICENSE, /cvs/libmhash/NEWS, /cvs/libmhash/README, /cvs/libmhash/TODO:
+	more cleanup
+
+	* /cvs/libmhash/doc/Makefile, /cvs/libmhash/lib/crc-32b.c: forgot these
+
+	* /cvs/libmhash/doc/.cvsignore, /cvs/libmhash/doc/mhash.pod, /cvs/libmhash/lib/Makefile.am, /cvs/libmhash/lib/mhash.c, /cvs/libmhash/lib/mhash.h, /cvs/libmhash/lib/snefru.c, /cvs/libmhash/src/driver.c, /cvs/libmhash/src/hash_test.sh, /cvs/libmhash/AUTHORS, /cvs/libmhash/ChangeLog, /cvs/libmhash/COPYING, /cvs/libmhash/Makefile.am, /cvs/libmhash/NEWS, /cvs/libmhash/README:
+	cleanup
+
+1999-05-18  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/src/.cvsignore: typo
+
+	* /cvs/libmhash/include/bzero.h, /cvs/libmhash/include/crc32.h, /cvs/libmhash/include/.cvsignore, /cvs/libmhash/include/haval.h, /cvs/libmhash/include/libdefs.h, /cvs/libmhash/include/md5.h, /cvs/libmhash/include/mhash_bzero.h, /cvs/libmhash/include/mhash_crc32.h, /cvs/libmhash/include/mhash_haval.h, /cvs/libmhash/include/mhash_md5.h, /cvs/libmhash/include/mhash_sha1.h, /cvs/libmhash/include/mhash_swap.h, /cvs/libmhash/include/mhash_tiger.h, /cvs/libmhash/include/rmd128.h, /cvs/libmhash/include/rmd160.h, /cvs/libmhash/include/sha1.h, /cvs/libmhash/include/swap.h, /cvs/libmhash/include/tiger.h, /cvs/libmhash/lib/crc32.c, /cvs/libmhash/lib/haval.c, /cvs/libmhash/lib/md5.c, /cvs/libmhash/lib/mhash.c, /cvs/libmhash/lib/mhash.h, /cvs/libmhash/lib/rmd128.c, /cvs/libmhash/lib/rmd160.c, /cvs/libmhash/lib/sha1.c, /cvs/libmhash/lib/swap.c, /cvs/libmhash/src/.cvsignore, /cvs/libmhash/src/driver.c, /cvs/libmhash/src/hash_test.sh, /cvs/libmhash/src/Makefile.am, /cvs/libmhash/configure.in, /cvs/libmhash/TODO:
+	- clean up
+	- test vectors on make check
+
+	* /cvs/libmhash/.cvsignore, /cvs/libmhash/include/.cvsignore, /cvs/libmhash/src/.cvsignore, /cvs/libmhash/stamp-h.in:
+	cleanup
+
+	* /cvs/libmhash/configure.in, /cvs/libmhash/lib/Makefile.am, /cvs/libmhash/Makefile.am, /cvs/libmhash/src/driver.c, /cvs/libmhash/src/Makefile.am:
+	- add test driver
+	- more cleanups
+
+	* /cvs/libmhash/lib/bzero.h, /cvs/libmhash/lib/crc32.h, /cvs/libmhash/lib/gosthash.h, /cvs/libmhash/lib/haval.h, /cvs/libmhash/lib/libdefs.h, /cvs/libmhash/lib/Makefile.am, /cvs/libmhash/lib/md5.h, /cvs/libmhash/lib/mhash.c, /cvs/libmhash/lib/mhash.h, /cvs/libmhash/lib/rmd128.h, /cvs/libmhash/lib/rmd160.h, /cvs/libmhash/lib/sha1.h, /cvs/libmhash/lib/snefru.c, /cvs/libmhash/lib/swap.h, /cvs/libmhash/lib/tiger.h, /cvs/libmhash/ChangeLog, /cvs/libmhash/configure.in, /cvs/libmhash/include/bzero.h, /cvs/libmhash/include/crc32.h, /cvs/libmhash/include/gosthash.h, /cvs/libmhash/include/haval.h, /cvs/libmhash/include/libdefs.h, /cvs/libmhash/include/md5.h, /cvs/libmhash/include/rmd128.h, /cvs/libmhash/include/rmd160.h, /cvs/libmhash/include/sha1.h, /cvs/libmhash/include/swap.h, /cvs/libmhash/include/tiger.h, /cvs/libmhash/Makefile.am, /cvs/libmhash/NEWS:
+	- change API a little bit
+	- add get_algorithms_name
+	- add snefru source
+	- move headers around (makes distribution process easier)
+
+1999-05-16  Sascha Schumann  <sascha@schumann.cx>
+
+	* /cvs/libmhash/lib/gosthash.c, /cvs/libmhash/lib/gosthash.h, /cvs/libmhash/lib/haval.c, /cvs/libmhash/lib/mhash.c, /cvs/libmhash/lib/mhash.h, /cvs/libmhash/lib/Makefile.am, /cvs/libmhash/ChangeLog:
+	* add GOST
+	* add mhash_get_algorithms_name
+
+	* /cvs/libmhash/AUTHORS, /cvs/libmhash/Makefile.am: cleanup
+
+	* /cvs/libmhash/ChangeLog, /cvs/libmhash/configure.in: .
+
+	* /cvs/libmhash/lib/.cvsignore: addition
+
+	* /cvs/libmhash/configure.in: this is done by another call already
+
+	* /cvs/libmhash/.cvsignore: addition
+
+	* /cvs/libmhash/lib/libdefs.h, /cvs/libmhash/lib/mhash.c, /cvs/libmhash/lib/mhash.h, /cvs/libmhash/lib/rmd128.c, /cvs/libmhash/lib/rmd128.h, /cvs/libmhash/lib/rmd160.c, /cvs/libmhash/lib/rmd160.h, /cvs/libmhash/lib/tiger.c, /cvs/libmhash/lib/tiger.h, /cvs/libmhash/lib/tiger_sboxes.c, /cvs/libmhash/lib/haval.c, /cvs/libmhash/lib/Makefile.am, /cvs/libmhash/ChangeLog, /cvs/libmhash/README:
+	* add some algorithms
+	* cleanup
+
+	* /cvs/libmhash/.cvsignore, /cvs/libmhash/lib/Makefile.in, /cvs/libmhash/Makefile.in:
+	further cleanup
+
+	* /cvs/libmhash/lib/.cvsignore, /cvs/libmhash/lib/haval.c, /cvs/libmhash/lib/libdefs.h, /cvs/libmhash/lib/Makefile.am, /cvs/libmhash/lib/Makefile.in, /cvs/libmhash/lib/mhash.c, /cvs/libmhash/lib/mhash.h, /cvs/libmhash/lib/rmd128.c, /cvs/libmhash/lib/rmd128.h, /cvs/libmhash/lib/rmd160.c, /cvs/libmhash/lib/rmd160.h:
+	RIPEMD128 and RIPEMD160 support
+	clean up file structure
+
+	* /cvs/libmhash/doc/digest.c, /cvs/libmhash/doc/md5-rfc1321.txt, /cvs/libmhash/doc/sha1.txt, /cvs/libmhash/doc/test.c:
+	derived from libmhash-0.3
+
+	* /cvs/libmhash/doc/digest.c, /cvs/libmhash/doc/md5-rfc1321.txt, /cvs/libmhash/doc/sha1.txt, /cvs/libmhash/doc/test.c:
+	New file.
+
+	* /cvs/libmhash/doc/README.lib, /cvs/libmhash/lib/haval.c, /cvs/libmhash/lib/haval.h, /cvs/libmhash/lib/Makefile.am, /cvs/libmhash/lib/mhash.c, /cvs/libmhash/lib/sha1.c, /cvs/libmhash/lib/sha1.h:
+	derived from libmhash-0.3
+
+	* /cvs/libmhash/doc/README.lib, /cvs/libmhash/lib/haval.c, /cvs/libmhash/lib/haval.h, /cvs/libmhash/lib/Makefile.am, /cvs/libmhash/lib/mhash.c, /cvs/libmhash/lib/sha1.c, /cvs/libmhash/lib/sha1.h:
+	New file.
+
+	* /cvs/libmhash/lib/bzero.c, /cvs/libmhash/lib/bzero.h, /cvs/libmhash/lib/libdefs.h, /cvs/libmhash/lib/Makefile.in, /cvs/libmhash/lib/md5.c, /cvs/libmhash/lib/md5.h, /cvs/libmhash/lib/swap.c, /cvs/libmhash/lib/swap.h:
+	derived from libmhash-0.3
+
+	* /cvs/libmhash/lib/bzero.c, /cvs/libmhash/lib/bzero.h, /cvs/libmhash/lib/libdefs.h, /cvs/libmhash/lib/Makefile.in, /cvs/libmhash/lib/md5.c, /cvs/libmhash/lib/md5.h, /cvs/libmhash/lib/swap.c, /cvs/libmhash/lib/swap.h:
+	New file.
+
+	* /cvs/libmhash/AUTHORS, /cvs/libmhash/buildconf, /cvs/libmhash/ChangeLog, /cvs/libmhash/.cvsignore, /cvs/libmhash/INSTALL, /cvs/libmhash/lib/crc32.c, /cvs/libmhash/lib/crc32.h, /cvs/libmhash/lib/mhash.h, /cvs/libmhash/NEWS, /cvs/libmhash/README:
+	derived from libmhash-0.3
+
+	* /cvs/libmhash/AUTHORS, /cvs/libmhash/buildconf, /cvs/libmhash/ChangeLog, /cvs/libmhash/.cvsignore, /cvs/libmhash/INSTALL, /cvs/libmhash/lib/crc32.c, /cvs/libmhash/lib/crc32.h, /cvs/libmhash/lib/mhash.h, /cvs/libmhash/NEWS, /cvs/libmhash/README:
+	New file.
+
+	* /cvs/libmhash/ltmain.sh: derived from libmhash-0.3
+
+	* /cvs/libmhash/ltmain.sh: New file.
+
+	* /cvs/libmhash/ltconfig: derived from libmhash-0.3
+
+	* /cvs/libmhash/ltconfig: New file.
+
+	* /cvs/libmhash/config.guess: derived from libmhash-0.3
+
+	* /cvs/libmhash/config.guess: New file.
+
+	* /cvs/libmhash/config.sub, /cvs/libmhash/missing, /cvs/libmhash/stamp-h.in:
+	derived from libmhash-0.3
+
+	* /cvs/libmhash/config.sub, /cvs/libmhash/missing, /cvs/libmhash/stamp-h.in:
+	New file.
+
+	* /cvs/libmhash/Makefile.in, /cvs/libmhash/mkinstalldirs:
+	derived from libmhash-0.3
+
+	* /cvs/libmhash/Makefile.in, /cvs/libmhash/mkinstalldirs: New file.
+
+	* /cvs/libmhash/COPYING: derived from libmhash-0.3
+
+	* /cvs/libmhash/COPYING: New file.
+
+	* /cvs/libmhash/install-sh, /cvs/libmhash/Makefile.am:
+	derived from libmhash-0.3
+
+	* /cvs/libmhash/install-sh, /cvs/libmhash/Makefile.am: New file.
+
