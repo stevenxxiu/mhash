@@ -23,21 +23,33 @@
 #ifndef MHASH_H
 #define MHASH_H
 
-/* $Id: mhash.h,v 1.23 2005/01/12 16:54:25 imipak Exp $ */
+/* $Id: mhash.h,v 1.24 2005/01/12 17:37:04 imipak Exp $ */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include <sys/types.h>
+#include <mhash_config.h>
 
-#define MHASH_API_VERSION 20020524
+#define MHASH_API_NONE		0
+#define MHASH_API_CLASSIC	1
+#define MHASH_API_FAMILY	2
+
+#define MHASH_API_VERSION 20040112
+#define MHASH_API_TYPE MHASH_API_CLASSIC
+/* #define MHASH_API_TYPE MHASH_API_FAMILY */
+#define MHASH_API_FULL
+
+/* These aliases are actually quite useful and so will be kept */
+
+#define MHASH_HAVAL MHASH_HAVAL256
+#define MHASH_TIGER MHASH_TIGER192
 
 /* these are for backwards compatibility and will 
    be removed at some time */
+
 #ifdef MHASH_BACKWARDS_COMPATIBLE
-# define MHASH_HAVAL MHASH_HAVAL256
-# define MHASH_TIGER192 MHASH_TIGER
 # define hmac_mhash_init mhash_hmac_init
 # define hmac_mhash_end mhash_hmac_end
 #endif
@@ -45,35 +57,133 @@ extern "C" {
 /* typedefs */ struct MHASH_INSTANCE;
 	typedef struct MHASH_INSTANCE *MHASH;
 
+#if MHASH_API_TYPE == MHASH_API_CLASSIC
 	enum hashid {
-		MHASH_CRC32,
-		MHASH_MD5,
-		MHASH_SHA1,
-		MHASH_HAVAL256,	/* 3 passes */
+#if defined(ENABLE_CRC32) || defined(MHASH_API_FULL)
+		MHASH_CRC32	= 0,
+		MHASH_CRC32B	= 9,
+#endif
+#if defined(ENABLE_ADLER32) || defined(MHASH_API_FULL)
+		MHASH_ADLER32	= 18,
+#endif
+#if defined(ENABLE_MD2) || defined(MHASH_API_FULL)
+		MHASH_MD2	= 27,
+#endif
+#if defined(ENABLE_MD4) || defined(MHASH_API_FULL)
+		MHASH_MD4	= 16,
+#endif
+#if defined(ENABLE_MD5) || defined(MHASH_API_FULL)
+		MHASH_MD5	= 1,
+#endif
+#if defined(ENABLE_RIPEMD) || defined(MHASH_API_FULL)
 		MHASH_RIPEMD160 = 5,
-		MHASH_TIGER = 7,
-		MHASH_GOST,
-		MHASH_CRC32B,
-		MHASH_HAVAL224 = 10,
-		MHASH_HAVAL192,
-		MHASH_HAVAL160,
-		MHASH_HAVAL128,
-		MHASH_TIGER128,
-		MHASH_TIGER160,
-		MHASH_MD4,
-		MHASH_SHA256,
-		MHASH_ADLER32,
-		MHASH_SHA224,
-		MHASH_SHA512,
-		MHASH_SHA384,
-		MHASH_WHIRLPOOL,
-		MHASH_RIPEMD128,
-		MHASH_RIPEMD256,
-		MHASH_RIPEMD320,
-		MHASH_SNEFRU128,  /* 8 passes */
-		MHASH_SNEFRU256,  /* 8 passes */
-		MHASH_MD2,
+		MHASH_RIPEMD128 = 22,
+		MHASH_RIPEMD256 = 23,
+		MHASH_RIPEMD320 = 24,
+#endif
+#if defined(ENABLE_SHA1) || defined(MHASH_API_FULL)
+		MHASH_SHA1	= 2,
+#endif
+#if defined(ENABLE_SHA256_SHA224) || defined(MHASH_API_FULL)
+		MHASH_SHA224	= 19,
+		MHASH_SHA256	= 17,
+#endif
+#if defined(ENABLE_SHA512_SHA384) || defined(MHASH_API_FULL)
+		MHASH_SHA384	= 21,
+		MHASH_SHA512	= 20,
+#endif
+#if defined(ENABLE_HAVAL) || defined(MHASH_API_FULL)
+		MHASH_HAVAL128	= 13,
+		MHASH_HAVAL160	= 12,
+		MHASH_HAVAL192	= 11,
+		MHASH_HAVAL224	= 10,
+		MHASH_HAVAL256	= 3,	/* 3 passes */
+#endif
+#if defined(ENABLE_HAVAL) || defined(MHASH_API_FULL)
+		MHASH_TIGER128	= 14,
+		MHASH_TIGER160	= 15,
+		MHASH_TIGER192	= 7,
+#endif
+#if defined(ENABLE_GOST) || defined(MHASH_API_FULL)
+		MHASH_GOST	= 8,
+#endif
+#if defined(ENABLE_WHIRLPOOL) || defined(MHASH_API_FULL)
+		MHASH_WHIRLPOOL = 21,
+#endif
+#if defined(ENABLE_SNEFRU) || defined(MHASH_API_FULL)
+		MHASH_SNEFRU128 = 25,  /* 8 passes */
+		MHASH_SNEFRU256 = 26,  /* 8 passes */
+#endif
 	};
+#endif
+
+/* No idea if this will prove of any value. The idea here is to map the
+ * hash function according to the general family to which it belongs.
+ *
+ * The units column denotes which hash within a given group it is.
+ * The tens column denotes which group within a given family it is.
+ * The remaining columns denote the family.
+ */
+
+#if MHASH_API_TYPE == MHASH_API_FAMILY
+	enum hashid {
+#if defined(ENABLE_CRC32) || defined(MHASH_API_FULL)
+		MHASH_CRC32	= 0001,
+		MHASH_CRC32B	= 0002,
+#endif
+#if defined(ENABLE_ADLER32) || defined(MHASH_API_FULL)
+		MHASH_ADLER32	= 0011,
+#endif
+#if defined(ENABLE_MD2) || defined(MHASH_API_FULL)
+		MHASH_MD2	= 0101,
+#endif
+#if defined(ENABLE_MD4) || defined(MHASH_API_FULL)
+		MHASH_MD4	= 0111,
+#endif
+#if defined(ENABLE_RIPEMD) || defined(MHASH_API_FULL)
+		MHASH_RIPEMD128 = 0112,
+		MHASH_RIPEMD160 = 0113,
+		MHASH_RIPEMD256 = 0114,
+		MHASH_RIPEMD320 = 0115,
+#endif
+#if defined(ENABLE_MD5) || defined(MHASH_API_FULL)
+		MHASH_MD5	= 0121,
+#endif
+#if defined(ENABLE_SHA1) || defined(MHASH_API_FULL)
+		MHASH_SHA1	= 0201,
+#endif
+#if defined(ENABLE_SHA256_SHA224) || defined(MHASH_API_FULL)
+		MHASH_SHA224	= 0201,
+		MHASH_SHA256	= 0202,
+#endif
+#if defined(ENABLE_SHA512_SHA384) || defined(MHASH_API_FULL)
+		MHASH_SHA384	= 0203,
+		MHASH_SHA512	= 0204,
+#endif
+#if defined(ENABLE_HAVAL) || defined(MHASH_API_FULL)
+		MHASH_HAVAL128	= 0301,
+		MHASH_HAVAL160	= 0302,
+		MHASH_HAVAL192	= 0303,
+		MHASH_HAVAL224	= 0304,
+		MHASH_HAVAL256	= 0305,	/* 3 passes */
+#endif
+#if defined(ENABLE_TIGER) || defined(MHASH_API_FULL)
+		MHASH_TIGER128	= 0401,
+		MHASH_TIGER160	= 0402,
+		MHASH_TIGER192	= 0403,
+#endif
+#if defined(ENABLE_GOST) || defined(MHASH_API_FULL)
+		MHASH_GOST	= 0501,
+#endif
+#if defined(ENABLE_WHIRLPOOL) || defined(MHASH_API_FULL)
+		MHASH_WHIRLPOOL = 0601,
+#endif
+#if defined(ENABLE_SNEFRU) || defined(MHASH_API_FULL)
+		MHASH_SNEFRU128 = 0701,  /* 8 passes */
+		MHASH_SNEFRU256 = 0702,  /* 8 passes */
+#endif
+	};
+#endif
 
 	enum keygenid {
 		KEYGEN_MCRYPT,	/* The key generator used in mcrypt */

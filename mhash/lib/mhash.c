@@ -20,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.38 2005/01/12 17:37:04 imipak Exp $ */
+/* $Id: mhash.c,v 1.39 2005/01/12 20:58:53 imipak Exp $ */
 
 #include <stdlib.h>
 
@@ -28,61 +28,20 @@
 
 #include "mhash_int.h"
 
-#ifdef ENABLE_CRC32
-# include "mhash_crc32.h"
-#endif
-
-#ifdef ENABLE_HAVAL
-# include "mhash_haval.h"
-#endif
-
-#ifdef ENABLE_MD5
-# include "mhash_md5.h"
-#endif
-
-#ifdef ENABLE_MD4
-# include "mhash_md4.h"
-#endif
-
-#ifdef ENABLE_MD2
-# include "mhash_md2.h"
-#endif
-
-#ifdef ENABLE_SHA1
-# include "mhash_sha1.h"
-#endif
-
-#ifdef ENABLE_TIGER
-# include "mhash_tiger.h"
-#endif
-
-#ifdef ENABLE_RIPEMD
-# include "mhash_ripemd.h"
-#endif
-
-#ifdef ENABLE_SHA256_SHA224
-# include "mhash_sha256_sha224.h"
-#endif
-
-#ifdef ENABLE_SHA512_SHA384
-# include "mhash_sha512_sha384.h"
-#endif
-
-#ifdef ENABLE_ADLER32
-# include "mhash_adler32.h"
-#endif
-
-#ifdef ENABLE_GOST
-# include "mhash_gost.h"
-#endif
-
-#ifdef ENABLE_WHIRLPOOL
-# include "mhash_whirlpool.h"
-#endif
-
-#ifdef ENABLE_SNEFRU
-# include "mhash_snefru.h"
-#endif
+#include "mhash_crc32.h"
+#include "mhash_haval.h"
+#include "mhash_md5.h"
+#include "mhash_md4.h"
+#include "mhash_md2.h"
+#include "mhash_sha1.h"
+#include "mhash_tiger.h"
+#include "mhash_ripemd.h"
+#include "mhash_sha256_sha224.h"
+#include "mhash_sha512_sha384.h"
+#include "mhash_adler32.h"
+#include "mhash_gost.h"
+#include "mhash_whirlpool.h"
+#include "mhash_snefru.h"
 
 /* 19/03/2000 Changes for better thread handling --nikos 
  * Actually it is thread safe.
@@ -109,53 +68,53 @@ struct mhash_hash_entry {
 };
 
 static const mhash_hash_entry algorithms[] = {
-#ifdef ENABLE_CRC32
+#if defined(ENABLE_CRC32)
 	MHASH_ENTRY(MHASH_CRC32, 4, 0, sizeof(word32), mhash_clear_crc32, 
 		mhash_crc32, NULL, mhash_get_crc32),
 	MHASH_ENTRY(MHASH_CRC32B, 4, 0, sizeof(word32), mhash_clear_crc32,
 		mhash_crc32b, NULL, mhash_get_crc32),
 #endif
 
-#ifdef ENABLE_ADLER32
+#if defined(ENABLE_ADLER32)
 	MHASH_ENTRY(MHASH_ADLER32, 4, 0, sizeof(word32), mhash_clear_adler32, 
 		mhash_adler32, NULL, mhash_get_adler32),
 #endif
 
-#ifdef ENABLE_MD5
+#if defined(ENABLE_MD5)
 	MHASH_ENTRY(MHASH_MD5, 16, 64, sizeof(MD5_CTX), MD5Init,
 		MD5Update, NULL, MD5Final),
 #endif
 
-#ifdef ENABLE_MD4
+#if defined(ENABLE_MD4)
 	MHASH_ENTRY(MHASH_MD4, 16, 64, sizeof(MD4_CTX), MD4Init, 
 		MD4Update, NULL, MD4Final),
 #endif
 
-#ifdef ENABLE_MD2
+#if defined(ENABLE_MD2)
 	MHASH_ENTRY(MHASH_MD2, 16, 16, sizeof(MD2_CTX), md2_init,
 		md2_update, NULL, md2_digest),
 #endif
 
-#ifdef ENABLE_SHA1
+#if defined(ENABLE_SHA1)
 	MHASH_ENTRY(MHASH_SHA1, 20, 64, sizeof(SHA_CTX), sha_init, 
 		sha_update, sha_final, sha_digest),
 #endif
 
-#ifdef ENABLE_SHA256_SHA224
+#if defined(ENABLE_SHA256_SHA224)
 	MHASH_ENTRY(MHASH_SHA256, 32, 64, sizeof( SHA256_SHA224_CTX), sha256_init,
 		sha256_sha224_update, sha256_sha224_final, sha256_digest),
 	MHASH_ENTRY(MHASH_SHA224, 28, 64, sizeof( SHA256_SHA224_CTX), sha224_init,
 		sha256_sha224_update, sha256_sha224_final, sha224_digest),
 #endif
 
-#ifdef ENABLE_SHA512_SHA384
+#if defined(ENABLE_SHA512_SHA384)
 	MHASH_ENTRY(MHASH_SHA512, 64, 128, sizeof( SHA512_SHA384_CTX), sha512_init,
 		sha512_sha384_update, sha512_sha384_final, sha512_digest),
 	MHASH_ENTRY(MHASH_SHA384, 48, 128, sizeof( SHA512_SHA384_CTX), sha384_init,
 		sha512_sha384_update, sha512_sha384_final, sha384_digest),
 #endif
 
-#ifdef ENABLE_HAVAL
+#if defined(ENABLE_HAVAL)
 	MHASH_ENTRY(MHASH_HAVAL256, 32, 128, sizeof(havalContext), havalInit256,
 		havalUpdate, NULL, havalFinal),
 	MHASH_ENTRY(MHASH_HAVAL128, 16, 128, sizeof(havalContext), havalInit128,
@@ -168,7 +127,7 @@ static const mhash_hash_entry algorithms[] = {
 		havalUpdate, NULL, havalFinal),
 #endif
 
-#ifdef ENABLE_RIPEMD
+#if defined(ENABLE_RIPEMD)
 	MHASH_ENTRY(MHASH_RIPEMD128, 16, 64, sizeof(RIPEMD_CTX), ripemd128_init, 
 		ripemd_update, ripemd_final, ripemd_digest),
 	MHASH_ENTRY(MHASH_RIPEMD160, 20, 64, sizeof(RIPEMD_CTX), ripemd160_init, 
@@ -179,7 +138,7 @@ static const mhash_hash_entry algorithms[] = {
 		ripemd_update, ripemd_final, ripemd_digest),
 #endif
 
-#ifdef ENABLE_TIGER
+#if defined(ENABLE_TIGER)
 	MHASH_ENTRY(MHASH_TIGER, 24, 64, sizeof(TIGER_CTX), tiger_init, 
 		tiger_update, tiger_final, tiger_digest),
 	MHASH_ENTRY(MHASH_TIGER128, 16, 64, sizeof(TIGER_CTX), tiger_init,
@@ -188,17 +147,17 @@ static const mhash_hash_entry algorithms[] = {
 		tiger_update, tiger_final, tiger160_digest),
 #endif
 
-#ifdef ENABLE_GOST
+#if defined(ENABLE_GOST)
 	MHASH_ENTRY(MHASH_GOST, 32, 0, sizeof(GostHashCtx), gosthash_reset, 
 		gosthash_update, NULL, gosthash_final),
 #endif
 
-#ifdef ENABLE_WHIRLPOOL
+#if defined(ENABLE_WHIRLPOOL)
 	MHASH_ENTRY(MHASH_WHIRLPOOL, 64, 64, sizeof(WHIRLPOOL_CTX), whirlpool_init, 
 		    whirlpool_update, whirlpool_final, whirlpool_digest),
 #endif
 
-#ifdef ENABLE_SNEFRU
+#if defined(ENABLE_SNEFRU)
 	MHASH_ENTRY(MHASH_SNEFRU128, 16, 64, sizeof(SNEFRU_CTX), snefru_init, 
 		    snefru128_update, snefru128_final, snefru128_digest),
 	MHASH_ENTRY(MHASH_SNEFRU256, 32, 64, sizeof(SNEFRU_CTX), snefru_init, 
@@ -402,7 +361,7 @@ MHASH mhash_init_int(const hashid type)
 	(((unsigned long)((unsigned char *)(a))[3]) << 24))
 
 
-#ifdef WORDS_BIGENDIAN
+#if defined(WORDS_BIGENDIAN)
 void mhash_32bit_conversion(word32 * ptr, size_t count)
 {
 	size_t i;

@@ -24,9 +24,11 @@
  * the Free Software Foundation, Inc., 59 Temple Place - Suite 330, Boston,
  * MA 02111-1307, USA.
  */
+
+#if defined(ENABLE_MD2)
  
-#ifndef MHASH_MD2_H_INCLUDED
-#define MHASH_MD2_H_INCLUDED
+#if !defined(__MHASH_MD2_H_INCLUDED)
+#define __MHASH_MD2_H_INCLUDED
 
 #define MD2_DIGEST_SIZE 16
 #define MD2_DATA_SIZE 16
@@ -46,4 +48,6 @@ void md2_update(struct md2_ctx *ctx, const byte *data, int length);
 void md2_digest(struct md2_ctx *ctx, byte *digest);
 
 
-#endif /* MHASH_MD2_H_INCLUDED */
+#endif /* __MHASH_MD2_H_INCLUDED */
+
+#endif

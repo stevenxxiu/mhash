@@ -1,5 +1,8 @@
-#ifndef __HAVAL_H
-#define __HAVAL_H
+#if defined(ENABLE_HAVAL)
+
+#if !defined(__MHASH_HAVAL_H)
+
+#define __MHASH_HAVAL_H
 
 typedef struct {
 	word16 passes, hashLength;	/* HAVAL parameters */
@@ -40,5 +43,6 @@ int havalFinal (havalContext *hcp, byte *digest);
 
 
 
-#endif /* __HAVAL_H */
+#endif /* __MHASH_HAVAL_H */
 
+#endif

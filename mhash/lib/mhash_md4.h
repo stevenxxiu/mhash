@@ -1,5 +1,7 @@
-#ifndef MD4_H
-#define MD4_H
+#if defined(ENABLE_MD4)
+
+#if !defined(__MHASH_MD4_H)
+#define __MHASH_MD4_H
 
 struct MD4Context {
 	word32 buf[4];
@@ -15,4 +17,6 @@ void MD4Transform(word32 buf[4], word32 const in[16]);
 
 typedef struct MD4Context MD4_CTX;
 
-#endif /* !MD4_H */
+#endif /* !__MHASH_MD4_H */
+
+#endif

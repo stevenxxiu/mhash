@@ -1,5 +1,7 @@
-#ifndef MHASH_SHA1_H
-#define MHASH_SHA1_H
+#if defined(ENABLE_SHA1)
+
+#if !defined(__MHASH_SHA1_H)
+#define __MHASH_SHA1_H
 
 #include <libdefs.h>
 
@@ -50,6 +52,8 @@ word32 STRING2INT(word8 *s)
     r = (r << 8) | *s;
   return r;
 }
+#endif
+
 #endif
 
 #endif

@@ -18,9 +18,10 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
+#if defined(ENABLE_SHA512_SHA384)
  
-#ifndef MHASH_SHA512_SHA384_H_INCLUDED
-#define MHASH_SHA512_SHA384_H_INCLUDED
+#if !defined(__MHASH_SHA512_SHA384_H_INCLUDED)
+#define __MHASH_SHA512_SHA384_H_INCLUDED
 
 /* SHA512 and SHA384 */
 
@@ -59,4 +60,6 @@ void
 sha384_digest(const struct sha512_sha384_ctx *ctx, byte *digest);
 
 
-#endif /* MHASH_SHA512_SHA384_H_INCLUDED */
+#endif /* __MHASH_SHA512_SHA384_H_INCLUDED */
+
+#endif

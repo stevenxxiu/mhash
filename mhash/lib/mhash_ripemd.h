@@ -22,8 +22,10 @@
  * Poettering for the mhash library.
  */
 
-#ifndef MHASH_RIPEMD_H
-#define MHASH_RIPEMD_H
+#if defined(ENABLE_RIPEMD)
+
+#if !defined(__MHASH_RIPEMD_H)
+#define __MHASH_RIPEMD_H
 
 #include <libdefs.h>
 
@@ -58,4 +60,6 @@ void ripemd_update(struct ripemd_ctx *ctx, word8 *buffer, word32 len);
 void ripemd_final(struct ripemd_ctx *ctx);
 void ripemd_digest(struct ripemd_ctx *ctx, word8 *s);
 
-#endif /* MHASH_RIPEMD_H */
+#endif /* __MHASH_RIPEMD_H */
+
+#endif

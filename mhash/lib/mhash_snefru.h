@@ -13,8 +13,10 @@
  * is in the public domain. 
  */
 
-#ifndef MHASH_SNEFRU_H_INCLUDED
-#define MHASH_SNEFRU_H_INCLUDED
+#if defined(ENABLE_SNEFRU)
+
+#if !defined(__MHASH_SNEFRU_H_INCLUDED)
+#define __MHASH_SNEFRU_H_INCLUDED
 
 #define SNEFRU128_DATA_SIZE 48
 #define SNEFRU128_DIGEST_SIZE 16
@@ -58,3 +60,5 @@ snefru256_digest(const struct snefru_ctx *ctx, byte *digest);
 
 
 #endif   /* MHASH_SNEFRU_H_INCLUDED */
+
+#endif

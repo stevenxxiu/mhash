@@ -24,9 +24,11 @@
  */
 
 /* The SHA224 support was added by B. Poettering in April 2004. */
+
+#if defined(ENABLE_SHA256_SHA224)
  
-#ifndef MHASH_SHA256_SHA224_H_INCLUDED
-#define MHASH_SHA256_SHA224_H_INCLUDED
+#if !defined(__MHASH_SHA256_SHA224_H_INCLUDED)
+#define __MHASH_SHA256_SHA224_H_INCLUDED
 
 
 /* SHA256 and SHA224 */
@@ -66,4 +68,6 @@ void
 sha224_digest(const struct sha256_sha224_ctx *ctx, byte *digest);
 
 
-#endif /* MHASH_SHA256_SHA224_H_INCLUDED */
+#endif /* __MHASH_SHA256_SHA224_H_INCLUDED */
+
+#endif

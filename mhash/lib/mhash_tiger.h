@@ -1,5 +1,7 @@
-#ifndef MHASH_TIGER_H
-#define MHASH_TIGER_H
+#if defined(ENABLE_TIGER)
+
+#if !defined(__MHASH_TIGER_H)
+#define __MHASH_TIGER_H
 
 #include "libdefs.h"
 
@@ -58,5 +60,7 @@ void tiger_update(struct tiger_ctx *ctx, word8 * buffer, word32 len);
 void tiger_init(struct tiger_ctx *ctx);
 void tiger128_digest(struct tiger_ctx *ctx, word8 * s);
 void tiger160_digest(struct tiger_ctx *ctx, word8 * s);
+
+#endif
 
 #endif

@@ -9,7 +9,9 @@
  *  All rights reserved.                    
  */
 
-#ifndef GOSTHASH_H
+#if defined(ENABLE_GOST)
+
+#if !defined(GOSTHASH_H)
 #define GOSTHASH_H
 
 /*
@@ -55,3 +57,5 @@ void gosthash_final(GostHashCtx * ctx, byte * digest);
 #endif /*
 	      GOSTHASH_H 
 	    */
+
+#endif

@@ -10,8 +10,10 @@
  *
  */
 
-#ifndef MHASH_WHIRLPOOL_H_INCLUDED
-#define MHASH_WHIRLPOOL_H_INCLUDED
+#if defined(ENABLE_WHIRLPOOL)
+
+#if !defined(__MHASH_WHIRLPOOL_H_INCLUDED)
+#define __MHASH_WHIRLPOOL_H_INCLUDED
 
 
 #define WHIRLPOOL_DIGEST_SIZE 64
@@ -39,4 +41,6 @@ void
 whirlpool_digest(const struct whirlpool_ctx *ctx, byte *digest);
 
 
-#endif   /* MHASH_WHIRLPOOL_H_INCLUDED */
+#endif   /* __MHASH_WHIRLPOOL_H_INCLUDED */
+
+#endif
