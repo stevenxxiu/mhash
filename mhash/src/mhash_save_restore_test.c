@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <mhash.h>
+#include "../lib/mhash.h"
 #include <string.h>
 #include <unistd.h>
 #include <errno.h>

@@ -1,6 +1,7 @@
 mhash_keygen
 mhash_keygen_ext
 mhash_get_keygen_name
+mhash_get_keygen_name_static
 mhash_get_keygen_max_key_size
 mhash_get_keygen_salt_size
 mhash_keygen_count
@@ -12,7 +13,7 @@ mhash_count
 mhash_end
 mhash_end_m
 mhash_get_block_size
-mhash_get_hash_name
+mhash_get_hash_name_static
 mhash_get_hash_pblock
 mhash_init
 mhash_init_int
