@@ -3,7 +3,7 @@ AC_INIT(lib/mhash.c)
 
 AC_CANONICAL_SYSTEM
 
-AM_INIT_AUTOMAKE(mhash, 0.8.13)
+AM_INIT_AUTOMAKE(mhash, 0.8.14)
 
 
 
