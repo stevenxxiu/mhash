@@ -6,10 +6,10 @@ Version: @VERSION@
 Release: 1
 Copyright: LGPL
 Group: System Environment/Libraries
-Source: http://schumann.cx/mhash/dl/%{name}-%{version}.tar.gz
+Source: http://mhash.sf.net/dl/%{name}-%{version}.tar.gz
 BuildRoot: /tmp/%{name}-%{version}-root
 Packager: Germano Rizzo <mano@pluto.linux.it>
-URL: http://mhash.sourceforge.net
+URL: http://mhash.sf.net
 
 %description
 mhash is a thread-safe hash library, implemented in C, and provides a
