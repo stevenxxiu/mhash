@@ -20,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.22 2001/10/26 10:47:11 nmav Exp $ */
+/* $Id: mhash.c,v 1.23 2001/10/27 09:42:22 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -103,7 +103,6 @@ WIN32DLL_DEFINE size_t mhash_get_block_size(hashid type)
 	return ret;
 }
 
-#ifdef WIN32
 /* function created in order for mhash to compile under WIN32 */
 char *mystrdup(char *str)
 {
@@ -116,7 +115,6 @@ char *mystrdup(char *str)
 	return ret;
 
 }
-#endif
 
 WIN32DLL_DEFINE hashid mhash_get_mhash_algo( MHASH tmp) {
 	return tmp->algorithm_given;
