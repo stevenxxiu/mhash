@@ -19,12 +19,6 @@
  */
 
 
-/*
-   This is a modified version of the crc32 described in comp.compression faq
-   * (the tables were taken from bzip2)
-   * I think it works fine on big and little endian machines.
- */
-
 #include "mhash_crc32.h"
 
 /* This polynomial ( 0xEDB88320L) DOES generate the same CRC values as ZMODEM and PKZIP
