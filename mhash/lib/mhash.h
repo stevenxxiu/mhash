@@ -22,7 +22,7 @@
 #ifndef MHASH_H
 #define MHASH_H
 
-/* $Id: mhash.h,v 1.8 2001/01/21 19:28:49 nmav Exp $ */
+/* $Id: mhash.h,v 1.9 2001/02/04 12:06:10 nmav Exp $ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -109,6 +109,7 @@ extern "C" {
 
 	void *mhash_end(MHASH thread);
 	void *mhash_end_m(MHASH thread, void *(*hash_malloc) (size_t));
+	void mhash_deinit(MHASH thread, void *result);
 
 /* informational */
 	size_t mhash_get_hash_pblock(hashid type);
@@ -120,6 +121,7 @@ extern "C" {
 			      int block);
 	void *mhash_hmac_end_m(MHASH thread, void *(*hash_malloc) (size_t));
 	void *mhash_hmac_end(MHASH thread);
+	int mhash_hmac_deinit(MHASH thread, void *result);
 
 
 /* Key generation functions */
