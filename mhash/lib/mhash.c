@@ -19,7 +19,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.5 2000/04/11 12:23:13 nmav Exp $ */
+/* $Id: mhash.c,v 1.6 2000/04/14 08:44:53 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -58,6 +58,7 @@ static mhash_hash_entry algorithms[] = {
 	MHASH_ENTRY(MHASH_HAVAL128, 16, 128),
 	MHASH_ENTRY(MHASH_HAVAL160, 20, 128),
 	MHASH_ENTRY(MHASH_HAVAL192, 24, 128),
+	MHASH_ENTRY(MHASH_HAVAL224, 28, 128),
 	MHASH_ENTRY(MHASH_RIPEMD160, 20, 64),
 	MHASH_ENTRY(MHASH_TIGER, 192 >> 3, 64),
 	MHASH_ENTRY(MHASH_GOST, 32, 0),
@@ -124,6 +125,10 @@ MHASH mhash_init_int(const hashid type)
 	case MHASH_HAVAL256:
 		ret->state = malloc(sizeof(havalContext));
 		havalInit( (void *) ret->state, 3, 256);
+		break;
+	case MHASH_HAVAL224:
+		ret->state = malloc(sizeof(havalContext));
+		havalInit( (void *) ret->state, 3, 224);
 		break;
 	case MHASH_HAVAL192:
 		ret->state = malloc(sizeof(havalContext));
@@ -196,6 +201,7 @@ int mhash(MHASH thread, const void *plaintext, size_t size)
 			   size);
 		break;
 	case MHASH_HAVAL256:
+	case MHASH_HAVAL224:
 	case MHASH_HAVAL192:
 	case MHASH_HAVAL160:
 	case MHASH_HAVAL128:
@@ -240,6 +246,7 @@ void *mhash_end(MHASH thread)
 		rtmp = digest;
 		break;
 	case MHASH_HAVAL256:
+	case MHASH_HAVAL224:
 	case MHASH_HAVAL192:
 	case MHASH_HAVAL160:
 	case MHASH_HAVAL128:
@@ -341,6 +348,7 @@ void *mhash_hmac_end(MHASH thread)
 		return_val = digest;
 		break;
 	case MHASH_HAVAL256:
+	case MHASH_HAVAL224:
 	case MHASH_HAVAL192:
 	case MHASH_HAVAL160:
 	case MHASH_HAVAL128:

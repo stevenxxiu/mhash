@@ -12,7 +12,8 @@ enum hashid {
 	MHASH_TIGER = 7,
 	MHASH_GOST,
 	MHASH_CRC32B,
-	MHASH_HAVAL192=11,
+	MHASH_HAVAL224=10,
+	MHASH_HAVAL192,
 	MHASH_HAVAL160,
 	MHASH_HAVAL128
 };
@@ -32,7 +33,7 @@ typedef enum hashid hashid;
 typedef enum keygenid keygenid;
 
 typedef struct keygen {
-	hashid 		hash_algorithm[1];
+	hashid 		hash_algorithm[2];
 	unsigned int 	count;
 	void*		salt;
 	int		salt_size;

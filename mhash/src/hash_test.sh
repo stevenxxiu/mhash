@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# $Id: hash_test.sh,v 1.1.1.1 2000/04/04 10:34:57 nmav Exp $
+# $Id: hash_test.sh,v 1.2 2000/04/11 11:58:33 nmav Exp $
 
 if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
   if (echo $ac_n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
@@ -73,11 +73,15 @@ test_hash 3 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 \
 		899397D96489281E9E76D5E65ABAB751F312E06C06C07C9C1D42ABD31BB6A404
 echo 
 
+echo $ac_n "testing HAVAL224 $ac_c"
+test_hash 10 "0123456789" \
+		EE345C97A58190BF0F38BF7CE890231AA5FCF9862BF8E7BEBBF76789
+echo 
+
 echo $ac_n "testing HAVAL192 $ac_c"
 test_hash 11 "HAVAL" \
 		8DA26DDAB4317B392B22B638998FE65B0FBE4610D345CF89
 echo 
-
 
 echo $ac_n "testing HAVAL160 $ac_c"
 test_hash 12 "a" \
