@@ -1,6 +1,7 @@
 /*
  *    Copyright (C) 1998 Nikos Mavroyanopoulos
  *    Copyright (C) 1999,2000 Sascha Schumman, Nikos Mavroyanopoulos
+ *    Copyright (C) 2002 Nikos Mavroyanopoulos
  *
  *    This library is free software; you can redistribute it and/or modify it 
  *    under the terms of the GNU Library General Public License as published 
@@ -127,14 +128,14 @@ int _mhash_gen_key_s2k_isalted(hashid algorithm, unsigned long _count,
 	int block_size = mhash_get_block_size(algorithm);
 	char* saltpass;
 	int saltpass_size;
-	word32 iter;
+	word32 bcount, rest;
 	word32 count = _count;
 
 	if (salt==NULL) return -1;
 	if (salt_size<8) return -1; /* This algorithm will use EXACTLY
 				     * 8 bytes salt.
 				     */
-	
+
 	if((saltpass = calloc(1, 8+plen)) == NULL) return -1; /* hmm */
 	memcpy( saltpass, salt, 8);
 	memcpy( &saltpass[8], password, plen);
@@ -143,6 +144,21 @@ int _mhash_gen_key_s2k_isalted(hashid algorithm, unsigned long _count,
 	times = key_size/block_size;
 	if (key_size%block_size != 0) times++;
 	if ( (key=calloc(1, times*block_size))==NULL) return -1;
+
+
+	/* Calculate the iterations
+	 */
+	bcount /*bytes */ = 
+		((word32)16 + (count & 15)) << ((count >> 4) + EXPBIAS); 
+
+	count /* iterations */ = 
+		(bcount / saltpass_size);
+
+	rest = bcount % saltpass_size;
+	if (bcount < saltpass_size) {
+		count++;
+		rest = 0;
+	}
 	
 	for (i=0;i<times;i++) {
 		td = mhash_init(algorithm);
@@ -155,16 +171,10 @@ int _mhash_gen_key_s2k_isalted(hashid algorithm, unsigned long _count,
 		for (j=0;j<i;j++)
 			mhash(td, &null, 1);
 
-		iter /*bytes */ = 
-			((word32)16 + (count & 15)) << ((count >> 4) + EXPBIAS); 
-
-		iter /* iterations */ = 
-			(iter / saltpass_size) + 
-				iter%saltpass_size==0?0:1;
-
-		for (z=0;z<iter;z++) {
+		for (z=0;z<count;z++) {
 			mhash(td, saltpass, saltpass_size);
 		}
+		mhash( td, saltpass, rest);
 
 		mhash_deinit(td, digest);
 		
