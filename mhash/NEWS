@@ -1,10 +1,14 @@
-mhash ChangeLog ($Date: 2000/12/15 12:45:44 $)
+mhash ChangeLog ($Date: 2000/12/17 19:10:54 $)
 ===============================================================================
 
 People
 
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
+
+Version 0.8.5
+- added checks for low malloc failures
+- corrected old style checks for mhash failures
 
 Version 0.8.4 (released on December 15 2000)
 - added mhash_hmac_end_m() and mhash_end_m() functions which allow to specify the malloc function. (NM)
