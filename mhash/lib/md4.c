@@ -77,7 +77,7 @@ void MD4Init(struct MD4Context *ctx)
 void MD4Update(struct MD4Context *ctx, unsigned char const *buf,
 	       unsigned len)
 {
-	word32 t;
+	register word32 t;
 
 	/* Update bitcount */
 
@@ -125,7 +125,7 @@ void MD4Update(struct MD4Context *ctx, unsigned char const *buf,
  */
 void MD4Final(unsigned char digest[16], struct MD4Context *ctx)
 {
-	unsigned count;
+	unsigned int count;
 	unsigned char *p;
 
 	/* Compute number of bytes mod 64 */

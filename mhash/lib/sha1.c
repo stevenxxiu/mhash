@@ -9,7 +9,7 @@
  * Adapted to pike and some cleanup by Niels Möller.
  */
 
-/* $Id: sha1.c,v 1.5 2000/04/03 14:03:57 nikos Exp $ */
+/* $Id: sha1.c,v 1.1.1.1 2000/04/04 10:34:35 nmav Exp $ */
 
 /* SHA: NIST's Secure Hash Algorithm */
 
@@ -139,7 +139,7 @@ void sha_init(struct sha_ctx *ctx)
 
 static void sha_transform(struct sha_ctx *ctx, word32 *data )
 {
-  word32 A, B, C, D, E;     /* Local vars */
+  register word32 A, B, C, D, E;     /* Local vars */
 
   /* Set up first buffer and local data buffer */
   A = ctx->digest[0];
