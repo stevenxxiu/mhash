@@ -1,10 +1,13 @@
-mhash ChangeLog ($Date: 2002/10/03 13:06:01 $)
+mhash ChangeLog ($Date: 2002/10/04 10:40:29 $)
 ===============================================================================
 
 People
 
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
+
+Version 0.8.18
+- Some additions to built win32 dlls.
 
 Version 0.8.17 (released October 4 2002)
 - Corrected the HEX key mode. Refuses to convert hex strings longer
