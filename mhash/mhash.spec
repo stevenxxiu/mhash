@@ -1,6 +1,6 @@
 # Note that this is NOT a relocatable package
-# $Id: mhash.spec,v 1.1 2000/02/15 19:50:11 sascha Exp $
-%define ver      0.6.1
+# $Id: mhash.spec,v 1.1.1.1 2000/04/04 10:34:20 nmav Exp $
+%define ver      0.8.13
 %define rel      1
 %define prefix   /usr
 
@@ -8,12 +8,12 @@ Summary: Thread-safe hash library
 Name: mhash
 Version: %ver
 Release: %rel
-Copyright: BSD
+Copyright: LGPL
 Group: System Environment/Libraries
-Source: http://schumann.cx/mhash/dl/mhash-0.6.1.tar.gz
+Source: http://mhash.sf.net/dl/mhash-%{ver}.tar.gz
 BuildRoot: /tmp/%{name}-%{ver}-root
-Packager: Clinton Work <clinton@scripty.com>
-URL: http://schumann.cx/mhash/
+Packager: Joerg Dorchain <joerg@dorchain.net>
+URL: http://mhash.sf.net/
 
 %description
 mhash is a thread-safe hash library, implemented in C, and provides a
@@ -36,6 +36,10 @@ Install the mhash-devel package if you want to develop applications that
 will use the mhash library.
 
 %changelog
+* Fri Feb 01 2002 Germano Rizzo <mano@pluto.linux.it>
+- Built version 0.8.13 basing on Kyle Wheeler's SPEC file
+* Sat Jun 10 2000 Kyle Wheeler <memoryhole@penguinpowered.com>
+- Updated for version 0.8.1
 * Wed Feb 9 2000 Clinton Work <clinton@scripty.com>
 - Created a new spec file for version 0.6.1
 - Created both a shared library and devel packages
@@ -45,7 +49,7 @@ will use the mhash library.
 
 %build
 CFLAGS="${RPM_OPT_FLAGS}"
-CFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=%prefix
+CFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=%{prefix}
 make
 
 %install
@@ -66,8 +70,8 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(-, root, root)
 %doc AUTHORS COPYING INSTALL ChangeLog NEWS README TODO
-%doc doc/digest.c doc/README.lib doc/test.c doc/sha1.txt
-%{prefix}/man/man3/mhash.3
+%doc doc/example.c doc/md5-rfc1321.txt doc/mhash.html doc/skid2-authentication
+%{prefix}/man/man3/mhash.3.gz
 %{prefix}/lib/*.a
 %{prefix}/lib/*.la
 %{prefix}/lib/*.so
