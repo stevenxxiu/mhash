@@ -53,8 +53,10 @@ staticforward PyTypeObject MHASH_Type;
 static void
 MHASH_dealloc(MHASHObject *self)
 {
-	if (self->thread)
-		mhash_end(self->thread);
+	if (self->thread) {
+		void *ret = mhash_end(self->thread);
+		if (ret) free(ret);
+	}
 	self->ob_type->tp_free((PyObject *)self);
 }
 

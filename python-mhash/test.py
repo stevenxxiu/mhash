@@ -238,8 +238,8 @@ class TestKeygenFunctions(unittest.TestCase):
 			self.assertEqual(keygen_salt_size(keygenid), saltsize)
 
 	def testMaxKeySize(self):
-		"Test keygen_max_keysize() function"
-		self.assertEqual(keygen_max_keysize(KEYGEN_MCRYPT), 0)
+		"Test keygen_max_key_size() function"
+		self.assertEqual(keygen_max_key_size(KEYGEN_MCRYPT), 0)
 
 if __name__ == "__main__":
 	unittest.main()
