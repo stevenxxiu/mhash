@@ -1,10 +1,14 @@
-mhash ChangeLog ($Date: 2000/04/04 10:34:20 $)
+mhash ChangeLog ($Date: 2000/04/05 12:00:58 $)
 ===============================================================================
 
 People
 
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
+
+Version 0.8.1 (released on April 11 2000)
+- Bugfixes in hmac implementation.
+- Removed MD2 (which was not free)
 
 Version 0.8.0 (released on April 5 2000)
 - No longer needs posix thread locks to be thread safe (NM)
