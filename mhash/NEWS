@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2002/10/04 10:40:29 $)
+mhash ChangeLog ($Date: 2003/01/19 18:00:52 $)
 ===============================================================================
 
 People
@@ -6,8 +6,12 @@ People
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
 
-Version 0.8.18
-- Some additions to built win32 dlls.
+Version 0.8.19
+- Added VC++ project files, contributed by James M. Rogers 
+  <james@singlestep.com>
+
+Version 0.8.18 (released March 6 2003)
+- Several additions and fixes to built win32 dlls.
 
 Version 0.8.17 (released October 4 2002)
 - Corrected the HEX key mode. Refuses to convert hex strings longer

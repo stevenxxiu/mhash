@@ -20,18 +20,17 @@
 
 
 /*
-   $Id: bzero.c,v 1.4 2000/04/03 14:03:57 nikos Exp $ 
+   $Id: bzero.c,v 1.1.1.1 2000/04/04 10:34:24 nmav Exp $ 
  */
 
 #include "libdefs.h"
 
-void
+WIN32DLL_DEFINE void
 mhash_bzero(void *s, int n)
 {
 #ifdef HAVE_MEMSET
 	memset(s, '\0', n);
-#else
-#ifdef HAVE_BZERO
+#elif HAVE_BZERO
 	bzero(s, n);
 #else
 	char *stmp = s;
