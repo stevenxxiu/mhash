@@ -1,5 +1,8 @@
 This is the NEWS file of python-mhash.
 
+Version 1.1
+	* Support to key generation implemented.
+
 Version 1.0
 	* MHASH and HMAC classes implemented
 	* hash_name() function implemented

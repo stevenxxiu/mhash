@@ -138,11 +138,14 @@ MHASH_digest(MHASHObject *self, PyObject *args)
 {
 	MHASH thread;
 	void *digest;
+	PyObject *ret;
 	if (!PyArg_ParseTuple(args, ":digest"))
 		return NULL;
 	thread = mhash_cp(self->thread);
 	digest = self->end(thread);
-	return PyString_FromStringAndSize((char*)digest, self->diggest_size);
+	ret = PyString_FromStringAndSize((char*)digest, self->diggest_size);
+	free(digest);
+	return ret;
 }
 
 static PyObject *
@@ -165,6 +168,7 @@ MHASH_hexdigest(MHASHObject *self, PyObject *args)
 	}
 	ret = PyString_FromStringAndSize((char*)hexdigest,
 					 self->diggest_size*2);
+	free(digest);
 	PyMem_Free(hexdigest);
 	return ret;
 }
@@ -368,8 +372,14 @@ statichere PyTypeObject HMAC_Type = {
 };
 /* --------------------------------------------------------------------- */
 
+static char hash_name__doc__[] =
+"hash_name(hashid) -> name\n\
+\n\
+Returns name of hashid hash algorithm.\n\
+";
+
 static PyObject *
-mhash_hash_name(PyObject *self, PyObject *args)
+_mhash_hash_name(PyObject *self, PyObject *args)
 {
 	hashid type;
 	char *name;
@@ -382,10 +392,195 @@ mhash_hash_name(PyObject *self, PyObject *args)
 	return ret;
 }
 
+static char keygen__doc__[] =
+"keygen(keygenid,\n\
+        password,\n\
+        keysize,\n\
+	hashid=MHASH_MD5,\n\
+	salt=\"\",\n\
+	count=0) -> key\n\
+\n\
+This function uses the algorithm specified in keygenid and the\n\
+password to generate a key of keysize length. Depending on the\n\
+algorithm you select, the parameters hashid, salt, and count are\n\
+used. You may discover when they are used with the keygen_uses_*()\n\
+functions. You may also check if the selected algorithm has any\n\
+limitations about the keysize with keygen_max_keysize() function.\n\
+Some algorithms using salt require an exact number of bytes in it,\n\
+so it must not contain less bytes than this (more is allowed, and\n\
+ignored). You may check the salt size using keygen_salt_size().\n\
+";
+
+static PyObject *
+_mhash_keygen(PyObject *self, PyObject *args, PyObject *kwargs)
+{
+	keygenid keygen_algo;
+	hashid hash_algo = MHASH_MD5;
+	void *keyword;
+	int keysize;
+	void *salt = "";
+	int saltsize = 0;
+	unsigned char *password;
+	int passlen;
+	unsigned int count = 0;
+
+	static char *kwlist[] = {"keygenid", "password", "keysize",
+				 "hashid", "salt", "count", NULL};
+	PyObject *ret;
+
+	unsigned int algo_keysize;
+	unsigned int algo_saltsize;
+	
+	if (!PyArg_ParseTupleAndKeywords(args, kwargs, "is#i|is#i:keygen",
+				         kwlist, &keygen_algo,
+					 &password, &passlen, &keysize,
+					 &hash_algo, &salt, &saltsize, &count))
+		return NULL;
+
+	/* Do some sanity checks in the parameters. */
+	algo_keysize = mhash_get_keygen_max_key_size(keygen_algo);
+	if (algo_keysize != 0 && keysize > algo_keysize) {
+		PyErr_Format(PyExc_ValueError, "keysize has exceeded the "
+			     "maximum keysize of algorithm (%d)",
+			     algo_keysize);
+		return NULL;
+	}
+	algo_saltsize = mhash_get_keygen_salt_size(keygen_algo);
+	if (saltsize < algo_saltsize) {
+		PyErr_Format(PyExc_ValueError, "salt size is smaller than "
+			     "the salt size used by the algorithm (%d)",
+			     algo_saltsize);
+		return NULL;
+	}
+
+	keyword = PyMem_Malloc(keysize);
+	mhash_keygen(keygen_algo, hash_algo, count, keyword, keysize,
+		     salt, saltsize, password, passlen);
+	ret = PyString_FromStringAndSize(keyword, keysize);
+	PyMem_Free(keyword);
+	return ret;
+}
+
+static char keygen_name__doc__[] =
+"keygen_name(keygenid) -> name\n\
+\n\
+Returns name of keygenid keygen algorithm.\n\
+";
+
+static PyObject *
+_mhash_keygen_name(PyObject *self, PyObject *args)
+{
+	keygenid type;
+	char *name;
+	PyObject *ret;
+	if (!PyArg_ParseTuple(args, "i:keygen_name", &type))
+		return NULL;
+	name = mhash_get_keygen_name(type);
+	ret = PyString_FromString(name);
+	free(name);
+	return ret;
+}
+
+static char keygen_uses_hashid__doc__[] =
+"keygen_uses_hashid(keygenid) -> bool\n\
+\n\
+Returns true if keygenid algorithm uses the hashid parameter of keygen().\n\
+";
+
+static PyObject *
+_mhash_keygen_uses_hashid(PyObject *self, PyObject *args)
+{
+	keygenid type;
+	if (!PyArg_ParseTuple(args, "i:keygen_uses_hashid", &type))
+		return NULL;
+	return PyInt_FromLong(mhash_keygen_uses_hash_algorithm(type));
+}
+
+static char keygen_uses_count__doc__[] =
+"keygen_uses_count(keygenid) -> bool\n\
+\n\
+Returns true if keygenid algorithm uses the count parameter of keygen().\n\
+";
+
+static PyObject *
+_mhash_keygen_uses_count(PyObject *self, PyObject *args)
+{
+	keygenid type;
+	if (!PyArg_ParseTuple(args, "i:keygen_uses_count", &type))
+		return NULL;
+	return PyInt_FromLong(mhash_keygen_uses_count(type));
+}
+
+static char keygen_uses_salt__doc__[] =
+"keygen_uses_salt(keygenid) -> bool\n\
+\n\
+Returns true if keygenid algorithm uses the salt parameter of keygen().\n\
+You may want to check the keygen_salt_size() function.\n\
+";
+
+static PyObject *
+_mhash_keygen_uses_salt(PyObject *self, PyObject *args)
+{
+	keygenid type;
+	if (!PyArg_ParseTuple(args, "i:keygen_uses_salt", &type))
+		return NULL;
+	return PyInt_FromLong(mhash_keygen_uses_salt(type));
+}
+
+static char keygen_salt_size__doc__[] =
+"keygen_salt_size(keygenid) -> size\n\
+\n\
+Returns the salt size needed by the keygenid algorithm. If the algorithm\n\
+doesn't use the salt parameter, or if the salt may be of any size, it\n\
+will return 0 instead. Note that you may provide a salt with more bytes\n\
+than the required, but the extra bytes will be ignored.\n\
+";
+
+static PyObject *
+_mhash_keygen_salt_size(PyObject *self, PyObject *args)
+{
+	keygenid type;
+	if (!PyArg_ParseTuple(args, "i:keygen_salt_size", &type))
+		return NULL;
+	return PyInt_FromLong(mhash_get_keygen_salt_size(type));
+}
+
+static char keygen_max_keysize__doc__[] =
+"keygen_max_keysize(keygenid) -> size\n\
+\n\
+Returns the maximum key size supported by the keygenid algorithm. Most\n\
+of them (all?) don't have any limitations, but you may check if any\n\
+algorithm has some using this function.\n\
+";
+
+static PyObject *
+_mhash_keygen_max_keysize(PyObject *self, PyObject *args)
+{
+	keygenid type;
+	if (!PyArg_ParseTuple(args, "i:keygen_max_keysize", &type))
+		return NULL;
+	return PyInt_FromLong(mhash_get_keygen_max_key_size(type));
+}
+
 /* List of functions defined in the module */
 
 static PyMethodDef mhash_methods[] = {
-	{"hash_name",	mhash_hash_name,	METH_VARARGS},
+	{"hash_name", _mhash_hash_name, METH_VARARGS,
+		hash_name__doc__},
+	{"keygen", (PyCFunction)_mhash_keygen, METH_VARARGS|METH_KEYWORDS,
+		keygen__doc__},
+	{"keygen_name", _mhash_keygen_name, METH_VARARGS,
+		keygen_name__doc__},
+	{"keygen_uses_hashid", _mhash_keygen_uses_hashid, METH_VARARGS,
+		keygen_uses_hashid__doc__},
+	{"keygen_uses_count", _mhash_keygen_uses_count, METH_VARARGS,
+		keygen_uses_count__doc__},
+	{"keygen_uses_salt", _mhash_keygen_uses_salt, METH_VARARGS,
+		keygen_uses_salt__doc__},
+	{"keygen_salt_size", _mhash_keygen_salt_size, METH_VARARGS,
+		keygen_salt_size__doc__},
+	{"keygen_max_keysize", _mhash_keygen_max_keysize, METH_VARARGS,
+		keygen_max_keysize__doc__},
 	{NULL,		NULL}		/* sentinel */
 };
 
@@ -407,11 +602,19 @@ These are newstyle classes, and may be subclassed by python classes.\n\
 \n\
 Functions:\n\
 \n\
-hash_name(algorithm)\n\
+hash_name(hashid)\n\
+keygen(keygenid, password, keysize [, hashid, salt, count])\n\
+keygen_name(keygenid)\n\
+keygen_uses_hash(keygenid)\n\
+keygen_uses_count(keygenid)\n\
+keygen_uses_salt(keygenid)\n\
+keygen_salt_size(keygenid)\n\
+keygen_max_keysize(keygenid)\n\
 \n\
 Constants:\n\
 \n\
 MHASH_*\n\
+KEYGEN_*\n\
 ";
 
 DL_EXPORT(void)
@@ -434,8 +637,12 @@ initmhash(void)
 	PyDict_SetItemString(d, "HMAC", (PyObject *)&HMAC_Type);
 	PyDict_SetItemString(d, "__authors__",
 			     PyString_FromString(__authors__));
+	PyDict_SetItemString(d, "__version__",
+			     PyString_FromString(VERSION));
 
 #define INSINT(x) PyModule_AddIntConstant(m, #x, x)
+
+	/* Hash algorithms */
 	INSINT(MHASH_CRC32);
 	INSINT(MHASH_MD5);
 	INSINT(MHASH_SHA1);
@@ -455,4 +662,14 @@ initmhash(void)
 	INSINT(MHASH_SHA256);
 	INSINT(MHASH_ADLER32);
 #endif
+
+	/* Keygen algorithms */
+	INSINT(KEYGEN_MCRYPT);
+	INSINT(KEYGEN_ASIS);
+	INSINT(KEYGEN_HEX);
+	INSINT(KEYGEN_PKDES);
+	INSINT(KEYGEN_S2K_SIMPLE);
+	INSINT(KEYGEN_S2K_SALTED);
+	INSINT(KEYGEN_S2K_ISALTED);
+	
 }

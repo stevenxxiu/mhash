@@ -17,6 +17,7 @@ o  Reentrancy support (*)
 o  Support for known strong algorithms (*)
 o  Support for less-known algorithms such as GOST (*)
 o  Support for HMAC hashing (*)
+o  Support for key generation functions (*)
 o  Support for Python newstyle classes, allowing subclassing
 o  Unittests testing functionality provided by the module
 

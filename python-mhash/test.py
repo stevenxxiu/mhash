@@ -160,15 +160,86 @@ class TestHMAC(unittest.TestCase):
 			self.assertEqual(m.hexdigest(), hexdigest)
 			self.assertEqual(m.digest(), digest)
 
-class TestFunctions(unittest.TestCase):
-	"Testcase for general functions."
+class TestHashFunctions(unittest.TestCase):
+	"Testcase for hash functions."
 
 	def testHashName(self):
 		"Test hash_name() function"
-		for name, value in locals().items():
+		for name, value in globals().items():
 			if name[:6] == "MHASH_":
 				# This seem to be the rule so far
 				self.assertEqual(hash_name(value), name[6:])
+
+class TestKeygenFunctions(unittest.TestCase):
+	"Testcase for keygen functions."
+
+	DATA = [
+			((KEYGEN_MCRYPT, "password", 10),
+			 "_M\xcc;Z\xa7e\xd6\x1d\x83"),
+			((KEYGEN_MCRYPT, "password", 20, MHASH_SHA1),
+			 "[\xaaa\xe4\xc9\xb9??\x06\x82%\x0bl\xf83\x1b~\xe6\x8f\xd8"),
+			((KEYGEN_S2K_ISALTED, "password", 15, MHASH_SHA256, "12345678", 17),
+		     "\x9f\x10i\x05\xdch|]\xd8\xbe\xc1*\x06\x06\xf2"),
+		   ]
+	
+	SALTSIZE = [(KEYGEN_MCRYPT, 0),
+				(KEYGEN_S2K_SALTED, 8),
+				(KEYGEN_S2K_ISALTED, 8)]
+	
+	def testKeygen(self):
+		"Generate some known keys"
+		for args, result in self.DATA:
+			self.assertEqual(keygen(*args), result)
+	
+	def testKeygenNoArguments(self):
+		"Function keygen raises TypeError when not using enough arguments"
+		args = (KEYGEN_MCRYPT, "password")
+		self.assertRaises(TypeError, keygen, *args)
+		
+	def testKeygenSmallSalt(self):
+		"Function keygen raises ValueError when salt is smaller than expected"
+		args = (KEYGEN_S2K_SALTED, "password", 10, MHASH_SHA1, "1234567")
+		self.assertRaises(ValueError, keygen, *args)
+		
+	def testKeygenWithEveryKeygenid(self):
+		"Try to create a key with every keygenid and hashid"
+		password = "mypassword"
+		keysize = 10
+		for name, keygenid in globals().items():
+			if name[:7] == "KEYGEN_":
+				salt = "x"*keygen_salt_size(keygenid)
+				for name, hashid in globals().items():
+					if name[:6] == "MHASH_":
+						key = keygen(keygenid, password, keysize, hashid, salt)
+						self.assertEqual(len(key), keysize)
+				
+	def testKeygenName(self):
+		"Test keygen_name() function"
+		for name, value in globals().items():
+			if name[:7] == "KEYGEN_":
+				# This seem to be the rule so far
+				self.assertEqual(keygen_name(value), name[7:])
+	
+	def testUsesCount(self):
+		"Test keygen_uses_count() function"
+		self.assertEqual(keygen_uses_count(KEYGEN_S2K_ISALTED), 1)
+
+	def testUsesHash(self):
+		"Test keygen_uses_hashid() function"
+		self.assertEqual(keygen_uses_hashid(KEYGEN_MCRYPT), 1)
+
+	def testUsesSalt(self):
+		"Test keygen_uses_count() function"
+		self.assertEqual(keygen_uses_salt(KEYGEN_S2K_ISALTED), 1)
+
+	def testSaltSize(self):
+		"Test keygen_salt_size() function"
+		for keygenid, saltsize in self.SALTSIZE:
+			self.assertEqual(keygen_salt_size(keygenid), saltsize)
+
+	def testMaxKeySize(self):
+		"Test keygen_max_keysize() function"
+		self.assertEqual(keygen_max_keysize(KEYGEN_MCRYPT), 0)
 
 if __name__ == "__main__":
 	unittest.main()
