@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2004/05/02 20:15:01 $)
+mhash ChangeLog ($Date: 2005/01/12 17:37:03 $)
 ===============================================================================
 
 People
@@ -9,6 +9,10 @@ People
 Version 0.9.2
 - Added SNEFRU128, SNEFRU256. Reintroduced MD2.
   (jkmhash@itaparica.org)
+- Fixes to .spec file and clean-ups of documentation
+  (cpedersen[at]c-note.dk)
+- Fixed typecasts, memory leaks and compiler warnings
+  (imipak@yahoo.com)
 
 Version 0.9.1
 - Added RIPEMD128/256/320, SHA224/384/512, Whirlpool
