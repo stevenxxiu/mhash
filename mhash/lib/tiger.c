@@ -541,7 +541,7 @@ tiger_compress(const word32 *str, word32 state[6])
 static void tiger_block(struct tiger_ctx *ctx, word8 * block)
 {
 	word32 data[TIGER_DATALEN];
-	int i;
+	size_t i;
 	
 	/* Update block count */
 	if (!++ctx->count_l)
@@ -551,7 +551,7 @@ static void tiger_block(struct tiger_ctx *ctx, word8 * block)
 	for (i = 0; i < TIGER_DATALEN; i++, block += sizeof(word32))
 		data[i] = STRING2INT(block);
 
-     tiger_compress(data, ctx->digest);
+	tiger_compress(data, ctx->digest);
 }
 
 void tiger_init(struct tiger_ctx *ctx)
@@ -600,8 +600,8 @@ void tiger_update(struct tiger_ctx *ctx, word8 * buffer, word32 len)
 void tiger_final(struct tiger_ctx *ctx)
 {
 	word32 data[TIGER_DATALEN];
-	int i;
-	int words;
+	size_t i;
+	size_t words;
 
 	i = ctx->index;
 	/* Set the first char of padding to 0x01.  This is safe since there is

@@ -880,7 +880,6 @@ void whirlpool_init(struct whirlpool_ctx *ctx)
 void
 whirlpool_update(struct whirlpool_ctx *ctx, const byte *data, unsigned length)
 {
-  int i;
   if (ctx->index) {	/* Try to fill partial block */
     unsigned int left = WHIRLPOOL_DATA_SIZE - ctx->index;
     if (length < left) {

@@ -20,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.37 2005/01/12 16:54:25 imipak Exp $ */
+/* $Id: mhash.c,v 1.38 2005/01/12 17:37:04 imipak Exp $ */
 
 #include <stdlib.h>
 
@@ -236,13 +236,19 @@ WIN32DLL_DEFINE size_t mhash_get_block_size(hashid type)
 	return ret;
 }
 
-WIN32DLL_DEFINE int _mhash_get_state_size(hashid type)
+WIN32DLL_DEFINE size_t _mhash_get_state_size(hashid type)
 {
-	int size = -1;
+	/* Fixed: Valid state sizes that exceeded maximum
+	   positive value for integer would be returned as
+	   an error.
+	*/
+
+	size_t size = 0;
 
 	MHASH_ALG_LOOP(size = p->state_size);
 	return size;
 }
+
 WIN32DLL_DEFINE INIT_FUNC _mhash_get_init_func(hashid type)
 {
 	INIT_FUNC func = NULL;
@@ -276,14 +282,16 @@ WIN32DLL_DEFINE DEINIT_FUNC _mhash_get_deinit_func(hashid type)
 /* function created in order for mhash to compile under WIN32 */
 char *mystrdup(char *str)
 {
-	char *ret;
-	if (str==NULL) return NULL;
-	
-	if ( (ret = malloc(strlen(str) + 1)) == NULL) return NULL;
-	strcpy(ret, str);
+	char *ret = NULL;
 
-	return ret;
+	if (str != NULL) {
+	  ret = malloc(strlen(str) + 1);
+	  if (ret != NULL) {
+	    strcpy(ret, str);
+	  }
+	}
 
+	return(ret);
 }
 
 WIN32DLL_DEFINE hashid mhash_get_mhash_algo( MHASH tmp) {
@@ -317,16 +325,32 @@ WIN32DLL_DEFINE const char *mhash_get_hash_name_static(hashid type)
 MHASH mhash_cp(MHASH from) {
 MHASH ret;
 
-	if ( (ret = malloc(sizeof(MHASH_INSTANCE))) == NULL) return MHASH_FAILED;
+	ret = (MHASH) malloc(sizeof(MHASH_INSTANCE));
+ 
+	if (ret == NULL) return MHASH_FAILED;
+
 	memcpy(ret, from, sizeof(MHASH_INSTANCE));
 	
 	/* copy the internal state also */
-	if ( (ret->state=malloc(ret->state_size)) == NULL) return MHASH_FAILED;
-	memcpy( ret->state, from->state, ret->state_size);
+	ret->state = (word8 *) malloc(ret->state_size);
+
+	if (ret->state == NULL) {
+		free(ret);
+		return MHASH_FAILED;
+	}
+
+	memcpy(ret->state, from->state, ret->state_size);
 	
 	/* copy the key in case of hmac*/
-	if (ret->hmac_key_size!=0) {
-		if ((ret->hmac_key=malloc(ret->hmac_key_size)) == NULL) return MHASH_FAILED;
+	if (ret->hmac_key_size != 0) {
+		ret->hmac_key = (unsigned char *) malloc(ret->hmac_key_size);
+
+		if (ret == NULL) {
+			free(ret->state);
+			free(ret);
+			return MHASH_FAILED;
+		}
+
 		memcpy(ret->hmac_key, from->hmac_key, ret->hmac_key_size);
 	}
 	return ret;
@@ -337,14 +361,15 @@ MHASH mhash_init_int(const hashid type)
 	MHASH ret;
 	INIT_FUNC func;
 
-	if ( (ret = malloc( sizeof(MHASH_INSTANCE))) == NULL) return MHASH_FAILED;
-	ret->algorithm_given = type;
-	ret->hmac_key = NULL;
-	ret->state = NULL;
-	ret->hmac_key_size = 0;
+	ret = (MHASH) malloc(sizeof(MHASH_INSTANCE));
+	if (ret == NULL) return MHASH_FAILED;
 
-	ret->state_size = _mhash_get_state_size( type);
-	if (ret->state_size <= 0) {
+	memset(ret, 0, sizeof(MHASH_INSTANCE));
+
+	ret->algorithm_given = type;
+
+	ret->state_size = _mhash_get_state_size(type);
+	if (ret->state_size == 0) {
 		free(ret);
 		return MHASH_FAILED;
 	}
@@ -355,9 +380,10 @@ MHASH mhash_init_int(const hashid type)
 	}
 	func = _mhash_get_init_func( type);
 	if (func!=NULL)
-		func( ret->state);
+		func(ret->state);
 	else {
-		free( ret);
+		free(ret->state);
+		free(ret);
 		return MHASH_FAILED;
 	}
 
@@ -687,7 +713,7 @@ WIN32DLL_DEFINE MHASH mhash_restore_state_mem(void* _mem)
 	memcpy( &ret->state_size, &mem[pos], sizeof(ret->state_size));
 	pos += sizeof( ret->state_size);
 
-	ret->state = malloc( ret->state_size);
+	ret->state = malloc(ret->state_size);
 	if (ret->state==NULL) goto freeall;
 
 	memcpy( ret->state, &mem[pos], ret->state_size);
@@ -702,9 +728,9 @@ WIN32DLL_DEFINE MHASH mhash_restore_state_mem(void* _mem)
 	freeall:
 		/* This uses too much internals
 		 */
-		free( ret->state);
-		free( ret->hmac_key);
-		free( ret);
+		free(ret->state);
+		free(ret->hmac_key);
+		free(ret);
 		return MHASH_FAILED;
 }
 

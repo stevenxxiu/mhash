@@ -60,12 +60,12 @@ typedef void (*FINAL_FUNC)(void*);
 typedef void (*DEINIT_FUNC)(void*, unsigned char*);
 
 typedef struct {
-	int hmac_key_size;
+	size_t hmac_key_size;
 	int hmac_block;
 	unsigned char *hmac_key;
 
 	word8 *state;
-	int	state_size;
+	size_t state_size;
 	hashid algorithm_given;
 
 	HASH_FUNC hash_func;
