@@ -47,7 +47,7 @@ int main()
 
 	memset(tmp, 0, sizeof(tmp));
 
-	passlen=sizeof(KEY1);
+	passlen=sizeof(KEY1) - 1;
 	password = malloc(passlen+1);
 	memcpy(password, KEY1, passlen);
 	
@@ -84,7 +84,7 @@ int main()
 
 	memset( tmp, 0, sizeof(tmp));
 	
-	passlen=sizeof(KEY2);
+	passlen=sizeof(KEY2) - 1;
 	password = malloc(passlen+1);
 	memcpy(password, KEY2, passlen);
 	
