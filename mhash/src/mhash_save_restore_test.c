@@ -21,7 +21,8 @@ int main(void) {
 	   If the enum should change, this loop will have to change! */
 	for (alg = 0; alg <= mhash_count(); ++alg) {
 		
-		if (alg == 6 || alg == 4)
+		/* if algorithm does not exist */
+		if (mhash_get_hash_name_static( alg)==NULL)
 			continue;
 
 		printf("Testing save/restore for algorithm %s: ", mhash_get_hash_name(alg));

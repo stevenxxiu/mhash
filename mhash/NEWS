@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2001/10/16 18:22:56 $)
+mhash ChangeLog ($Date: 2001/10/19 21:46:26 $)
 ===============================================================================
 
 People
@@ -6,7 +6,7 @@ People
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
 
-Version 0.8.11
+Version 0.8.11 (release October 21 2001)
 - added mhash_save_state_mem() and mhash_restore_state_mem() functions,
   initial patches and idea by Blake Stephen <Stephen.Blake@veritect.com>
 - Added mhash_get_name_static()
