@@ -150,11 +150,13 @@ int _mhash_gen_key_s2k_isalted(hashid algorithm, unsigned long _count,
 	 */
 	bcount /*bytes */ = 
 		((word32)16 + (count & 15)) << ((count >> 4) + EXPBIAS); 
+fprintf(stderr, "bcount: %d\n", bcount);
 
 	count /* iterations */ = 
 		(bcount / saltpass_size);
 
 	rest = bcount % saltpass_size;
+fprintf(stderr, "count: %d + %d\n", count,rest);
 	if (bcount < saltpass_size) {
 		count++;
 		rest = 0;

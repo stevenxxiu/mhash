@@ -1,10 +1,14 @@
-mhash ChangeLog ($Date: 2002/03/28 19:32:23 $)
+mhash ChangeLog ($Date: 2002/03/28 19:38:58 $)
 ===============================================================================
 
 People
 
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
+
+Version 0.8.15 (released May 24 2002)
+- Corrected Iterated S2K
+- Made all static tables constant (pointed out by Darryl Miles <darryl@netbauds.net>)
 
 Version 0.8.14 (release March 28 2002)
 - mhash_deinit() and mhash_hmac_deinit() now accept a null digest parameter

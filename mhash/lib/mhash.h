@@ -23,7 +23,7 @@
 #ifndef MHASH_H
 #define MHASH_H
 
-/* $Id: mhash.h,v 1.18 2001/11/12 14:14:24 nmav Exp $ */
+/* $Id: mhash.h,v 1.19 2002/02/12 11:46:43 nmav Exp $ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -31,7 +31,7 @@ extern "C" {
 
 #include <sys/types.h>
 
-#define MHASH_API_VERSION 20011020
+#define MHASH_API_VERSION 20020524
 
 /* these are for backwards compatibility and will 
    be removed at some time */
