@@ -111,8 +111,10 @@ int _mhash_gen_key_s2k_salted(hashid algorithm, void *keyword, int key_size,
 	return 0;
 }
 
+#define EXPBIAS 6
+           
 /* Key generation using OpenPGP Iterated and Salted S2K algorithm */
-int _mhash_gen_key_s2k_isalted(hashid algorithm, unsigned long count, 
+int _mhash_gen_key_s2k_isalted(hashid algorithm, unsigned long _count, 
 		  void *keyword, int key_size,
 		  unsigned char* salt, int salt_size,
 		  unsigned char *password, int plen)
@@ -125,7 +127,8 @@ int _mhash_gen_key_s2k_isalted(hashid algorithm, unsigned long count,
 	int block_size = mhash_get_block_size(algorithm);
 	char* saltpass;
 	int saltpass_size;
-	int iter;
+	word32 iter;
+	word32 count = _count;
 
 	if (salt==NULL) return -1;
 	if (salt_size<8) return -1; /* This algorithm will use EXACTLY
@@ -152,9 +155,13 @@ int _mhash_gen_key_s2k_isalted(hashid algorithm, unsigned long count,
 		for (j=0;j<i;j++)
 			mhash(td, &null, 1);
 
-		iter = (count / saltpass_size) + 
-			count%saltpass_size==0?0:1;
-		
+		iter /*bytes */ = 
+			((word32)16 + (count & 15)) << ((count >> 4) + EXPBIAS); 
+
+		iter /* iterations */ = 
+			(iter / saltpass_size) + 
+				iter%saltpass_size==0?0:1;
+
 		for (z=0;z<iter;z++) {
 			mhash(td, saltpass, saltpass_size);
 		}
