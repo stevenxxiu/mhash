@@ -25,7 +25,7 @@
  *
  * It's ugly, limited and you should hit :q! now
  *
- * $Id: driver.c,v 1.1.1.1 2000/04/04 10:34:57 nmav Exp $
+ * $Id: driver.c,v 1.2 2000/04/06 22:19:31 nmav Exp $
  */
 
 #include <string.h>
@@ -65,7 +65,7 @@ int
 main(int argc, char **argv)
 {
 	size_t bsize;
-	unsigned char *data;
+	unsigned char data[128]; /* enough space to hold digests */
 	size_t data_len;
 	char *str;
 	size_t str_len;
@@ -85,7 +85,6 @@ main(int argc, char **argv)
 	if (!bsize)
 		exit(1);
 
-	data = (unsigned char *) malloc(data_len + 1);
 	mhash_bzero(data, data_len + 1);
 	
 
@@ -94,9 +93,8 @@ main(int argc, char **argv)
 
 	td = mhash_init(hashid);
 	mhash(td, data, data_len);
-	free(data);
 	
-	data = mhash_end(td);
+	mhash_deinit(td, data);
 	str = bin2hex(data, bsize, &str_len);
 	printf("%s\n", str);
 	free(str);
