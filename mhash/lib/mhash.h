@@ -22,7 +22,7 @@
 #ifndef MHASH_H
 #define MHASH_H
 
-/* $Id: mhash.h,v 1.2 2000/04/09 10:18:03 nmav Exp $ */
+/* $Id: mhash.h,v 1.3 2000/04/11 11:58:33 nmav Exp $ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -50,7 +50,7 @@ extern "C" {
 		MHASH_TIGER = 7,
 		MHASH_GOST,
 		MHASH_CRC32B,
-		MHASH_HAVAL192 = 12,
+		MHASH_HAVAL192 = 11,
 		MHASH_HAVAL160,
 		MHASH_HAVAL128
 	};
