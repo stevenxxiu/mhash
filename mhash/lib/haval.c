@@ -749,9 +749,6 @@ int havalUpdate (havalContext *hcp, const byte *dataBuffer, size_t dataLength)
 
 int havalFinal (havalContext *hcp, byte *digest)
 {
-#ifndef HARDWARE_ROTATIONS
-	register word32 rot_tmp;
-#endif /* ?HARDWARE_ROTATIONS */
 	word32 w;
 
 	if (hcp == NULL) {

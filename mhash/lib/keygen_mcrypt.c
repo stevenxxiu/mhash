@@ -73,7 +73,6 @@ int _mhash_gen_key_pkdes( void *keyword, int key_size,
 		 unsigned char *password, int plen)
 {
 	char* pkeyword=keyword;
-	char tmp;
 	int cnt,i,c;
 
 	if (plen>key_size) return -1;

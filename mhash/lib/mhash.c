@@ -20,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.24 2001/10/29 03:34:23 nmav Exp $ */
+/* $Id: mhash.c,v 1.25 2001/11/12 14:14:24 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -39,6 +39,7 @@
 #include "mhash_tiger.h"
 #include "mhash_ripemd.h"
 #include "mhash_sha256.h"
+#include "mhash_adler32.h"
 #include "gosthash.h"
 
 /* 19/03/2000 Changes for better thread handling --nikos */
@@ -166,7 +167,6 @@ MHASH ret;
 MHASH mhash_init_int(const hashid type)
 {
 	MHASH ret;
-	int i;
 
 	if ( (ret = malloc( sizeof(MHASH_INSTANCE))) == NULL) return MHASH_FAILED;
 	ret->algorithm_given = type;
@@ -532,11 +532,6 @@ WIN32DLL_DEFINE
     void *mhash_hmac_end_m(MHASH thread, void *(*hash_malloc) (size_t))
 {
 	void *digest;
-	unsigned char *opad;
-	unsigned char _opad[MAX_BLOCK_SIZE];
-	MHASH tmptd;
-	void *return_val;
-	int i, opad_alloc = 0;
 
 	digest =
 	    hash_malloc(mhash_get_block_size
@@ -561,7 +556,6 @@ WIN32DLL_DEFINE
 {
 	MHASH ret = MHASH_FAILED;
 	MHASH tmptd;
-	unsigned char *tmp;
 	unsigned char *ipad;
 	unsigned char _ipad[MAX_BLOCK_SIZE];
 	int i, ipad_alloc=0;
@@ -630,7 +624,6 @@ WIN32DLL_DEFINE void mhash_free(void *ptr)
 */
 WIN32DLL_DEFINE int mhash_save_state_mem(MHASH thread, void *_mem, int* mem_size )
 {
-	int fd;
 	int tot_size, pos;
 	unsigned char* mem = _mem;
 	

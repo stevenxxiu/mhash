@@ -102,7 +102,7 @@ static void ripemd_transform(struct ripemd_ctx *ctx, word32 * data)
 {
 	word32 A, B, C, D, E;	/* Local vars */
 	word32 AA, BB, CC, DD, EE;	/* Local vars */
-	word32 T, t;
+	word32 T;
 
 	/* Set up first buffer and local data buffer */
 	A = ctx->digest[0];

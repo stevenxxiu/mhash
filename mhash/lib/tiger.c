@@ -227,7 +227,7 @@ static void tiger_block(struct tiger_ctx *ctx, word8 * block)
 {
 	word32 data[TIGER_DATALEN];
 	int i;
-
+	
 	/* Update block count */
 	if (!++ctx->count_l)
 		++ctx->count_h;

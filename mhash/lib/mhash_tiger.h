@@ -33,5 +33,7 @@ void tiger_digest128(struct tiger_ctx *ctx, word8 * s);
 void tiger_final(struct tiger_ctx *ctx);
 void tiger_update(struct tiger_ctx *ctx, word8 * buffer, word32 len);
 void tiger_init(struct tiger_ctx *ctx);
+void tiger128_digest(struct tiger_ctx *ctx, word8 * s);
+void tiger160_digest(struct tiger_ctx *ctx, word8 * s);
 
 #endif
