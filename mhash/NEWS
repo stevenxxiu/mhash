@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2001/09/09 09:58:13 $)
+mhash ChangeLog ($Date: 2001/10/16 18:19:47 $)
 ===============================================================================
 
 People
@@ -6,11 +6,11 @@ People
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
 
-Version ?.?.?
+Version 0.8.11
 - added mhash_save_state_mem() and mhash_restore_state_mem() functions,
   initial patches and idea by Blake Stephen <Stephen.Blake@veritect.com>
 
-Version 0.8.10 
+Version 0.8.10 (released on July 12 2001)
 - New mhash_deinit() and mhash_hmac_deinit() functions based on the
   proposal, and patches by William Ahern <wahern@25thandClement.com>
 
