@@ -19,7 +19,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.7 2000/04/14 19:09:06 nmav Exp $ */
+/* $Id: mhash.c,v 1.8 2000/05/10 05:46:07 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -73,6 +73,7 @@ static mhash_hash_entry algorithms[] = {
 #define MHASH_ALG_LOOP(a) \
 	MHASH_LOOP( if(p->id == type) { a; break; } )
 
+WIN32DLL_DEFINE
 size_t mhash_count(void)
 {
 	size_t count = 0;
@@ -82,6 +83,7 @@ size_t mhash_count(void)
 	return count;
 }
 
+WIN32DLL_DEFINE
 size_t mhash_get_block_size(hashid type)
 {
 	size_t ret = 0;
@@ -90,15 +92,32 @@ size_t mhash_get_block_size(hashid type)
 	return ret;
 }
 
+#ifdef WIN32
+/* function created in order for mhash to compile under WIN32 */
+static char* mystrdup(char* str) {
+char* ret;
+	ret = malloc(strlen(str)+1);
+	strcpy(ret, str);
+
+	return ret;
+
+}
+#endif
+
+WIN32DLL_DEFINE
 char *mhash_get_hash_name(hashid type)
 {
 	char *ret = NULL;
 
 	/* avoid prefix */
+#ifdef WIN32
+	MHASH_ALG_LOOP(ret = mystrdup(p->name + sizeof("MHASH_") - 1));
+#else
 	MHASH_ALG_LOOP(ret = strdup(p->name + sizeof("MHASH_") - 1));
-
+#endif
 	return ret;
 }
+
 
 MHASH mhash_init_int(const hashid type)
 {
@@ -224,7 +243,7 @@ int mhash(MHASH thread, const void *plaintext, size_t size)
 	return 0;
 }
 
-
+WIN32DLL_DEFINE
 void *mhash_end(MHASH thread)
 {
 	void *digest;
@@ -284,6 +303,7 @@ void *mhash_end(MHASH thread)
 	return rtmp;
 }
 
+WIN32DLL_DEFINE
 MHASH mhash_init(const hashid type)
 {
 	static int gost_init, crc32b_init;
@@ -306,6 +326,7 @@ MHASH mhash_init(const hashid type)
 
 /* HMAC functions */
 
+WIN32DLL_DEFINE
 size_t mhash_get_hash_pblock(hashid type)
 {
 	size_t ret = 0;
@@ -314,6 +335,7 @@ size_t mhash_get_hash_pblock(hashid type)
 	return ret;
 }
 
+WIN32DLL_DEFINE
 void *mhash_hmac_end(MHASH thread)
 {
 	void *digest;
@@ -395,6 +417,7 @@ void *mhash_hmac_end(MHASH thread)
 	return mhash_end(tmptd);
 }
 
+WIN32DLL_DEFINE
 MHASH mhash_hmac_init(const hashid type, void *key, int keysize, int block)
 {
 	static int gost_init, crc32b_init;
@@ -458,6 +481,7 @@ MHASH mhash_hmac_init(const hashid type, void *key, int keysize, int block)
 	return ret;
 }
 
+WIN32DLL_DEFINE
 void mhash_free(void * ptr) {
 	free(ptr);
 }

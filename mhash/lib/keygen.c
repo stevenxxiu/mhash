@@ -55,6 +55,7 @@ static mhash_keygen_entry keygen_algorithms[] = {
 #define KEYGEN_ALG_LOOP(a) \
                         KEYGEN_LOOP( if(p->id == type) { a; break; } )
 
+WIN32DLL_DEFINE
 int mhash_keygen_uses_hash_algorithm(keygenid type)
 {
 	int ret = 0;
@@ -63,6 +64,7 @@ int mhash_keygen_uses_hash_algorithm(keygenid type)
 }
 
 
+WIN32DLL_DEFINE
 int mhash_keygen_uses_count(keygenid type)
 {
 	int ret = 0;
@@ -71,6 +73,7 @@ int mhash_keygen_uses_count(keygenid type)
 }
 
 
+WIN32DLL_DEFINE
 int mhash_keygen_uses_salt(keygenid type)
 {
 	int ret = 0;
@@ -79,6 +82,7 @@ int mhash_keygen_uses_salt(keygenid type)
 }
 
 
+WIN32DLL_DEFINE
 size_t mhash_keygen_count(void)
 {
 	size_t count = 0;
@@ -86,6 +90,7 @@ size_t mhash_keygen_count(void)
 	return count;
 }
 
+WIN32DLL_DEFINE
 size_t mhash_get_keygen_salt_size(keygenid type)
 {
 	size_t ret = 0;
@@ -94,6 +99,7 @@ size_t mhash_get_keygen_salt_size(keygenid type)
 	return ret;
 }
 
+WIN32DLL_DEFINE
 size_t mhash_get_keygen_max_key_size(keygenid type)
 {
 	size_t ret = 0;
@@ -102,6 +108,7 @@ size_t mhash_get_keygen_max_key_size(keygenid type)
 	return ret;
 }
 
+WIN32DLL_DEFINE
 char *mhash_get_keygen_name(hashid type)
 {
 	char *ret = NULL;
@@ -113,6 +120,7 @@ char *mhash_get_keygen_name(hashid type)
 }
 
 
+WIN32DLL_DEFINE
 int mhash_keygen(keygenid algorithm, hashid opt_algorithm,
 		 unsigned long count, void *keyword, int keysize,
 		 void *salt, int saltsize, unsigned char *password,
@@ -161,6 +169,7 @@ int x;
 
 
 
+WIN32DLL_DEFINE
 int mhash_keygen_ext(keygenid algorithm, KEYGEN data,
 		 void *keyword, int keysize,
 		 unsigned char *password, int passwordlen)

@@ -11,7 +11,7 @@ libmhash_la_SOURCES = mhash.c swap.c bzero.c crc32.c md5.c sha1.c haval.c \
 		keygen_hex.c keygen_mcrypt.c keygen_asis.c keygen.c \
 		keygen_s2k.c ripemd.c
 
-libmhash_la_LDFLAGS = -version-info 2 -export-symbols $(srcdir)/libmhash.sym
+libmhash_la_LDFLAGS = -version-info 2 -no-undefined -export-symbols $(srcdir)/libmhash.sym
 
 EXTRA_DIST = libmhash.sym
 

@@ -42,6 +42,18 @@ AC_ARG_WITH(LDFLAGS,
 )
 
 AC_PROG_CC
+AC_CANONICAL_SYSTEM
+
+case "${target}" in
+    *-cygwin*)
+	AC_DEFINE(WIN32)
+	AC_DEFINE(WIN32_DLOPEN)
+	if test $ac_cv_prog_gcc = yes; then
+	  CFLAGS="${CFLAGS} -mno-cygwin"
+	fi
+        ;;
+esac
+
 
 dnl Checks for programs.
 AC_PROG_INSTALL

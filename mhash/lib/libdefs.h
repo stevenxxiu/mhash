@@ -16,6 +16,12 @@
 #include <ctype.h>
 #endif
 
+#ifdef WIN32
+# define WIN32DLL_DEFINE __declspec( dllexport)
+#else
+# define WIN32DLL_DEFINE
+#endif
+
 /*
    }}} 
  */
