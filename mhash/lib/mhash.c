@@ -19,7 +19,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.14 2001/01/03 21:55:22 nmav Exp $ */
+/* $Id: mhash.c,v 1.15 2001/01/21 17:13:23 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -33,6 +33,7 @@
 #include "mhash_crc32.h"
 #include "mhash_haval.h"
 #include "mhash_md5.h"
+#include "mhash_md4.h"
 #include "mhash_sha1.h"
 #include "mhash_tiger.h"
 #include "mhash_ripemd.h"
@@ -53,6 +54,7 @@ struct mhash_hash_entry {
 static mhash_hash_entry algorithms[] = {
 	MHASH_ENTRY(MHASH_CRC32, 4, 0),
 	MHASH_ENTRY(MHASH_MD5, 16, 64),
+	MHASH_ENTRY(MHASH_MD4, 16, 64),
 	MHASH_ENTRY(MHASH_SHA1, 20, 64),
 	MHASH_ENTRY(MHASH_HAVAL256, 32, 128),
 	MHASH_ENTRY(MHASH_HAVAL128, 16, 128),
@@ -61,6 +63,8 @@ static mhash_hash_entry algorithms[] = {
 	MHASH_ENTRY(MHASH_HAVAL224, 28, 128),
 	MHASH_ENTRY(MHASH_RIPEMD160, 20, 64),
 	MHASH_ENTRY(MHASH_TIGER, 24, 64),
+	MHASH_ENTRY(MHASH_TIGER128, 16, 64),
+	MHASH_ENTRY(MHASH_TIGER160, 20, 64),
 	MHASH_ENTRY(MHASH_GOST, 32, 0),
 	MHASH_ENTRY(MHASH_CRC32B, 4, 0),
 	{0}
@@ -157,6 +161,11 @@ MHASH mhash_init_int(const hashid type)
 		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
 		MD5Init((void *) ret->state);
 		break;
+	case MHASH_MD4:
+		ret->state_size = sizeof(MD4_CTX);
+		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		MD4Init((void *) ret->state);
+		break;
 	case MHASH_SHA1:
 		ret->state_size = sizeof(SHA_CTX);
 		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
@@ -193,6 +202,8 @@ MHASH mhash_init_int(const hashid type)
 		ripemd_init((void *) ret->state);
 		break;
 	case MHASH_TIGER:
+	case MHASH_TIGER128:
+	case MHASH_TIGER160:
 		ret->state_size = sizeof(TIGER_CTX);
 		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
 		tiger_init((void*) ret->state);
@@ -245,6 +256,9 @@ int mhash(MHASH thread, const void *plaintext, size_t size)
 	case MHASH_MD5:
 		MD5Update((void *) thread->state, plaintext, size);
 		break;
+	case MHASH_MD4:
+		MD4Update((void *) thread->state, plaintext, size);
+		break;
 	case MHASH_SHA1:
 		sha_update((void *) thread->state, (void *) plaintext,
 			   size);
@@ -261,6 +275,8 @@ int mhash(MHASH thread, const void *plaintext, size_t size)
 			      size);
 		break;
 	case MHASH_TIGER:
+	case MHASH_TIGER160:
+	case MHASH_TIGER128:
 		tiger_update((void*)thread->state, (void*)plaintext, size);
 		break;
 	case MHASH_GOST:
@@ -290,6 +306,14 @@ WIN32DLL_DEFINE
 				(thread->algorithm_given));
 		if (digest == NULL) return NULL;
 		MD5Final(digest, (void *) thread->state);
+		rtmp = digest;
+		break;
+	case MHASH_MD4:
+		digest =
+		    hash_malloc(mhash_get_block_size
+				(thread->algorithm_given));
+		if (digest == NULL) return NULL;
+		MD4Final(digest, (void *) thread->state);
 		rtmp = digest;
 		break;
 	case MHASH_SHA1:
@@ -323,6 +347,20 @@ WIN32DLL_DEFINE
 		digest = hash_malloc(TIGER_DIGESTSIZE);
 		if (digest == NULL) return NULL;
 		tiger_digest((void *) thread->state, digest);
+		rtmp = digest;
+		break;
+	case MHASH_TIGER128:
+		tiger_final((void*) thread->state);
+		digest = hash_malloc(TIGER128_DIGESTSIZE);
+		if (digest == NULL) return NULL;
+		tiger128_digest((void *) thread->state, digest);
+		rtmp = digest;
+		break;
+	case MHASH_TIGER160:
+		tiger_final((void*) thread->state);
+		digest = hash_malloc(TIGER160_DIGESTSIZE);
+		if (digest == NULL) return NULL;
+		tiger160_digest((void *) thread->state, digest);
 		rtmp = digest;
 		break;
 	case MHASH_GOST:
@@ -405,6 +443,14 @@ WIN32DLL_DEFINE
 		MD5Final(digest, (void *) thread->state);
 		return_val = digest;
 		break;
+	case MHASH_MD4:
+		digest =
+		    hash_malloc(mhash_get_block_size
+				(thread->algorithm_given));
+		if (digest == NULL) return NULL;
+		MD4Final(digest, (void *) thread->state);
+		return_val = digest;
+		break;
 	case MHASH_SHA1:
 		digest = hash_malloc(SHA_DIGESTSIZE);
 		if (digest == NULL) return NULL;
@@ -436,6 +482,20 @@ WIN32DLL_DEFINE
 		if (digest == NULL) return NULL;
 		tiger_final((void *) thread->state);
 		tiger_digest((void *) thread->state, digest);
+		return_val = digest;
+		break;
+	case MHASH_TIGER128:
+		digest = hash_malloc(TIGER128_DIGESTSIZE);
+		if (digest == NULL) return NULL;
+		tiger_final((void *) thread->state);
+		tiger128_digest((void *) thread->state, digest);
+		return_val = digest;
+		break;
+	case MHASH_TIGER160:
+		digest = hash_malloc(TIGER160_DIGESTSIZE);
+		if (digest == NULL) return NULL;
+		tiger_final((void *) thread->state);
+		tiger160_digest((void *) thread->state, digest);
 		return_val = digest;
 		break;
 	case MHASH_GOST:
