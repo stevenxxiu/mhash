@@ -9,7 +9,7 @@
  	int i;
 	MHASH td;
 	unsigned char buffer;
-	unsigned char *hash;
+	unsigned char hash[16]; /* only for md5 */
 
 	td = mhash_init(MHASH_MD5);
 
@@ -19,7 +19,7 @@
 		mhash(td, &buffer, 1);
 	}
 
-	hash = mhash_end(td);
+	mhash_deinit(td, hash);
 
 	printf("Hash:");
 	for (i = 0; i < mhash_get_block_size(MHASH_MD5); i++) {
