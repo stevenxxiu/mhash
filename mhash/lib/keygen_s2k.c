@@ -183,7 +183,7 @@ int _mhash_gen_key_s2k_isalted(hashid algorithm, unsigned long _count,
 	memcpy(keyword, key, key_size);
 
 	mhash_bzero(key, key_size);
-	mhash_bzero(saltpass, 8+plen);
+	mhash_bzero(saltpass, saltpass_size);
 
 	free(key);
 	free(saltpass);
