@@ -16,7 +16,7 @@ B< Informative Functions >
 
  size_t   mhash_count(void);
  size_t   mhash_get_block_size(hashid type);
- const char    *mhash_get_hash_name(hashid type);
+ char    *mhash_get_hash_name(hashid type);
  size_t   mhash_get_hash_pblock(hashid type);
  hashid   mhash_get_mhash_algo( MHASH);
 
@@ -133,10 +133,11 @@ This returns the C<hashid> of the last available hash. Hashes are numbered from
 If I<type> exists, this returns the used blocksize of the hash I<type>
 in bytes. Otherwise, it returns 0.
 
-=item const char *B<mhash_get_hash_name>(hashid I<type>);
+=item char *B<mhash_get_hash_name>(hashid I<type>);
 
 If I<type> exists, this returns the name of the hash I<type>. Otherwise, a
-C<NULL> pointer is returned. 
+C<NULL> pointer is returned. The string is allocated with malloc(3) seperately,
+so do not forget to free(3) it.
 
 =item size_t B<mhash_get_hash_pblock>(hashid I<type>);
 
@@ -271,10 +272,11 @@ mhash_keygen_ext(). If
 This returns the C<keygenid> of the last available key generation algorithm.
 Algorithms are numbered from 0 to C<mhash_keygen_count()>.
 
-=item const char *B<mhash_get_keygen_name>(keygenid I<type>);
+=item char *B<mhash_get_keygen_name>(keygenid I<type>);
 
 If I<type> exists, this returns the name of the keygen I<type>. Otherwise, a
-C<NULL> pointer is returned. 
+C<NULL> pointer is returned. The string is allocated with malloc(3) seperately,
+so do not forget to free(3) it.
 
 =back
 

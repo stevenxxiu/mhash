@@ -1,5 +1,5 @@
 
-#include <unistd.h>
+#include <libdefs.h>
 
 #ifdef WIN32
 char* mystrdup(char*);
@@ -68,7 +68,7 @@ typedef struct mhash_hash_entry mhash_hash_entry;
 
 size_t mhash_count(void);
 size_t mhash_get_block_size(hashid type);
-const char *mhash_get_hash_name(hashid type);
+char *mhash_get_hash_name(hashid type);
 
 /* initializing prototypes */
 
@@ -97,7 +97,7 @@ int mhash_keygen_ext(keygenid algorithm, KEYGEN data,
 	 void *keyword, int keysize,
 	 unsigned char *password, int passwordlen);
 
-const char *mhash_get_keygen_name(hashid type);
+char *mhash_get_keygen_name(hashid type);
 size_t mhash_get_keygen_salt_size(keygenid type);
 size_t mhash_keygen_count(void);
 int mhash_keygen_uses_salt(keygenid type);

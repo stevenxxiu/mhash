@@ -6,14 +6,18 @@
  */
 
 #ifdef HAVE_CONFIG_H
-#include <mhash_config.h>
+# include <mhash_config.h>
 #endif
 
 #ifdef STDC_HEADERS
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <ctype.h>
+# include <string.h>
+# include <stdlib.h>
+# include <stdio.h>
+# include <ctype.h>
+#endif
+
+#ifdef HAVE_SYS_TYPES_H
+# include <sys/types.h>
 #endif
 
 #ifdef WIN32

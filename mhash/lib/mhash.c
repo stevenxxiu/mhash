@@ -19,7 +19,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.17 2001/07/09 07:24:28 nmav Exp $ */
+/* $Id: mhash.c,v 1.18 2001/09/09 09:58:13 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -113,13 +113,13 @@ WIN32DLL_DEFINE hashid mhash_get_mhash_algo( MHASH tmp) {
 	return tmp->algorithm_given;
 }
 
-WIN32DLL_DEFINE const char *mhash_get_hash_name(hashid type)
+WIN32DLL_DEFINE char *mhash_get_hash_name(hashid type)
 {
 	char *ret = NULL;
 
 	/* avoid prefix */
 	MHASH_ALG_LOOP(ret = p->name + sizeof("MHASH_") - 1);
-	return ret;
+	return mystrdup(ret);
 }
 
 MHASH mhash_cp(MHASH from) {

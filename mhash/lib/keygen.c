@@ -1,6 +1,6 @@
 /*
  *    Copyright (C) 1998 Nikos Mavroyanopoulos
- *    Copyright (C) 1999,2000 Sascha Schumman, Nikos Mavroyanopoulos
+ *    Copyright (C) 1999,2000,2001 Sascha Schumman, Nikos Mavroyanopoulos
  *
  *    This library is free software; you can redistribute it and/or modify it 
  *    under the terms of the GNU Library General Public License as published 
@@ -109,14 +109,14 @@ size_t mhash_get_keygen_max_key_size(keygenid type)
 }
 
 WIN32DLL_DEFINE
-const char *mhash_get_keygen_name(hashid type)
+char *mhash_get_keygen_name(hashid type)
 {
 	char *ret = NULL;
 
 	/* avoid prefix */
 	KEYGEN_ALG_LOOP(ret = p->name + sizeof("KEYGEN_") - 1);
 
-	return ret;
+	return mystrdup(ret);
 }
 
 

@@ -52,8 +52,8 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "libdefs.h"
-#include "mhash_haval.h"
+#include <libdefs.h>
+#include <mhash_haval.h>
 /* #include <assert.h> */
 
 #define HAVAL_VERSION	1
