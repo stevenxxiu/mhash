@@ -19,7 +19,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.1.1.1 2000/04/04 10:34:30 nmav Exp $ */
+/* $Id: mhash.c,v 1.2 2000/04/11 11:58:33 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -313,8 +313,11 @@ void *mhash_hmac_end(MHASH thread)
 
 	opad = malloc(thread->hmac_block);
 
-	for (i = 0; i < thread->hmac_block; i++) {
+	for (i = 0; i < thread->hmac_key_size; i++) {
 		opad[i] = (0x5C) ^ thread->hmac_key[i];
+	}
+	for (; i < thread->hmac_block; i++) {
+		opad[i] = (0x5C);
 	}
 
 	tmptd = mhash_init(thread->algorithm_given);
@@ -401,9 +404,7 @@ MHASH mhash_hmac_init(const hashid type, void *key, int keysize, int block)
 
 		ret = mhash_init_int(type);
 
-		if (ret < 0) {
-			ret = MHASH_FAILED;
-		} else {
+		if (ret != MHASH_FAILED) {
 			/* Initial hmac calculations */
 			ret->hmac_block = block;
 
@@ -416,7 +417,7 @@ MHASH mhash_hmac_init(const hashid type, void *key, int keysize, int block)
 				    mhash_get_block_size(type);
 				ret->hmac_key = mhash_end(tmptd);
 			} else {
-				ret->hmac_key_size = keysize;
+//				ret->hmac_key_size = keysize;
 				ret->hmac_key = calloc(1, ret->hmac_block);
 				memmove(ret->hmac_key, key, keysize);
 				ret->hmac_key_size = ret->hmac_block;
@@ -424,8 +425,11 @@ MHASH mhash_hmac_init(const hashid type, void *key, int keysize, int block)
 
 			/* IPAD */
 
-			for (i = 0; i < ret->hmac_block; i++) {
+			for (i = 0; i < ret->hmac_key_size; i++) {
 				ipad[i] = (0x36) ^ ret->hmac_key[i];
+			}
+			for (;i<ret->hmac_block;i++) {
+				ipad[i] = (0x36);
 			}
 
 			mhash(ret, ipad, ret->hmac_block);
