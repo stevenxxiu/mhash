@@ -30,4 +30,26 @@ void sha_final(struct sha_ctx *ctx);
 void sha_digest(struct sha_ctx *ctx, word8 *s);
 void sha_copy(struct sha_ctx *dest, struct sha_ctx *src);
 
+#if 1
+
+#ifndef EXTRACT_UCHAR
+#define EXTRACT_UCHAR(p)  (*(unsigned char *)(p))
+#endif
+
+#define STRING2INT(s) ((((((EXTRACT_UCHAR(s) << 8)    \
+			 | EXTRACT_UCHAR(s+1)) << 8)  \
+			 | EXTRACT_UCHAR(s+2)) << 8)  \
+			 | EXTRACT_UCHAR(s+3))
+#else
+word32 STRING2INT(word8 *s)
+{
+  word32 r;
+  int i;
+  
+  for (i = 0, r = 0; i < 4; i++, s++)
+    r = (r << 8) | *s;
+  return r;
+}
+#endif
+
 #endif

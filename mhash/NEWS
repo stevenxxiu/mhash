@@ -1,10 +1,14 @@
-mhash ChangeLog ($Date: 2001/10/19 21:46:26 $)
+mhash ChangeLog ($Date: 2001/10/21 15:01:21 $)
 ===============================================================================
 
 People
 
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
+
+Version 0.8.12
+- Corrected bugs in mhash_get_name() functions
+- Added SHA-256 from libnettle.
 
 Version 0.8.11 (release October 21 2001)
 - added mhash_save_state_mem() and mhash_restore_state_mem() functions,

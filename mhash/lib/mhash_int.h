@@ -22,7 +22,8 @@ enum hashid {
 	MHASH_HAVAL128,
 	MHASH_TIGER128,
 	MHASH_TIGER160,
-	MHASH_MD4
+	MHASH_MD4,
+	MHASH_SHA256
 };
 
 enum keygenid {

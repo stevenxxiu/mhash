@@ -20,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.21 2001/10/19 21:46:27 nmav Exp $ */
+/* $Id: mhash.c,v 1.22 2001/10/26 10:47:11 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -38,6 +38,7 @@
 #include "mhash_sha1.h"
 #include "mhash_tiger.h"
 #include "mhash_ripemd.h"
+#include "mhash_sha256.h"
 #include "gosthash.h"
 
 /* 19/03/2000 Changes for better thread handling --nikos */
@@ -59,6 +60,7 @@ static mhash_hash_entry algorithms[] = {
 	MHASH_ENTRY(MHASH_MD5, 16, 64),
 	MHASH_ENTRY(MHASH_MD4, 16, 64),
 	MHASH_ENTRY(MHASH_SHA1, 20, 64),
+	MHASH_ENTRY(MHASH_SHA256, 32, 64),
 	MHASH_ENTRY(MHASH_HAVAL256, 32, 128),
 	MHASH_ENTRY(MHASH_HAVAL128, 16, 128),
 	MHASH_ENTRY(MHASH_HAVAL160, 20, 128),
@@ -195,6 +197,11 @@ MHASH mhash_init_int(const hashid type)
 		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
 		sha_init((void *) ret->state);
 		break;
+	case MHASH_SHA256:
+		ret->state_size = sizeof( SHA256_CTX);
+		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		sha256_init((void *) ret->state);
+		break;
 	case MHASH_HAVAL256:
 		ret->state_size = sizeof(havalContext);
 		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
@@ -287,6 +294,9 @@ int mhash(MHASH thread, const void *plaintext, size_t size)
 		sha_update((void *) thread->state, (void *) plaintext,
 			   size);
 		break;
+	case MHASH_SHA256:
+		sha256_update((void *) thread->state, (void *) plaintext, size);
+		break;
 	case MHASH_HAVAL256:
 	case MHASH_HAVAL224:
 	case MHASH_HAVAL192:
@@ -331,6 +341,10 @@ WIN32DLL_DEFINE
 	case MHASH_SHA1:
 		sha_final((void *) thread->state);
 		sha_digest((void *) thread->state, result);
+		break;
+	case MHASH_SHA256:
+		sha256_final((void *) thread->state);
+		sha256_digest((void *) thread->state, result);
 		break;
 	case MHASH_HAVAL256:
 	case MHASH_HAVAL224:
@@ -451,6 +465,10 @@ WIN32DLL_DEFINE
 	case MHASH_SHA1:
 		sha_final((void *) thread->state);
 		sha_digest((void *) thread->state, result);
+		break;
+	case MHASH_SHA256:
+		sha256_final((void *) thread->state);
+		sha256_digest((void *) thread->state, result);
 		break;
 	case MHASH_HAVAL256:
 	case MHASH_HAVAL224:

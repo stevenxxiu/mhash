@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# $Id: hash_test.sh,v 1.8 2001/04/25 09:59:43 nmav Exp $
+# $Id: hash_test.sh,v 1.9 2001/05/10 07:03:21 nmav Exp $
 
 if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
   if (echo $ac_n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
@@ -156,6 +156,12 @@ test_hash 16 "message digest" D9130A8164549FE818874806E1C7014B
 test_hash 16 abcdefghijklmnopqrstuvwxyz D79E1C308AA5BBCDEEA8ED63DF412DA9
 test_hash 16 12345678901234567890123456789012345678901234567890123456789012345678901234567890 \
 		E33B4DDC9C38F2199C3E7B164FCC0536
+echo ""
+
+echo $ac_n "testing SHA-256 $ac_c"
+test_hash 17 abc ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
+test_hash 17 abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq 248d6a61d20638b8e5c026930c3e6039a33ce45964ff2167f6ecedd419db06c1
+test_hash 17 abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu cf5b16a778af8380036ce59e7b0492370b249b11e8f07a51afac45037afee9d1
 echo ""
 
 

@@ -9,7 +9,7 @@
  * Adapted to pike and some cleanup by Niels Möller.
  */
 
-/* $Id: sha1.c,v 1.1.1.1 2000/04/04 10:34:35 nmav Exp $ */
+/* $Id: sha1.c,v 1.2 2001/01/24 08:20:29 nmav Exp $ */
 
 /* SHA: NIST's Secure Hash Algorithm */
 
@@ -241,27 +241,6 @@ static void sha_transform(struct sha_ctx *ctx, word32 *data )
   ctx->digest[4] += E;
 }
 
-#if 1
-
-#ifndef EXTRACT_UCHAR
-#define EXTRACT_UCHAR(p)  (*(unsigned char *)(p))
-#endif
-
-#define STRING2INT(s) ((((((EXTRACT_UCHAR(s) << 8)    \
-			 | EXTRACT_UCHAR(s+1)) << 8)  \
-			 | EXTRACT_UCHAR(s+2)) << 8)  \
-			 | EXTRACT_UCHAR(s+3))
-#else
-word32 STRING2INT(word8 *s)
-{
-  word32 r;
-  int i;
-  
-  for (i = 0, r = 0; i < 4; i++, s++)
-    r = (r << 8) | *s;
-  return r;
-}
-#endif
 
 static void sha_block(struct sha_ctx *ctx, word8 *block)
 {
