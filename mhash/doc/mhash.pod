@@ -262,7 +262,7 @@ or may be NULL.
 
 The algorithm may use the I<algorithm_data.count> internally (eg. KEYGEN_S2K_ISALTED).
 The generated keyword is stored in I<keyword>, which should be (at least) I<keysize> bytes long.
-The generated keyword is a binary one.
+The generated keyword is a binary one. Returns a negative number on failure.
 
 =item int B<mhash_keygen_uses_salt>( keygenid I<algorithm>);
 
