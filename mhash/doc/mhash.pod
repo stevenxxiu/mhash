@@ -53,8 +53,8 @@ in mhash are: B<MHASH_CRC32> (like the one used in ethernet) and B<MHASH_CRC32B>
 I<MD5>: The MD5 algorithm by Ron Rivest and RSA. In mhash this algorithm is defined
 as B<MHASH_MD5>.
 
-I<MD4>: The MD4 algorithm by Ron Rivest and RSA. This algorithm
-is considered old. In mhash this algorithm is defined
+I<MD4>: The MD4 algorithm by Ron Rivest and RSA. This algorithm is
+considered broken, so don't use it. In mhash this algorithm is defined
 as B<MHASH_MD4>.
 
 I<SHA1>: The SHA algorithm by US. NIST/NSA. This algorithm is specified
