@@ -14,6 +14,7 @@ mhash_end
 mhash_end_m
 mhash_get_block_size
 mhash_get_hash_name_static
+mhash_get_hash_name
 mhash_get_hash_pblock
 mhash_init
 mhash_init_int
