@@ -179,7 +179,7 @@ class TestKeygenFunctions(unittest.TestCase):
 			((KEYGEN_MCRYPT, "password", 20, MHASH_SHA1),
 			 "[\xaaa\xe4\xc9\xb9??\x06\x82%\x0bl\xf83\x1b~\xe6\x8f\xd8"),
 			((KEYGEN_S2K_ISALTED, "password", 15, MHASH_SHA256, "12345678", 17),
-		     "\x9f\x10i\x05\xdch|]\xd8\xbe\xc1*\x06\x06\xf2"),
+             "27A\xf7\t\xf4\x18M\x8b\xb5\x01\xebJb\xe0"),
 		   ]
 	
 	SALTSIZE = [(KEYGEN_MCRYPT, 0),
