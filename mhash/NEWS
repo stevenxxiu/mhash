@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2000/04/11 12:20:14 $)
+mhash ChangeLog ($Date: 2000/05/10 05:47:19 $)
 ===============================================================================
 
 People
@@ -7,12 +7,12 @@ People
    SS - Sascha Schumann <sascha@schumann.cx>
 
 Version 0.8.2
-- Corrected Memory leaks in HMAC implementation patches by Marios Hadjieleftheriou <marioh@cs.ucr.edu>
-- Added HAVAL224
+- Corrected Memory leaks in HMAC implementation (NM, patches by Marios Hadjieleftheriou <marioh@cs.ucr.edu>)
+- Added HAVAL224 (NM)
 
 Version 0.8.1 (released on April 11 2000)
-- Bugfixes in hmac implementation.
-- Removed MD2 (which was not free)
+- Bugfixes in hmac implementation. (NM)
+- Removed MD2 (which was not free) (NM)
 
 Version 0.8.0 (released on April 5 2000)
 - No longer needs posix thread locks to be thread safe (NM)
