@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2003/04/14 08:09:36 $)
+mhash ChangeLog ($Date: 2004/04/17 21:36:08 $)
 ===============================================================================
 
 People
@@ -6,8 +6,9 @@ People
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
 
-Version 0.9.0
+Version 0.9.1
 - Added RIPEMD128/256/320, SHA224/384/512, Whirlpool
+- Really, this time!
   (jkmhash@itaparica.org)
 
 Version 0.8.19
