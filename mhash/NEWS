@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2001/01/21 19:30:36 $)
+mhash ChangeLog ($Date: 2001/01/28 21:52:41 $)
 ===============================================================================
 
 People
@@ -6,8 +6,12 @@ People
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
 
-Version 0.8.7 (released on January 28 2001)
+Version 0.8.9 
+- TIGER runs on alpha too
+
+Version 0.8.8 (released on January 29 2001)
 - MD4 and MD5 now compile on big endian machines
+- TIGER now compiles.
 
 Version 0.8.6 (released on January 21 2001)
 - Corrected Tiger implementation (NM, bug pointed out by Gordon Mohr <gojomo@usa.net>)
