@@ -20,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.23 2001/10/27 09:42:22 nmav Exp $ */
+/* $Id: mhash.c,v 1.24 2001/10/29 03:34:23 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -57,6 +57,7 @@ struct mhash_hash_entry {
 
 static mhash_hash_entry algorithms[] = {
 	MHASH_ENTRY(MHASH_CRC32, 4, 0),
+	MHASH_ENTRY(MHASH_ADLER32, 4, 0),
 	MHASH_ENTRY(MHASH_MD5, 16, 64),
 	MHASH_ENTRY(MHASH_MD4, 16, 64),
 	MHASH_ENTRY(MHASH_SHA1, 20, 64),
@@ -178,7 +179,12 @@ MHASH mhash_init_int(const hashid type)
 	case MHASH_CRC32B:
 		ret->state_size = sizeof(word32);
 		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
-		clear_crc32((void *) ret->state);
+		mhash_clear_crc32((void *) ret->state);
+		break;
+	case MHASH_ADLER32:
+		ret->state_size = sizeof(word32);
+		if ( (ret->state = malloc(ret->state_size)) == NULL) return MHASH_FAILED;
+		mhash_clear_adler32((void *) ret->state);
 		break;
 	case MHASH_MD5:
 		ret->state_size = sizeof(MD5_CTX);
@@ -277,7 +283,10 @@ int mhash(MHASH thread, const void *plaintext, size_t size)
 
 	switch (thread->algorithm_given) {
 	case MHASH_CRC32:
-		crc32((void *) thread->state, plaintext, size);
+		mhash_crc32((void *) thread->state, plaintext, size);
+		break;
+	case MHASH_ADLER32:
+		mhash_adler32((void *) thread->state, plaintext, size);
 		break;
 	case MHASH_CRC32B:
 		crc32b((void *) thread->state, plaintext, size);
@@ -328,7 +337,10 @@ WIN32DLL_DEFINE
 	switch (thread->algorithm_given) {
 	case MHASH_CRC32:
 	case MHASH_CRC32B:
-		get_crc32(result, (void *) thread->state);
+		mhash_get_crc32(result, (void *) thread->state);
+		break;
+	case MHASH_ADLER32:
+		mhash_get_adler32(result, (void *) thread->state);
 		break;
 	case MHASH_MD5:
 		MD5Final( result, (void *) thread->state);
@@ -452,7 +464,10 @@ WIN32DLL_DEFINE
 	switch (thread->algorithm_given) {
 	case MHASH_CRC32:
 	case MHASH_CRC32B:
-		get_crc32( result, (void *) thread->state);
+		mhash_get_crc32( result, (void *) thread->state);
+		break;
+	case MHASH_ADLER32:
+		mhash_get_adler32( result, (void *) thread->state);
 		break;
 	case MHASH_MD5:
 		MD5Final( result, (void *) thread->state);
