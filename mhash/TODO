@@ -1,7 +1,9 @@
 mhash TODO
 ===============================================================================
 
-- add RIPEMD-256 and RIPEMD-320 
-  (see http://www.esat.kuleuven.ac.be/~bosselae/ripemd160.html)
 - add PANAMA hash algorithm.
 - add 64 bit version of Tiger.
+- add all unbroken hash algorithms from Paulo Barreto's "Hashing
+   Function Lounge". In April 2004 these were: Cellhash, Parallel
+   FFT-Hash, Subhash.
+   http://planeta.terra.com.br/informatica/paulobarreto/hflounge.html

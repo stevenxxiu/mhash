@@ -20,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.33 2002/09/02 20:59:41 nmav Exp $ */
+/* $Id: mhash.c,v 1.34 2003/01/19 18:00:58 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -56,8 +56,12 @@
 # include "mhash_ripemd.h"
 #endif
 
-#ifdef ENABLE_SHA256
-# include "mhash_sha256.h"
+#ifdef ENABLE_SHA256_SHA224
+# include "mhash_sha256_sha224.h"
+#endif
+
+#ifdef ENABLE_SHA512_SHA384
+# include "mhash_sha512_sha384.h"
 #endif
 
 #ifdef ENABLE_ADLER32
@@ -68,11 +72,15 @@
 # include "mhash_gost.h"
 #endif
 
+#ifdef ENABLE_WHIRLPOOL
+# include "mhash_whirlpool.h"
+#endif
+
 /* 19/03/2000 Changes for better thread handling --nikos 
  * Actually it is thread safe.
  */
 
-#define MAX_BLOCK_SIZE 64
+#define MAX_BLOCK_SIZE 128
 
 #define MHASH_ENTRY(name, blksize, hash_pblock, state_size, init_func, \
 	hash_func, final_func, deinit_func) \
@@ -120,9 +128,18 @@ static const mhash_hash_entry algorithms[] = {
 		sha_update, sha_final, sha_digest),
 #endif
 
-#ifdef ENABLE_SHA256
-	MHASH_ENTRY(MHASH_SHA256, 32, 64, sizeof( SHA256_CTX), sha256_init,
-		sha256_update, sha256_final, sha256_digest),
+#ifdef ENABLE_SHA256_SHA224
+	MHASH_ENTRY(MHASH_SHA256, 32, 64, sizeof( SHA256_SHA224_CTX), sha256_init,
+		sha256_sha224_update, sha256_sha224_final, sha256_digest),
+	MHASH_ENTRY(MHASH_SHA224, 28, 64, sizeof( SHA256_SHA224_CTX), sha224_init,
+		sha256_sha224_update, sha256_sha224_final, sha224_digest),
+#endif
+
+#ifdef ENABLE_SHA512_SHA384
+	MHASH_ENTRY(MHASH_SHA512, 64, 128, sizeof( SHA512_SHA384_CTX), sha512_init,
+		sha512_sha384_update, sha512_sha384_final, sha512_digest),
+	MHASH_ENTRY(MHASH_SHA384, 48, 128, sizeof( SHA512_SHA384_CTX), sha384_init,
+		sha512_sha384_update, sha512_sha384_final, sha384_digest),
 #endif
 
 #ifdef ENABLE_HAVAL
@@ -139,7 +156,13 @@ static const mhash_hash_entry algorithms[] = {
 #endif
 
 #ifdef ENABLE_RIPEMD
-	MHASH_ENTRY(MHASH_RIPEMD160, 20, 64, sizeof(RIPEMD_CTX), ripemd_init, 
+	MHASH_ENTRY(MHASH_RIPEMD128, 16, 64, sizeof(RIPEMD_CTX), ripemd128_init, 
+		ripemd_update, ripemd_final, ripemd_digest),
+	MHASH_ENTRY(MHASH_RIPEMD160, 20, 64, sizeof(RIPEMD_CTX), ripemd160_init, 
+		ripemd_update, ripemd_final, ripemd_digest),
+	MHASH_ENTRY(MHASH_RIPEMD256, 32, 64, sizeof(RIPEMD_CTX), ripemd256_init, 
+		ripemd_update, ripemd_final, ripemd_digest),
+	MHASH_ENTRY(MHASH_RIPEMD320, 40, 64, sizeof(RIPEMD_CTX), ripemd320_init, 
 		ripemd_update, ripemd_final, ripemd_digest),
 #endif
 
@@ -155,6 +178,11 @@ static const mhash_hash_entry algorithms[] = {
 #ifdef ENABLE_GOST
 	MHASH_ENTRY(MHASH_GOST, 32, 0, sizeof(GostHashCtx), gosthash_reset, 
 		gosthash_update, NULL, gosthash_final),
+#endif
+
+#ifdef ENABLE_WHIRLPOOL
+	MHASH_ENTRY(MHASH_WHIRLPOOL, 64, 64, sizeof(WHIRLPOOL_CTX), whirlpool_init, 
+		    whirlpool_update, whirlpool_final, whirlpool_digest),
 #endif
 	{0}
 };

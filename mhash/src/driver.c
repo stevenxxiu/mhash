@@ -25,79 +25,59 @@
  *
  * It's ugly, limited and you should hit :q! now
  *
- * $Id: driver.c,v 1.3 2001/07/12 15:34:06 nmav Exp $
+ * $Id: driver.c,v 1.4 2002/05/16 22:45:59 nmav Exp $
  */
 
 #include <string.h>
+#include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include "../lib/mhash.h"
 
-static const char hexconvtab[] = "0123456789ABCDEF";
+#define MAX_DIGEST_SIZE 256
 
-/*
-   Also used in PHP3 
- */
-
-static char *
-bin2hex(const unsigned char *old, const size_t oldlen, size_t * newlen)
+int main(int argc, char **argv)
 {
-	unsigned char *new = NULL;
-	int i, j;
-
-	new = (char *) malloc(oldlen * 2 * sizeof(char) + 1);
-	if (!new)
-		return (new);
-
-	for (i = j = 0; i < oldlen; i++) {
-		new[j++] = hexconvtab[old[i] >> 4];
-		new[j++] = hexconvtab[old[i] & 15];
-	}
-	new[j] = '\0';
-
-	if (newlen)
-		*newlen = oldlen * 2 * sizeof(char);
-
-	return (new);
-}
-
-int 
-main(int argc, char **argv)
-{
-	size_t bsize;
-	unsigned char data[128]; /* enough space to hold digests */
-	size_t data_len;
-	char *str;
-	size_t str_len;
+	unsigned char digest[MAX_DIGEST_SIZE]; /* enough space to hold digests */
+	unsigned char data[1024];
+	ssize_t r;
+	int i, found;
 	hashid hashid;
 	MHASH td;
 
-	if (argc < 3)
-		exit(1);
+	if (argc != 2)
+	  {
+	    fprintf(stderr, "Syntax: %s <name of hash function>\n", argv[0]);
+	    exit(1);
+	  }
 
-	hashid = atoi(argv[1]);
-	data_len = atoi(argv[2]);
+	/* Look for the right mhash hash id */
+	for(found = hashid = 0; hashid <= mhash_count(); hashid++)
+	  if (mhash_get_hash_name_static(hashid))
+	    if (! strcmp(argv[1], mhash_get_hash_name_static(hashid)))
+	      {
+		found = 1;
+		break;
+	      }
+	if (! found)
+	  {
+	    fprintf(stderr, "FATAL: hash function %s not available!\n", argv[1]);
+	    exit(1);
+	  }
 
-	if (mhash_get_hash_name(hashid)==NULL) 
-		return 0;
+	assert(mhash_get_block_size(hashid) <= MAX_DIGEST_SIZE);
+
+	td = mhash_init(hashid);  /* hash stdin until EOF ist reached */
+	do {
+	  r = read(0, data, sizeof data);
+	  assert(r >= 0);
+	  mhash(td, data, r);
+	} while (r);
+	mhash_deinit(td, digest);
+
+	for(i = 0; i < mhash_get_block_size(hashid); i++)
+	  printf("%02X", digest[i]);
+	printf("\n");
 	
-	bsize = mhash_get_block_size(hashid);
-	if (!bsize)
-		exit(1);
-
-	mhash_bzero(data, data_len + 1);
-	
-
-	if (data_len)
-		read(0, data, data_len);
-
-	td = mhash_init(hashid);
-	mhash(td, data, data_len);
-	
-	mhash_deinit(td, data);
-	str = bin2hex(data, bsize, &str_len);
-	printf("%s\n", str);
-	free(str);
-	
-	exit(0);
+	return 0;
 }
