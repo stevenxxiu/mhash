@@ -21,6 +21,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 #include <mhash.h>
+/* work around typo in mhash.h */
+#if MHASH_API_VERSION == 20020524
+#define MHASH_WHIRLPOOL MHSH_WHIRLPOOL
+#endif
 #include "Python.h"
 #include "structmember.h"
 
@@ -60,6 +64,8 @@ MHASH_dealloc(MHASHObject *self)
 	self->ob_type->tp_free((PyObject *)self);
 }
 
+/* FIXME: There has to be a better way to populate the hashid_array[]. */
+
 hashid hashid_array[] = {
 	MHASH_CRC32,
 	MHASH_MD5,
@@ -78,7 +84,19 @@ hashid hashid_array[] = {
 	MHASH_MD4,
 #if MHASH_API_VERSION >= 20011020
 	MHASH_SHA256,
-	MHASH_ADLER32
+	MHASH_ADLER32,
+#endif
+#if MHASH_API_VERSION >= 20020524
+	MHASH_SHA224,
+	MHASH_SHA512,
+	MHASH_SHA384,
+	MHASH_WHIRLPOOL,
+	MHASH_RIPEMD128,
+	MHASH_RIPEMD256,
+	MHASH_RIPEMD320,
+	MHASH_SNEFRU128,
+	MHASH_SNEFRU256,
+	MHASH_MD2,
 #endif
 };
 
@@ -658,6 +676,15 @@ initmhash(void)
 #if MHASH_API_VERSION >= 20011020
 	INSINT(MHASH_SHA256);
 	INSINT(MHASH_ADLER32);
+#endif
+#if MHASH_API_VERSION >= 20020524
+	INSINT(MHASH_SHA224);
+	INSINT(MHASH_SHA512);
+	INSINT(MHASH_SHA384);
+	INSINT(MHASH_WHIRLPOOL);
+	INSINT(MHASH_RIPEMD128);
+	INSINT(MHASH_RIPEMD256);
+	INSINT(MHASH_RIPEMD320);
 #endif
 
 	/* Keygen algorithms */
