@@ -138,6 +138,7 @@ int x;
 	case KEYGEN_ASIS:
 		x=_mhash_gen_key_asis(keyword, keysize, password,
 				    passwordlen);
+		break;
 	case KEYGEN_PKDES:
 		x=_mhash_gen_key_pkdes(keyword, keysize, password,
 				    passwordlen);
@@ -190,6 +191,7 @@ int saltsize= data.salt_size;
 	case KEYGEN_ASIS:
 		x=_mhash_gen_key_asis(keyword, keysize, password,
 				    passwordlen);
+		break;
 	case KEYGEN_PKDES:
 		x=_mhash_gen_key_pkdes(keyword, keysize, password,
 				    passwordlen);

@@ -29,10 +29,8 @@ int _mhash_gen_key_asis(void *keyword, int key_size, unsigned char *password, in
 	int i;
 
 	if (plen>key_size) plen=key_size;
-	bzero( keyword, key_size);
-
+	memset( keyword, 0, key_size);
 	memmove( keyword, password, plen);
-
 	return 0;
 }
 
