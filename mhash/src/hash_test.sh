@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# $Id: hash_test.sh,v 1.4 2001/01/21 17:14:52 nmav Exp $
+# $Id: hash_test.sh,v 1.5 2001/01/21 19:30:36 nmav Exp $
 
 if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
   if (echo $ac_n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
@@ -95,15 +95,15 @@ echo
 
 
 echo $ac_n "testing RIPEMD160 $ac_c"
-test_hash 5 "" 9c1185a5c5e9fc54612808977ee8f548b2258d31
-test_hash 5 a 0bdc9d2d256b3ee9daae347be6f4dc835a467ffe
-test_hash 5 abc 8eb208f7e05d987a9b044a8e98c6b087f15a0bfc
-test_hash 5 "message digest" 5d0689ef49d2fae572b881b123a85ffa21595f36
-test_hash 5 abcdefghijklmnopqrstuvwxyz f71c27109c692c1b56bbdceb5b9d2865b3708dbc
+test_hash 5 "" 9C1185A5C5E9FC54612808977EE8F548B2258D31
+test_hash 5 a 0BDC9D2D256B3EE9DAAE347BE6F4DC835A467FFE
+test_hash 5 abc 8EB208F7E05D987A9B044A8E98C6B087F15A0BFC
+test_hash 5 "message digest" 5D0689EF49D2FAE572B881B123A85FFA21595F36
+test_hash 5 abcdefghijklmnopqrstuvwxyz F71C27109C692C1B56BBDCEB5B9D2865B3708DBC
 test_hash 5 abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq \
-		12a053384a9c0c88e405a06c27dcf49ada62eb2b
+		12A053384A9C0C88E405A06C27DCF49ADA62EB2B
 test_hash 5 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 \
-		b0e20b6e3116640286ed3a87a5713079b21f5189
+		B0E20B6E3116640286ED3A87A5713079B21F5189
 echo ""
 
 
