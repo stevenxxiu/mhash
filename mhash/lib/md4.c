@@ -35,13 +35,13 @@
 #ifndef WORDS_BIGENDIAN
 #define byteReverse(buf, len)	/* Nothing */
 #else
-void byteReverse(unsigned char *buf, unsigned longs);
+static void byteReverse(unsigned char *buf, unsigned longs);
 
 
 /*
  * Note: this code is harmless on little-endian machines.
  */
-void byteReverse(unsigned char *buf, unsigned longs)
+static void byteReverse(unsigned char *buf, unsigned longs)
 {
 	word32 t;
 	do {
