@@ -34,7 +34,7 @@
 
 #define PASSES 3
 
-extern word32 tiger_table[4*256][2];
+extern const word32 tiger_table[4*256][2];
 
 #define t1 (tiger_table)
 #define t2 (tiger_table+256)

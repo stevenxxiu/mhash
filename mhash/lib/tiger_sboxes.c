@@ -1,7 +1,7 @@
 #include "libdefs.h"
 
 #if 0 /* for 64 bit version of tiger - not ready yet */
-word64 tiger_table[4*256] = {
+const word64 tiger_table[4*256] = {
     0x02AAB17CF7E90C5ELL   /*    0 */,    0xAC424B03E243A8ECLL   /*    1 */,
     0x72CD5BE30DD5FCD3LL   /*    2 */,    0x6D019B93F6F97F3ALL   /*    3 */,
     0xCD9978FFD21F9193LL   /*    4 */,    0x7573A1C9708029E2LL   /*    5 */,
@@ -517,7 +517,7 @@ word64 tiger_table[4*256] = {
 
 #endif
 
-word32 tiger_table[4*256][2] = {
+const word32 tiger_table[4*256][2] = {
     {0xF7E90C5E, 0x02AAB17C} /*    0 */,    {0xE243A8EC, 0xAC424B03} /*    1 */,
     {0x0DD5FCD3, 0x72CD5BE3} /*    2 */,    {0xF6F97F3A, 0x6D019B93} /*    3 */,
     {0xD21F9193, 0xCD9978FF} /*    4 */,    {0x708029E2, 0x7573A1C9} /*    5 */,

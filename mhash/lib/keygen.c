@@ -37,7 +37,7 @@ typedef struct mhash_keygen_entry {
 	size_t max_key_size;
 } mhash_keygen_entry;
 
-static mhash_keygen_entry keygen_algorithms[] = {
+static const mhash_keygen_entry keygen_algorithms[] = {
 	KEYGEN_ENTRY(KEYGEN_ASIS, 0, 0, 0, 0, 0),
 	KEYGEN_ENTRY(KEYGEN_PKDES, 0, 0, 0, 0, 0),
 	KEYGEN_ENTRY(KEYGEN_HEX, 0, 0, 0, 0, 0),
@@ -49,7 +49,7 @@ static mhash_keygen_entry keygen_algorithms[] = {
 };
 
 #define KEYGEN_LOOP(b) \
-        mhash_keygen_entry *p; \
+        const mhash_keygen_entry *p; \
                 for(p = keygen_algorithms; p->name != NULL; p++) { b ; }
 
 #define KEYGEN_ALG_LOOP(a) \

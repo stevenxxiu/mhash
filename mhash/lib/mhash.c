@@ -20,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.27 2002/01/26 09:09:45 nmav Exp $ */
+/* $Id: mhash.c,v 1.28 2002/02/10 10:10:08 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -56,7 +56,7 @@ struct mhash_hash_entry {
 	size_t hash_pblock;
 };
 
-static mhash_hash_entry algorithms[] = {
+static const mhash_hash_entry algorithms[] = {
 	MHASH_ENTRY(MHASH_CRC32, 4, 0),
 	MHASH_ENTRY(MHASH_ADLER32, 4, 0),
 	MHASH_ENTRY(MHASH_MD5, 16, 64),
@@ -78,7 +78,7 @@ static mhash_hash_entry algorithms[] = {
 };
 
 #define MHASH_LOOP(b) \
-	mhash_hash_entry *p; \
+	const mhash_hash_entry *p; \
 	for(p = algorithms; p->name != NULL; p++) { b ; }
 
 #define MHASH_ALG_LOOP(a) \

@@ -23,7 +23,7 @@
 
 /* This polynomial ( 0xEDB88320L) DOES generate the same CRC values as ZMODEM and PKZIP
  */
-static word32 crc32_table_b[256] =
+static const word32 crc32_table_b[256] =
 {
 	0x0UL, 0x77073096UL, 0xEE0E612CUL, 0x990951BAUL, 0x76DC419UL,
 	0x706AF48FUL, 0xE963A535UL, 0x9E6495A3UL, 0xEDB8832UL, 0x79DCB8A4UL,
@@ -83,7 +83,7 @@ static word32 crc32_table_b[256] =
 /* This polynomial (0x04c11db7) is used at: AUTODIN II, Ethernet, & FDDI 
  */
 
-static word32 crc32_table[256] =
+static const word32 crc32_table[256] =
 {
 
 	0x00000000UL, 0x04c11db7UL, 0x09823b6eUL, 0x0d4326d9UL,

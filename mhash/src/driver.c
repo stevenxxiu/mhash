@@ -25,7 +25,7 @@
  *
  * It's ugly, limited and you should hit :q! now
  *
- * $Id: driver.c,v 1.2 2000/04/06 22:19:31 nmav Exp $
+ * $Id: driver.c,v 1.3 2001/07/12 15:34:06 nmav Exp $
  */
 
 #include <string.h>
@@ -33,7 +33,7 @@
 #include <stdio.h>
 #include "../lib/mhash.h"
 
-static char hexconvtab[] = "0123456789ABCDEF";
+static const char hexconvtab[] = "0123456789ABCDEF";
 
 /*
    Also used in PHP3 

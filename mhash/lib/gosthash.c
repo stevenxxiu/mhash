@@ -18,7 +18,7 @@
    lookup tables : each of these has two rotated 4-bit S-Boxes 
  */
 
-static word32 gost_sbox_1[256] = {
+static const word32 gost_sbox_1[256] = {
 
 	0x72000UL, 0x75000UL, 0x74800UL, 0x71000UL, 0x76800UL,
 	0x74000UL, 0x70000UL, 0x77000UL, 0x73000UL, 0x75800UL,
@@ -73,7 +73,7 @@ static word32 gost_sbox_1[256] = {
 	0x48800UL, 0x4E000UL, 0x4B800UL, 0x4F800UL, 0x4A800UL,
 	0x49800UL,
 };
-static word32 gost_sbox_2[256] = {
+static const word32 gost_sbox_2[256] = {
 
 	0x3A80000UL, 0x3C00000UL, 0x3880000UL, 0x3E80000UL, 0x3D00000UL,
 	0x3980000UL, 0x3A00000UL, 0x3900000UL, 0x3F00000UL, 0x3F80000UL,
@@ -128,7 +128,7 @@ static word32 gost_sbox_2[256] = {
 	0x1E00000UL, 0x1B80000UL, 0x1B00000UL, 0x1800000UL, 0x1C80000UL,
 	0x1D80000UL,
 };
-static word32 gost_sbox_3[256] = {
+static const word32 gost_sbox_3[256] = {
 
 	0x30000002UL, 0x60000002UL, 0x38000002UL, 0x8000002UL,
 	0x28000002UL,
@@ -226,7 +226,7 @@ static word32 gost_sbox_3[256] = {
 	0x48000007UL, 0x70000007UL, 0x7UL, 0x18000007UL, 0x58000007UL,
 	0x10000007UL,
 };
-static word32 gost_sbox_4[256] = {
+static const word32 gost_sbox_4[256] = {
 
 	0xE8UL, 0xD8UL, 0xA0UL, 0x88UL, 0x98UL,
 	0xF8UL, 0xA8UL, 0xC8UL, 0x80UL, 0xD0UL,
@@ -300,7 +300,7 @@ void gosthash_init()
 	   4-bit S-Boxes 
 	 */
 
-	word32 sbox[8][16] = {
+	const word32 sbox[8][16] = {
 		{4, 10, 9, 2, 13, 8, 0, 14, 6, 11, 1, 12, 7, 15, 5, 3},
 		{14, 11, 4, 12, 6, 13, 15, 10, 2, 3, 8, 1, 0, 7, 5, 9},
 		{5, 8, 1, 13, 10, 3, 4, 2, 14, 15, 12, 7, 6, 0, 9, 11},
