@@ -143,8 +143,11 @@ int _mhash_gen_key_s2k_isalted(hashid algorithm, unsigned long _count,
 
 	times = key_size/block_size;
 	if (key_size%block_size != 0) times++;
-	if ( (key=calloc(1, times*block_size))==NULL) return -1;
-
+	if ( (key=calloc(1, times*block_size))==NULL) {
+	   mhash_bzero(saltpass, saltpass_size);
+	   free( saltpass);
+	   return -1;
+        }
 
 	/* Calculate the iterations
 	 */
@@ -163,6 +166,8 @@ int _mhash_gen_key_s2k_isalted(hashid algorithm, unsigned long _count,
 	for (i=0;i<times;i++) {
 		td = mhash_init(algorithm);
 		if (td==MHASH_FAILED) {
+		        mhash_bzero( key, key_size);
+		        mhash_bzero( saltpass, saltpass_size);
 			free(key);
 			free(saltpass);
 			return -1;
