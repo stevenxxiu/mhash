@@ -53,6 +53,9 @@
  */
 
 #include <libdefs.h>
+
+#ifdef ENABLE_HAVAL
+
 #include <mhash_haval.h>
 /* #include <assert.h> */
 
@@ -927,3 +930,4 @@ int havalFinal (havalContext *hcp, byte *digest)
 } /* havalFinal */
 
 
+#endif /* ENABLE_HAVAL */

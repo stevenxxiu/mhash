@@ -13,6 +13,9 @@
  */
 
 #include "libdefs.h"
+
+#ifdef ENABLE_GOST
+
 #include "mhash_gost.h"
 /*
    lookup tables : each of these has two rotated 4-bit S-Boxes 
@@ -627,3 +630,5 @@ void gosthash_final(GostHashCtx * ctx, byte * digest)
 		j += 4;
 	}
 }
+
+#endif /* ENABLE_GOST */

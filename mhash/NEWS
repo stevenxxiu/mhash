@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2002/05/24 16:40:58 $)
+mhash ChangeLog ($Date: 2002/05/26 17:08:45 $)
 ===============================================================================
 
 People
@@ -8,6 +8,7 @@ People
 
 Version ?.?.?
 - Code cleanups
+- Added configure time options to disable certain algorithms
 
 Version 0.8.15 (released May 24 2002)
 - Corrected Iterated S2K

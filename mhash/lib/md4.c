@@ -18,13 +18,15 @@
  */
 
 
+#include <libdefs.h>
+
+#ifdef ENABLE_MD4
 
 /* 
  * The algorithm is due to Ron Rivest.  This code is based on code
  * written by Colin Plumb in 1993.
  */
  
-#include <libdefs.h>
 
 /*
  * This code implements the MD4 message-digest algorithm.
@@ -256,3 +258,4 @@ void MD4Transform(word32 buf[4], word32 const in[16])
 	buf[3] += d;
 }
 
+#endif /* ENABLE_MD4 */

@@ -30,6 +30,10 @@
  *							--nikos
  */
 
+#include "libdefs.h"
+
+#ifdef ENABLE_TIGER
+
 #include "mhash_tiger.h"
 
 #define PASSES 3
@@ -379,3 +383,5 @@ void tiger160_digest(struct tiger_ctx *ctx, word8 * s)
 	s[1] = 0xff & (ctx->digest[i+1] >> 16);
 	s[0] = 0xff & ctx->digest[i+1] >> 24;
 }
+
+#endif /* ENABLE_TIGER */

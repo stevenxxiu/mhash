@@ -19,6 +19,10 @@
  */
 
 
+#include "libdefs.h"
+
+#ifdef ENABLE_CRC32
+
 #include "mhash_crc32.h"
 
 /* This polynomial ( 0xEDB88320L) DOES generate the same CRC values as ZMODEM and PKZIP
@@ -196,3 +200,5 @@ mhash_crc32b(word32 * crc, const void *buf, int len)
 	for (p = buf; len > 0; ++p, --len)
 		(*crc) = (((*crc) >> 8) & 0x00FFFFFF) ^ crc32_table_b[(*crc ^ *p) & 0xff];
 }
+
+#endif /* ENABLE_CRC32 */

@@ -1,5 +1,7 @@
 #include "libdefs.h"
 
+#ifdef ENABLE_TIGER
+
 #if 0 /* for 64 bit version of tiger - not ready yet */
 const word64 tiger_table[4*256] = {
     0x02AAB17CF7E90C5ELL   /*    0 */,    0xAC424B03E243A8ECLL   /*    1 */,
@@ -1031,3 +1033,5 @@ const word32 tiger_table[4*256][2] = {
     {0x0EA8280E, 0xCD56D943} /* 1020 */,    {0x535F5065, 0xC12591D7} /* 1021 */,
     {0x720AEF96, 0xC83223F1} /* 1022 */,    {0x7363A51F, 0xC3A0396F} /* 1023 */};
 
+
+#endif /* ENABLE_TIGER */

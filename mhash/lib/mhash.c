@@ -20,23 +20,53 @@
  */
 
 
-/* $Id: mhash.c,v 1.30 2002/05/17 11:26:34 nmav Exp $ */
+/* $Id: mhash.c,v 1.31 2002/05/26 17:08:47 nmav Exp $ */
 
 #include <stdlib.h>
 
 #include "libdefs.h"
 
 #include "mhash_int.h"
-#include "mhash_crc32.h"
-#include "mhash_haval.h"
-#include "mhash_md5.h"
-#include "mhash_md4.h"
-#include "mhash_sha1.h"
-#include "mhash_tiger.h"
-#include "mhash_ripemd.h"
-#include "mhash_sha256.h"
-#include "mhash_adler32.h"
-#include "mhash_gost.h"
+
+#ifdef ENABLE_CRC32
+# include "mhash_crc32.h"
+#endif
+
+#ifdef ENABLE_HAVAL
+# include "mhash_haval.h"
+#endif
+
+#ifdef ENABLE_MD5
+# include "mhash_md5.h"
+#endif
+
+#ifdef ENABLE_MD4
+# include "mhash_md4.h"
+#endif
+
+#ifdef ENABLE_SHA1
+# include "mhash_sha1.h"
+#endif
+
+#ifdef ENABLE_TIGER
+# include "mhash_tiger.h"
+#endif
+
+#ifdef ENABLE_RIPEMD
+# include "mhash_ripemd.h"
+#endif
+
+#ifdef ENABLE_SHA256
+# include "mhash_sha256.h"
+#endif
+
+#ifdef ENABLE_ADLER32
+# include "mhash_adler32.h"
+#endif
+
+#ifdef ENABLE_GOST
+# include "mhash_gost.h"
+#endif
 
 /* 19/03/2000 Changes for better thread handling --nikos 
  * Actually it is thread safe.
@@ -48,11 +78,6 @@
 	hash_func, final_func, deinit_func) \
 	{ #name, name, blksize, hash_pblock, state_size, init_func,\
 		hash_func, final_func, deinit_func }
-
-typedef void (*INIT_FUNC)( void*);
-typedef void (*HASH_FUNC)(void*, const void*, int);
-typedef void (*FINAL_FUNC)(void*);
-typedef void (*DEINIT_FUNC)(void*, unsigned char*);
 
 struct mhash_hash_entry {
 	char *name;
@@ -68,18 +93,39 @@ struct mhash_hash_entry {
 };
 
 static const mhash_hash_entry algorithms[] = {
+#ifdef ENABLE_CRC32
 	MHASH_ENTRY(MHASH_CRC32, 4, 0, sizeof(word32), mhash_clear_crc32, 
 		mhash_crc32, NULL, mhash_get_crc32),
+	MHASH_ENTRY(MHASH_CRC32B, 4, 0, sizeof(word32), mhash_clear_crc32,
+		mhash_crc32b, NULL, mhash_get_crc32),
+#endif
+
+#ifdef ENABLE_ADLER32
 	MHASH_ENTRY(MHASH_ADLER32, 4, 0, sizeof(word32), mhash_clear_adler32, 
 		mhash_adler32, NULL, mhash_get_adler32),
+#endif
+
+#ifdef ENABLE_MD5
 	MHASH_ENTRY(MHASH_MD5, 16, 64, sizeof(MD5_CTX), MD5Init,
 		MD5Update, NULL, MD5Final),
+#endif
+
+#ifdef ENABLE_MD4
 	MHASH_ENTRY(MHASH_MD4, 16, 64, sizeof(MD4_CTX), MD4Init, 
 		MD4Update, NULL, MD4Final),
+#endif
+
+#ifdef ENABLE_SHA1
 	MHASH_ENTRY(MHASH_SHA1, 20, 64, sizeof(SHA_CTX), sha_init, 
 		sha_update, sha_final, sha_digest),
+#endif
+
+#ifdef ENABLE_SHA256
 	MHASH_ENTRY(MHASH_SHA256, 32, 64, sizeof( SHA256_CTX), sha256_init,
 		sha256_update, sha256_final, sha256_digest),
+#endif
+
+#ifdef ENABLE_HAVAL
 	MHASH_ENTRY(MHASH_HAVAL256, 32, 128, sizeof(havalContext), havalInit256,
 		havalUpdate, NULL, havalFinal),
 	MHASH_ENTRY(MHASH_HAVAL128, 16, 128, sizeof(havalContext), havalInit128,
@@ -90,18 +136,26 @@ static const mhash_hash_entry algorithms[] = {
 		havalUpdate, NULL, havalFinal),
 	MHASH_ENTRY(MHASH_HAVAL224, 28, 128, sizeof(havalContext), havalInit224,
 		havalUpdate, NULL, havalFinal),
+#endif
+
+#ifdef ENABLE_RIPEMD
 	MHASH_ENTRY(MHASH_RIPEMD160, 20, 64, sizeof(RIPEMD_CTX), ripemd_init, 
 		ripemd_update, ripemd_final, ripemd_digest),
+#endif
+
+#ifdef ENABLE_TIGER
 	MHASH_ENTRY(MHASH_TIGER, 24, 64, sizeof(TIGER_CTX), tiger_init, 
 		tiger_update, tiger_final, tiger_digest),
 	MHASH_ENTRY(MHASH_TIGER128, 16, 64, sizeof(TIGER_CTX), tiger_init,
 		tiger_update, tiger_final, tiger128_digest),
 	MHASH_ENTRY(MHASH_TIGER160, 20, 64, sizeof(TIGER_CTX), tiger_init, 
 		tiger_update, tiger_final, tiger160_digest),
+#endif
+
+#ifdef ENABLE_GOST
 	MHASH_ENTRY(MHASH_GOST, 32, 0, sizeof(GostHashCtx), gosthash_reset, 
 		gosthash_update, NULL, gosthash_final),
-	MHASH_ENTRY(MHASH_CRC32B, 4, 0, sizeof(word32), mhash_clear_crc32,
-		mhash_crc32b, NULL, mhash_get_crc32),
+#endif
 	{0}
 };
 
@@ -253,6 +307,10 @@ MHASH mhash_init_int(const hashid type)
 		return MHASH_FAILED;
 	}
 
+	ret->hash_func = _mhash_get_hash_func( type);
+	ret->deinit_func = _mhash_get_deinit_func( type);
+	ret->final_func = _mhash_get_final_func( type);
+
 	return ret;
 		
 }
@@ -281,11 +339,9 @@ void mhash_32bit_conversion(word32 * ptr, size_t count)
 
 int mhash(MHASH td, const void *plaintext, size_t size)
 {
-HASH_FUNC func;
 	
-	func = _mhash_get_hash_func( td->algorithm_given);
-	if (func!=NULL)
-		func( td->state, plaintext, size);
+	if (td->hash_func!=NULL)
+		td->hash_func( td->state, plaintext, size);
 
 	return 0;
 }
@@ -294,16 +350,12 @@ HASH_FUNC func;
 WIN32DLL_DEFINE
     void mhash_deinit(MHASH td, void *result)
 {
-DEINIT_FUNC deinit_func;
-FINAL_FUNC final_func;
 	
-	final_func = _mhash_get_final_func( td->algorithm_given);
-	if (final_func!=NULL)
-		final_func( td->state);
+	if (td->final_func!=NULL)
+		td->final_func( td->state);
 
-	deinit_func = _mhash_get_deinit_func( td->algorithm_given);
-	if (deinit_func!=NULL)
-		deinit_func( td->state, result);
+	if (td->deinit_func!=NULL)
+		td->deinit_func( td->state, result);
 
 	if (NULL != td->state) {
 		free(td->state);
@@ -361,8 +413,6 @@ WIN32DLL_DEFINE
 	unsigned char _opad[MAX_BLOCK_SIZE];
 	MHASH tmptd;
 	int i, opad_alloc = 0;
-	DEINIT_FUNC deinit_func;
-	FINAL_FUNC final_func;
 	
 
 
@@ -385,13 +435,11 @@ WIN32DLL_DEFINE
 	tmptd = mhash_init(td->algorithm_given);
 	mhash(tmptd, opad, td->hmac_block);
 
-	final_func = _mhash_get_final_func( td->algorithm_given);
-	if (final_func!=NULL)
-		final_func( td->state);
+	if (td->final_func!=NULL)
+		td->final_func( td->state);
 
-	deinit_func = _mhash_get_deinit_func( td->algorithm_given);
-	if (deinit_func!=NULL)
-		deinit_func( td->state, result);
+	if (td->deinit_func!=NULL)
+		td->deinit_func( td->state, result);
 
 	if (result!=NULL)
 		mhash(tmptd, result,
@@ -590,6 +638,10 @@ WIN32DLL_DEFINE MHASH mhash_restore_state_mem(void* _mem)
 
 	memcpy( ret->state, &mem[pos], ret->state_size);
 	pos += ret->state_size;
+
+	ret->hash_func = _mhash_get_hash_func( algorithm_given);
+	ret->deinit_func = _mhash_get_deinit_func( algorithm_given);
+	ret->final_func = _mhash_get_final_func( algorithm_given);
 
 	return ret;
 

@@ -34,6 +34,10 @@
  * by NSA/NIST.  This code implements the fixed version of SHA.
  */
 
+#include "libdefs.h"
+
+#ifdef ENABLE_RIPEMD
+
 #include "mhash_ripemd.h"
 
 /* 32-bit rotate left - kludged with shifts */
@@ -429,3 +433,5 @@ void ripemd_digest(struct ripemd_ctx *ctx, word8 * s)
 	}
 
 }
+
+#endif /* ENABLE_RIPEMD */

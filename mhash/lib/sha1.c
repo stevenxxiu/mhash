@@ -9,7 +9,7 @@
  * Adapted to pike and some cleanup by Niels Möller.
  */
 
-/* $Id: sha1.c,v 1.3 2001/10/27 09:42:22 nmav Exp $ */
+/* $Id: sha1.c,v 1.4 2002/01/26 09:09:45 nmav Exp $ */
 
 /* SHA: NIST's Secure Hash Algorithm */
 
@@ -30,6 +30,10 @@ whether this is an optimal solution to the problem which was discovered in the
 SHA or whether it's simply a bandaid which fixes the problem with a minimum of
 effort (for example the reengineering of a great many Capstone chips).
 */
+
+#include "libdefs.h"
+
+#ifdef ENABLE_SHA1
 
 #include "mhash_sha1.h"
 
@@ -342,3 +346,5 @@ void sha_digest(struct sha_ctx *ctx, word8 *s)
 	      *s++ = 0xff &  ctx->digest[i];
 	    }
 }
+
+#endif /* ENABLE_SHA1 */

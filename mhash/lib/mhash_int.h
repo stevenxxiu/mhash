@@ -44,6 +44,10 @@ typedef struct keygen {
 	int		salt_size;
 } KEYGEN;
 
+typedef void (*INIT_FUNC)( void*);
+typedef void (*HASH_FUNC)(void*, const void*, int);
+typedef void (*FINAL_FUNC)(void*);
+typedef void (*DEINIT_FUNC)(void*, unsigned char*);
 
 typedef struct {
 	int hmac_key_size;
@@ -53,6 +57,11 @@ typedef struct {
 	word8 *state;
 	int	state_size;
 	hashid algorithm_given;
+
+	HASH_FUNC hash_func;
+	FINAL_FUNC final_func;
+	DEINIT_FUNC deinit_func;
+	                        
 } MHASH_INSTANCE;
 
 typedef MHASH_INSTANCE * MHASH;

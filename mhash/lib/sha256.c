@@ -30,6 +30,9 @@
  */
 
 #include "libdefs.h"
+
+#ifdef ENABLE_SHA256
+
 #include "mhash_sha256.h"
 #include "mhash_sha1.h"
 
@@ -310,44 +313,4 @@ void sha256_digest(const struct sha256_ctx *ctx, byte * s)
 		}
 }
 
-
-#if 0
-void
-sha256_digest(const struct sha256_ctx *ctx, unsigned length, byte * digest)
-{
-	unsigned i;
-	unsigned words;
-	unsigned leftover;
-
-/*  assert(length <= SHA256_DIGEST_SIZE);
- */
-
-	words = length / 4;
-	leftover = length % 4;
-
-	for (i = 0; i < words; i++, digest += 4)
-		WRITE_UINT32(digest, ctx->state[i]);
-
-	if (leftover) {
-		word32 word;
-		unsigned j = leftover;
-
-		assert(i < _SHA256_DIGEST_LENGTH);
-
-		word = ctx->state[i];
-
-		switch (leftover) {
-		default:
-			abort();
-		case 3:
-			digest[--j] = (word >> 8) & 0xff;
-			/* Fall through */
-		case 2:
-			digest[--j] = (word >> 16) & 0xff;
-			/* Fall through */
-		case 1:
-			digest[--j] = (word >> 24) & 0xff;
-		}
-	}
-}
-#endif
+#endif /* ENABLE_SHA256 */
