@@ -20,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.34 2003/01/19 18:00:58 nmav Exp $ */
+/* $Id: mhash.c,v 1.36 2004/05/02 20:03:10 imipak Exp $ */
 
 #include <stdlib.h>
 
@@ -687,7 +687,7 @@ WIN32DLL_DEFINE MHASH mhash_restore_state_mem(void* _mem)
 		return MHASH_FAILED;
 }
 
-#ifdef WIN32
+#if defined(WIN32) || defined (__CYGWIN__)
 WIN32DLL_DEFINE int main (void)
 {
        /* empty main function to avoid linker error (see cygwin FAQ) */

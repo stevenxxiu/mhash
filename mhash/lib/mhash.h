@@ -23,7 +23,7 @@
 #ifndef MHASH_H
 #define MHASH_H
 
-/* $Id: mhash.h,v 1.20 2002/05/24 16:40:59 nmav Exp $ */
+/* $Id: mhash.h,v 1.22 2004/05/02 20:03:10 imipak Exp $ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -66,7 +66,7 @@ extern "C" {
 		MHASH_SHA224,
 		MHASH_SHA512,
 		MHASH_SHA384,
-		MHSH_WHIRLPOOL,
+		MHASH_WHIRLPOOL,
 		MHASH_RIPEMD128,
 		MHASH_RIPEMD256,
 		MHASH_RIPEMD320,

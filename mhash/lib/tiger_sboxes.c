@@ -2,7 +2,7 @@
 
 #ifdef ENABLE_TIGER
 
-#if 0 /* for 64 bit version of tiger - not ready yet */
+#ifdef TIGER_64BIT /* for 64 bit version of tiger */
 const word64 tiger_table[4*256] = {
     0x02AAB17CF7E90C5ELL   /*    0 */,    0xAC424B03E243A8ECLL   /*    1 */,
     0x72CD5BE30DD5FCD3LL   /*    2 */,    0x6D019B93F6F97F3ALL   /*    3 */,
@@ -517,7 +517,7 @@ const word64 tiger_table[4*256] = {
     0xCD56D9430EA8280ELL   /* 1020 */,    0xC12591D7535F5065LL   /* 1021 */,
     0xC83223F1720AEF96LL   /* 1022 */,    0xC3A0396F7363A51FLL   /* 1023 */};
 
-#endif
+#else /* !TIGER_64BIT */
 
 const word32 tiger_table[4*256][2] = {
     {0xF7E90C5E, 0x02AAB17C} /*    0 */,    {0xE243A8EC, 0xAC424B03} /*    1 */,
@@ -1033,5 +1033,6 @@ const word32 tiger_table[4*256][2] = {
     {0x0EA8280E, 0xCD56D943} /* 1020 */,    {0x535F5065, 0xC12591D7} /* 1021 */,
     {0x720AEF96, 0xC83223F1} /* 1022 */,    {0x7363A51F, 0xC3A0396F} /* 1023 */};
 
+#endif /* !TIGER_64BIT */
 
 #endif /* ENABLE_TIGER */
