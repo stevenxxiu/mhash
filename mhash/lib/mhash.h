@@ -22,7 +22,7 @@
 #ifndef MHASH_H
 #define MHASH_H
 
-/* $Id: mhash.h,v 1.10 2000/04/03 14:03:57 nikos Exp $ */
+/* $Id: mhash.h,v 1.1.1.1 2000/04/04 10:34:56 nmav Exp $ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -47,8 +47,7 @@ extern "C" {
 		MHASH_SHA1,
 		MHASH_HAVAL256,	/* 3 passes */
 		MHASH_RIPEMD160 = 5,
-		MHASH_SNEFRU,
-		MHASH_TIGER,
+		MHASH_TIGER = 7,
 		MHASH_GOST,
 		MHASH_CRC32B,
 		MHASH_MD2 = 10,

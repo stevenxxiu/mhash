@@ -307,7 +307,7 @@ The library is now maintained by I<Nikos Mavroyanopoulos>.
 If you find any, please send a bug report (preferrably together with a patch)
 to the maintainer with a detailed description on how to reproduce the bug.  
 
-=head1 AUTHOR
+=head1 AUTHORS
 
 Sascha Schumann <sascha@schumann.cx>
 Nikos Mavroyanopoulos <nmav@hellug.gr>
