@@ -1,10 +1,14 @@
-mhash ChangeLog ($Date: 2000/04/05 12:00:58 $)
+mhash ChangeLog ($Date: 2000/04/11 12:20:14 $)
 ===============================================================================
 
 People
 
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
+
+Version 0.8.2
+- Corrected Memory leaks in HMAC implementation patches by Marios Hadjieleftheriou <marioh@cs.ucr.edu>
+- Added HAVAL224
 
 Version 0.8.1 (released on April 11 2000)
 - Bugfixes in hmac implementation.
