@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# $Id: hash_test.sh,v 1.5 2001/01/21 19:30:36 nmav Exp $
+# $Id: hash_test.sh,v 1.6 2001/02/24 22:41:35 nmav Exp $
 
 if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
   if (echo $ac_n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
@@ -21,12 +21,12 @@ test_hash ( ) {
 	
 	plainlen=`echo $ac_n "$2$ac_c" | wc -c`
 	
-	got=`echo $ac_n "$2$ac_c" | ./driver $1 $plainlen`
+	got=`echo $ac_n "$2$ac_c" | ./driver $1 $plainlen | tr a-z A-Z`
 
 	want=`echo $ac_n "$3$ac_c" | tr a-z A-Z`
 	
 	if test "$got" = ""; then
-		echo "This algorithm($1) may not available"
+		echo "This algorithm($1) might not available"
 	else
 		if test "$got" != "$want" ; then
 			echo "  -- TEST FAILED: $1 \"$2\""
