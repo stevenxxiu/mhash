@@ -7,7 +7,7 @@ include_HEADERS = mhash.h
 lib_LTLIBRARIES = libmhash.la
 
 libmhash_la_SOURCES = mhash.c swap.c bzero.c crc32.c md5.c sha1.c haval.c \
-		tiger.c tiger_sboxes.c gosthash.c crc-32b.c \
+		tiger.c tiger_sboxes.c gosthash.c \
 		keygen_hex.c keygen_mcrypt.c keygen_asis.c keygen.c \
 		keygen_s2k.c ripemd.c
 

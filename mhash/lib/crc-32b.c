@@ -45,3 +45,13 @@ crc32bgen(void)
 		crcTable[i] = crc;
 	}
 }
+int main() {
+int i;
+crc32bgen();
+
+for (i=0;i<256;i++) {
+	if (i%5==0) printf("\n");
+	printf(" 0x%XUL,", crcTable[i]);	
+
+}
+}

@@ -12,8 +12,6 @@
 #ifndef GOSTHASH_H
 #define GOSTHASH_H
 
-#include <stdlib.h>
-
 /*
    State structure 
  */
@@ -32,7 +30,9 @@ typedef struct {
    Compute some lookup-tables that are needed by all other functions. 
  */
 
+#if 0
 void gosthash_init(void);
+#endif
 
 /*
    Clear the state of the given context structure. 
