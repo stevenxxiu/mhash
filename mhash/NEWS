@@ -1,10 +1,13 @@
-mhash ChangeLog ($Date: 2000/10/26 13:37:09 $)
+mhash ChangeLog ($Date: 2000/10/26 14:18:05 $)
 ===============================================================================
 
 People
 
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
+
+Version 0.8.4
+- added mhash_hmac_end_m() and mhash_end_m() functions which allow to specify the malloc function.
 
 Version 0.8.3 (released on October 25 2000)
 - Compiles under Win32 using cygwin (with -mno-cygwin) (NM)

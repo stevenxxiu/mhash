@@ -19,7 +19,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.9 2000/10/20 14:32:22 nmav Exp $ */
+/* $Id: mhash.c,v 1.10 2000/10/26 13:37:10 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -241,7 +241,7 @@ int mhash(MHASH thread, const void *plaintext, size_t size)
 }
 
 WIN32DLL_DEFINE
-void *mhash_end(MHASH thread)
+void *mhash_end_m(MHASH thread, void* (*hash_malloc)(size_t))
 {
 	void *digest;
 	void *rtmp = NULL;
@@ -249,17 +249,19 @@ void *mhash_end(MHASH thread)
 	switch (thread->algorithm_given) {
 	case MHASH_CRC32:
 	case MHASH_CRC32B:
-		rtmp = get_crc32((void *) thread->state);
+		rtmp = hash_malloc(sizeof(word32));
+		get_crc32(rtmp, (void *) thread->state);
+		
 		break;
 	case MHASH_MD5:
 		digest =
-		    malloc(mhash_get_block_size(thread->algorithm_given));
+		    hash_malloc(mhash_get_block_size(thread->algorithm_given));
 		MD5Final(digest, (void *) thread->state);
 		rtmp=digest;
 		break;
 	case MHASH_SHA1:
 		sha_final((void *) thread->state);
-		digest = malloc(SHA_DIGESTSIZE);
+		digest = hash_malloc(SHA_DIGESTSIZE);
 		sha_digest((void *) thread->state, digest);
 		rtmp = digest;
 		break;
@@ -269,24 +271,24 @@ void *mhash_end(MHASH thread)
 	case MHASH_HAVAL160:
 	case MHASH_HAVAL128:
 		digest =
-		    malloc(mhash_get_block_size(thread->algorithm_given));
+		    hash_malloc(mhash_get_block_size(thread->algorithm_given));
 		havalFinal((void *) thread->state, digest);
 		rtmp = digest;
 		break;
 	case MHASH_RIPEMD160:
 		ripemd_final((void *) thread->state);
-		digest = malloc(RIPEMD_DIGESTSIZE);
+		digest = hash_malloc(RIPEMD_DIGESTSIZE);
 		ripemd_digest((void *) thread->state, digest);
 		rtmp = digest;
 		break;
 	case MHASH_TIGER:
-		digest = malloc(192 >> 3);
+		digest = hash_malloc(192 >> 3);
 		memcpy(digest, (void *) thread->state, 192 >> 3);
 		mhash_32bit_conversion(digest, 192 >> 5);
 		rtmp = digest;
 		break;
 	case MHASH_GOST:
-		digest = malloc(32);
+		digest = hash_malloc(32);
 		gosthash_final((void *) thread->state, digest);
 		rtmp = digest;
 		break;
@@ -299,6 +301,12 @@ void *mhash_end(MHASH thread)
 
 	return rtmp;
 }
+
+WIN32DLL_DEFINE
+void* mhash_end(MHASH thread) {
+	return mhash_end_m(thread, malloc);
+}
+
 
 WIN32DLL_DEFINE
 MHASH mhash_init(const hashid type)
@@ -332,8 +340,9 @@ size_t mhash_get_hash_pblock(hashid type)
 	return ret;
 }
 
+
 WIN32DLL_DEFINE
-void *mhash_hmac_end(MHASH thread)
+void *mhash_hmac_end_m(MHASH thread, void* (*hash_malloc)(size_t))
 {
 	void *digest;
 	unsigned char *opad;
@@ -356,16 +365,19 @@ void *mhash_hmac_end(MHASH thread)
 	switch (thread->algorithm_given) {
 	case MHASH_CRC32:
 	case MHASH_CRC32B:
-		return_val = get_crc32((void *) thread->state);
+		digest = hash_malloc(sizeof(word32));
+		get_crc32(digest, (void *) thread->state);
+		return_val = digest;
+		
 		break;
 	case MHASH_MD5:
 		digest =
-		    malloc(mhash_get_block_size(thread->algorithm_given));
+		    hash_malloc(mhash_get_block_size(thread->algorithm_given));
 		MD5Final(digest, (void *) thread->state);
 		return_val = digest;
 		break;
 	case MHASH_SHA1:
-		digest = malloc(SHA_DIGESTSIZE);
+		digest = hash_malloc(SHA_DIGESTSIZE);
 		sha_final((void *) thread->state);
 		sha_digest((void *) thread->state, digest);
 		return_val = digest;
@@ -376,23 +388,23 @@ void *mhash_hmac_end(MHASH thread)
 	case MHASH_HAVAL160:
 	case MHASH_HAVAL128:
 		digest =
-		    malloc(mhash_get_block_size(thread->algorithm_given));
+		    hash_malloc(mhash_get_block_size(thread->algorithm_given));
 		havalFinal((void *) thread->state, digest);
 		return_val = digest;
 		break;
 	case MHASH_RIPEMD160:
-		digest = malloc(RIPEMD_DIGESTSIZE);
+		digest = hash_malloc(RIPEMD_DIGESTSIZE);
 		ripemd_final((void *) thread->state);
 		ripemd_digest((void *) thread->state, digest);
 		return_val = digest;
 		break;
 	case MHASH_TIGER:
-		digest = malloc(192 >> 3);
+		digest = hash_malloc(192 >> 3);
 		memcpy(digest, (void *) thread->state, 192 >> 3);
 		return_val = digest;
 		break;
 	case MHASH_GOST:
-		digest = malloc(32);
+		digest = hash_malloc(32);
 		gosthash_final((void *) thread->state, digest);
 		return_val = digest;
 		break;
@@ -413,6 +425,12 @@ void *mhash_hmac_end(MHASH thread)
 
 	return mhash_end(tmptd);
 }
+
+WIN32DLL_DEFINE
+void *mhash_hmac_end(MHASH thread) {
+	return mhash_hmac_end_m(thread, malloc);
+}
+
 
 WIN32DLL_DEFINE
 MHASH mhash_hmac_init(const hashid type, void *key, int keysize, int block)

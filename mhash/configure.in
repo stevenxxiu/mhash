@@ -74,6 +74,8 @@ AC_CHECK_HEADERS(sys/stat.h sys/types.h fcntl.h signal.h unistd.h utime.h)
 AC_CHECK_FUNCS(bzero signal sigaction memset fcntl fsync \
 lstat stat umask utime memmove bcopy)
 
+AC_TYPE_SIZE_T
+
 dnl Checks for libraries.
 AC_CHECK_SIZEOF(unsigned long long int, 8)
 AC_CHECK_SIZEOF(unsigned long int, 4)

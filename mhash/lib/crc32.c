@@ -109,17 +109,17 @@ clear_crc32(word32 * crc)
 								 */
 }
 
-void *
-get_crc32(const word32 * crc)
+void
+get_crc32(void* ret, const word32 * crc)
 {
-	word32 *tmp = malloc(sizeof(word32));
-	*tmp = ~(*crc);				/*
+	word32 tmp;
+	tmp = ~(*crc);				/*
 								   transmit complement, per CRC-32 spec 
 								 */
 #ifdef WORDS_BIGENDIAN
-	*tmp = mhash_byteswap(*tmp);
+	tmp = mhash_byteswap(tmp);
 #endif
-	return tmp;
+	memcpy( ret, &tmp, sizeof(word32));	
 }
 
 void

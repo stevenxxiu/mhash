@@ -38,6 +38,8 @@ B< Finalizing Functions >
 
  void    *mhash_end(MHASH thread);
  void    *mhash_hmac_end(MHASH thread);
+ void    *mhash_end_m(MHASH thread, void* (*hash_malloc)(size_t));
+ void    *mhash_hmac_end_m(MHASH thread, void* (*hash_malloc)(size_t));
 
 B< Available Hashes >
 
@@ -146,6 +148,18 @@ the whole hashing operation (the ``I<digest>'').
 
 This frees all resources associated with thread and returns the result of the
 whole hashing operation (the ``I<mac>'').
+
+=item void *B<mhash_end_m>(MHASH I<thread>, void* (*hash_malloc)(size_t));
+
+This frees all resources associated with I<thread> and returns the result of
+the whole hashing operation (the ``I<digest>''). The result will be allocated
+by using the hash_malloc() function provided.
+
+=item void *B<mhash_hmac_end>(MHASH I<thread>, void* (*hash_malloc)(size_t));
+
+This frees all resources associated with thread and returns the result of the
+whole hashing operation (the ``I<mac>''). The result will be allocated
+by using the hash_malloc() function provided.
 
 =head1 KEYGEN API FUNCTIONS
 
