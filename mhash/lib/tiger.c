@@ -256,64 +256,6 @@ void tiger_init(struct tiger_ctx *ctx)
 	ctx->index = 0;
 }
 
-/*
-void
-tiger(const word32 *str, word32 length, word32 *res)
-{
-  register word32 i, j;
-  byte temp[64];
-
-  res[0]=0x89ABCDEF;
-  res[1]=0x01234567;
-  res[2]=0x76543210;
-  res[3]=0xFEDCBA98;
-  res[4]=0xC3B2E187;
-  res[5]=0xF096A5B4;
-
-  for(i=length; i>=64; i-=64)
-    {
-#ifdef WORDS_BIGENDIAN
-      for(j=0; j<64; j++)
-	temp[j^3] = ((byte*)str)[j];
-      tiger_compress(((word32*)temp), res);
-#else
-      tiger_compress(str, res);
-#endif
-      str += 16;
-    }
-
-#ifdef WORDS_BIGENDIAN
-  for(j=0; j<i; j++)
-    temp[j^3] = ((byte*)str)[j];
-
-  temp[j^3] = 0x01;
-  j++;
-  for(; j&7; j++)
-    temp[j^3] = 0;
-#else
-  for(j=0; j<i; j++)
-    temp[j] = ((byte*)str)[j];
-
-  temp[j++] = 0x01;
-  for(; j&7; j++)
-    temp[j] = 0;
-#endif
-  if(j>56)
-    {
-      for(; j<64; j++)
-	temp[j] = 0;
-      tiger_compress(((word32*)temp), res);
-      j=0;
-    }
-
-  for(; j<56; j++)
-    temp[j] = 0;
-  ((word32*)(&(temp[56])))[0] = ((word32)length)<<3;
-  ((word32*)(&(temp[56])))[1] = 0;
-  tiger_compress(((word32*)temp), res);
-}
-*/
-
 void tiger_update(struct tiger_ctx *ctx, word8 * buffer, word32 len)
 {
 	if (ctx->index) {	/* Try to fill partial block */
