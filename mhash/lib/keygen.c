@@ -21,7 +21,7 @@
 
 
 #include "libdefs.h"
-#include "mhash.h"
+#include "mhash_int.h"
 #include "keygen.h"
 
 #define KEYGEN_ENTRY(name, uses_hash_algorithm, uses_count, uses_salt, salt_size, max_key_size) \
@@ -114,7 +114,7 @@ char *mhash_get_keygen_name(hashid type)
 	char *ret = NULL;
 
 	/* avoid prefix */
-	KEYGEN_ALG_LOOP(ret = strdup(p->name + sizeof("KEYGEN_") - 1));
+	KEYGEN_ALG_LOOP(ret = mystrdup(p->name + sizeof("KEYGEN_") - 1));
 
 	return ret;
 }

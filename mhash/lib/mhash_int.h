@@ -1,7 +1,11 @@
 
 #include <unistd.h>
 
-
+#ifdef WIN32
+char* mystrdup(char*);
+#else
+# define mystrdup strdup
+#endif
 
 enum hashid {
 	MHASH_CRC32,

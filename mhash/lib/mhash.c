@@ -19,7 +19,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.8 2000/05/10 05:46:07 nmav Exp $ */
+/* $Id: mhash.c,v 1.9 2000/10/20 14:32:22 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -94,7 +94,7 @@ size_t mhash_get_block_size(hashid type)
 
 #ifdef WIN32
 /* function created in order for mhash to compile under WIN32 */
-static char* mystrdup(char* str) {
+char* mystrdup(char* str) {
 char* ret;
 	ret = malloc(strlen(str)+1);
 	strcpy(ret, str);
@@ -104,17 +104,14 @@ char* ret;
 }
 #endif
 
+
 WIN32DLL_DEFINE
 char *mhash_get_hash_name(hashid type)
 {
 	char *ret = NULL;
 
 	/* avoid prefix */
-#ifdef WIN32
 	MHASH_ALG_LOOP(ret = mystrdup(p->name + sizeof("MHASH_") - 1));
-#else
-	MHASH_ALG_LOOP(ret = strdup(p->name + sizeof("MHASH_") - 1));
-#endif
 	return ret;
 }
 

@@ -59,8 +59,8 @@ int main()
 	}
 	
 	salt = calloc( 1, salt_size);
-	key = malloc( keysize);
-	tmp = malloc( 2*keysize+1);
+	key = calloc( 1, keysize);
+	tmp = calloc( 1, 2*keysize+1);
 	
 	data.hash_algorithm[0] = MHASH_MD5;
 	data.count = 0;

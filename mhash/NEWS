@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2000/10/20 14:32:22 $)
+mhash ChangeLog ($Date: 2000/10/24 23:12:42 $)
 ===============================================================================
 
 People
@@ -6,7 +6,7 @@ People
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
 
-Version 0.8.3
+Version 0.8.3 (released on October 25 2000)
 - Compiles under Win32 using cygwin (with -mno-cygwin)
 - Bugfixes in KEYGEN_ASIS
 
