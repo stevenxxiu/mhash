@@ -1,10 +1,13 @@
-mhash ChangeLog ($Date: 2001/02/04 12:06:10 $)
+mhash ChangeLog ($Date: 2001/07/09 07:31:58 $)
 ===============================================================================
 
 People
 
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
+
+Version ?.?.?
+- mhash_*_get_name() functions now return a constant string (not allocated)
 
 Version 0.8.10 
 - New mhash_deinit() and mhash_hmac_deinit() functions based on the

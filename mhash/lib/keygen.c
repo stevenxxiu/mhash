@@ -109,12 +109,12 @@ size_t mhash_get_keygen_max_key_size(keygenid type)
 }
 
 WIN32DLL_DEFINE
-char *mhash_get_keygen_name(hashid type)
+const char *mhash_get_keygen_name(hashid type)
 {
 	char *ret = NULL;
 
 	/* avoid prefix */
-	KEYGEN_ALG_LOOP(ret = mystrdup(p->name + sizeof("KEYGEN_") - 1));
+	KEYGEN_ALG_LOOP(ret = p->name + sizeof("KEYGEN_") - 1);
 
 	return ret;
 }
