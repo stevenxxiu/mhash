@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2000/10/26 14:18:05 $)
+mhash ChangeLog ($Date: 2000/10/30 13:13:11 $)
 ===============================================================================
 
 People
@@ -8,6 +8,8 @@ People
 
 Version 0.8.4
 - added mhash_hmac_end_m() and mhash_end_m() functions which allow to specify the malloc function.
+- added mhash_cp() - Copy a context
+- added mhash_get_mhash_algo() - Returns the name of the algorithm of the context
 
 Version 0.8.3 (released on October 25 2000)
 - Compiles under Win32 using cygwin (with -mno-cygwin) (NM)

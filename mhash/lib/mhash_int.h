@@ -50,6 +50,7 @@ typedef struct {
 	unsigned char *hmac_key;
 
 	word8 *state;
+	int	state_size;
 	hashid algorithm_given;
 } MHASH_INSTANCE;
 

@@ -18,6 +18,7 @@ B< Informative Functions >
  size_t   mhash_get_block_size(hashid type);
  char    *mhash_get_hash_name(hashid type);
  size_t   mhash_get_hash_pblock(hashid type);
+ hashid   mhash_get_mhash_algo( MHASH);
 
 B< Key Generation Functions >
 
@@ -29,6 +30,7 @@ B< Initializing Functions >
 
  MHASH    mhash_init(hashid type);
  MHASH    mhash_hmac_init(const hashid type, void *key, int keysize, int block);
+ MHASH	  mhash_cp( MHASH);
 
 B< Update Functions >
 
@@ -117,6 +119,10 @@ It returns the block size that the algorithm operates. This is used
 in mhash_hmac_init. If the return value is 0 you shouldn't use that
 algorithm in HMAC.
 
+=item hashid B<mhash_get_mhash_algo>(MHASH I<src>);
+
+Returns the algorithm used in the state of I<src>.
+
 =item MHASH B<mhash_init>(hashid I<type>);
 
 This setups a context to begin hashing using the algorithm I<type>. It returns
@@ -133,7 +139,11 @@ After calling it you should use mhash() to update the context.
 It returns a descriptor to that context which will result in leaking memory,
 if you do not call mhash_hmac_end(3) later.
 Returns C<MHASH_FAILED> on failure.
- 
+
+=item MHASH B<mhash_cp>(MHASH I<src>);
+
+This setups a new context using the state of I<src>.
+
 =item int B<mhash>(MHASH I<thread>, const void *I<plaintext>, size_t I<size>);
 
 This updates the context described by I<thread> with I<plaintext>. I<size> is
@@ -230,7 +240,6 @@ Algorithms are numbered from 0 to C<mhash_keygen_count()>.
 If I<type> exists, this returns the name of the keygen I<type>. Otherwise, a
 C<NULL> pointer is returned. The string is allocated with malloc(3) seperately,
 so do not forget to free(3) it.
-
 
 =back
 

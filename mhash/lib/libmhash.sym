@@ -10,6 +10,7 @@ mhash_keygen_uses_hash_algorithm
 mhash
 mhash_count
 mhash_end
+mhash_end_m
 mhash_get_block_size
 mhash_get_hash_name
 mhash_get_hash_pblock
@@ -18,4 +19,7 @@ mhash_init_int
 mhash_free
 mhash_hmac_init
 mhash_hmac_end
+mhash_hmac_end_m
 mhash_bzero
+mhash_cp
+mhash_get_mhash_algo

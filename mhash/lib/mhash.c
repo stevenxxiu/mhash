@@ -19,7 +19,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.11 2000/10/30 13:13:11 nmav Exp $ */
+/* $Id: mhash.c,v 1.12 2000/12/15 12:11:47 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -103,6 +103,9 @@ char *mystrdup(char *str)
 }
 #endif
 
+WIN32DLL_DEFINE hashid mhash_get_mhash_algo( MHASH tmp) {
+	return tmp->algorithm_given;
+}
 
 WIN32DLL_DEFINE char *mhash_get_hash_name(hashid type)
 {
@@ -113,7 +116,24 @@ WIN32DLL_DEFINE char *mhash_get_hash_name(hashid type)
 	return ret;
 }
 
+MHASH mhash_cp(MHASH from) {
+MHASH ret;
 
+	ret = malloc(sizeof(MHASH_INSTANCE));
+	memcpy(ret, from, sizeof(MHASH_INSTANCE));
+	
+	/* copy the internal state also */
+	ret->state=malloc(ret->state_size);
+	memcpy( ret->state, from->state, ret->state_size);
+	
+	/* copy the key in case of hmac*/
+	if (ret->hmac_key_size!=0) {
+		ret->hmac_key=malloc(ret->hmac_key_size);
+		memcpy(ret->hmac_key, from->hmac_key, ret->hmac_key_size);
+	}
+	return ret;
+
+}
 MHASH mhash_init_int(const hashid type)
 {
 	MHASH ret;
@@ -123,50 +143,62 @@ MHASH mhash_init_int(const hashid type)
 	ret->algorithm_given = type;
 	ret->hmac_key = NULL;
 	ret->state = NULL;
-
+	ret->hmac_key_size = 0;
+	
 	switch (type) {
 	case MHASH_CRC32:
 	case MHASH_CRC32B:
-		ret->state = malloc(sizeof(word32));
+		ret->state_size = sizeof(word32);
+		ret->state = malloc(ret->state_size);
 		clear_crc32((void *) ret->state);
 		break;
 	case MHASH_MD5:
-		ret->state = malloc(sizeof(MD5_CTX));
+		ret->state_size = sizeof(MD5_CTX);
+		ret->state = malloc(ret->state_size);
 		MD5Init((void *) ret->state);
 		break;
 	case MHASH_SHA1:
-		ret->state = malloc(sizeof(SHA_CTX));
+		ret->state_size = sizeof(SHA_CTX);
+		ret->state = malloc(ret->state_size);
 		sha_init((void *) ret->state);
 		break;
 	case MHASH_HAVAL256:
-		ret->state = malloc(sizeof(havalContext));
+		ret->state_size = sizeof(havalContext);
+		ret->state = malloc(ret->state_size);
 		havalInit((void *) ret->state, 3, 256);
 		break;
 	case MHASH_HAVAL224:
-		ret->state = malloc(sizeof(havalContext));
+		ret->state_size = sizeof(havalContext);
+		ret->state = malloc(ret->state_size);
 		havalInit((void *) ret->state, 3, 224);
 		break;
 	case MHASH_HAVAL192:
-		ret->state = malloc(sizeof(havalContext));
+		ret->state_size = sizeof(havalContext);
+		ret->state = malloc(ret->state_size);
 		havalInit((void *) ret->state, 3, 192);
 		break;
 	case MHASH_HAVAL160:
-		ret->state = malloc(sizeof(havalContext));
+		ret->state_size = sizeof(havalContext);
+		ret->state = malloc(ret->state_size);
 		havalInit((void *) ret->state, 3, 160);
 		break;
 	case MHASH_HAVAL128:
-		ret->state = malloc(sizeof(havalContext));
+		ret->state_size = sizeof(havalContext);
+		ret->state = malloc(ret->state_size);
 		havalInit((void *) ret->state, 3, 128);
 		break;
 	case MHASH_RIPEMD160:
-		ret->state = malloc(sizeof(RIPEMD_CTX));
+		ret->state_size = sizeof(RIPEMD_CTX);
+		ret->state = malloc(ret->state_size);
 		ripemd_init((void *) ret->state);
 		break;
 	case MHASH_TIGER:
-		ret->state = malloc(3 * sizeof(word64));
+		ret->state_size = 3 * sizeof(word64);
+		ret->state = malloc(ret->state_size);
 		break;
 	case MHASH_GOST:
-		ret->state = malloc(sizeof(GostHashCtx));
+		ret->state_size = sizeof(GostHashCtx);
+		ret->state = malloc(ret->state_size);
 		gosthash_reset((void *) ret->state);
 		break;
 	default:

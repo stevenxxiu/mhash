@@ -22,13 +22,13 @@
 #ifndef MHASH_H
 #define MHASH_H
 
-/* $Id: mhash.h,v 1.5 2000/04/11 19:02:22 nmav Exp $ */
+/* $Id: mhash.h,v 1.6 2000/04/14 19:09:06 nmav Exp $ */
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 #include <unistd.h>
-#define MHASH_API_VERSION 20000324
+#define MHASH_API_VERSION 20001215
 
 /* these are for backwards compatibility and will 
    be removed at some time */
@@ -93,6 +93,10 @@ extern "C" {
 
 	MHASH mhash_init(hashid type);
 
+/* copy prototypes */
+
+	MHASH mhash_cp(MHASH);
+
 /* update prototype */
 
 	int mhash(MHASH thread, const void *plaintext, size_t size);
@@ -100,12 +104,17 @@ extern "C" {
 /* finalizing prototype */
 
 	void *mhash_end(MHASH thread);
+	void *mhash_end_m(MHASH thread, void *(*hash_malloc) (size_t));
 
+/* informational */
 	size_t mhash_get_hash_pblock(hashid type);
 
+	hashid mhash_get_mhash_algo(MHASH);
 
+/* HMAC */
 	MHASH mhash_hmac_init(const hashid type, void *key, int keysize,
 			      int block);
+	void *mhash_hmac_end_m(MHASH thread, void *(*hash_malloc) (size_t));
 	void *mhash_hmac_end(MHASH thread);
 
 
