@@ -1,6 +1,6 @@
 #AUTOMAKE_OPTIONS = foreign
 
-noinst_HEADERS = mhash_ripemd.h gosthash.h mhash_crc32.h mhash_md5.h \
+noinst_HEADERS = mhash_ripemd.h mhash_gost.h mhash_crc32.h mhash_md5.h \
 	mhash_tiger.h libdefs.h mhash_haval.h mhash_sha1.h keygen.h \
 	mhash_int.h mhash_md4.h mhash_sha256.h mhash_adler32.h
  

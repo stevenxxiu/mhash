@@ -20,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.28 2002/02/10 10:10:08 nmav Exp $ */
+/* $Id: mhash.c,v 1.29 2002/05/16 22:45:59 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -40,7 +40,7 @@
 #include "mhash_ripemd.h"
 #include "mhash_sha256.h"
 #include "mhash_adler32.h"
-#include "gosthash.h"
+#include "mhash_gost.h"
 
 /* 19/03/2000 Changes for better thread handling --nikos */
 
@@ -761,4 +761,3 @@ WIN32DLL_DEFINE MHASH mhash_restore_state_mem(void* _mem)
 		free( ret);
 		return MHASH_FAILED;
 }
-
