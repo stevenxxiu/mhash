@@ -25,13 +25,13 @@
  *
  * It's ugly, limited and you should hit :q! now
  *
- * $Id: driver.c,v 1.7 2000/04/03 14:03:58 nikos Exp $
+ * $Id: driver.c,v 1.1.1.1 2000/04/04 10:34:57 nmav Exp $
  */
 
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
-#include <mhash.h>
+#include "../lib/mhash.h"
 
 static char hexconvtab[] = "0123456789ABCDEF";
 

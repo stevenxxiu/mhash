@@ -20,7 +20,7 @@
 
 
 
-#include <mhash.h>
+#include "../lib/mhash.h"
 #include <stdio.h>
 #include <stdlib.h>
 
