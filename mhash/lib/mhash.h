@@ -23,7 +23,7 @@
 #ifndef MHASH_H
 #define MHASH_H
 
-/* $Id: mhash.h,v 1.17 2001/10/27 09:42:22 nmav Exp $ */
+/* $Id: mhash.h,v 1.18 2001/11/12 14:14:24 nmav Exp $ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -142,7 +142,7 @@ extern "C" {
 		 void *keyword, int keysize,
 		 unsigned char *password, int passwordlen);
 
-	char *mhash_get_keygen_name(hashid type);
+	char *mhash_get_keygen_name(keygenid type);
 	const char *mhash_get_keygen_name_static(hashid type);
 
 	size_t mhash_get_keygen_salt_size(keygenid type);
