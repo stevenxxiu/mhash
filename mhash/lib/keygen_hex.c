@@ -36,9 +36,9 @@ static int check_hex(char *given_chain, int len)
 
 
 int _mhash_gen_key_hex(void *keyword, int key_size, 
-		 unsigned char *password, int plen)
+		unsigned char *password, int plen)
 {
-	char *chain = password;
+	char *chain = (char*) password;
 	char* pkeyword=keyword;
 	char tmp[3];
 	int i;

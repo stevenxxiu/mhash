@@ -12,7 +12,11 @@
 
 #define TIGER_DATALEN 16
 #define TIGER_DIGESTLEN 6
+#define TIGER128_DIGESTLEN 4
+#define TIGER160_DIGESTLEN 5
 #define TIGER_DIGESTSIZE 24
+#define TIGER160_DIGESTSIZE 20
+#define TIGER128_DIGESTSIZE 16
 #define TIGER_DATASIZE 64
 
 typedef struct tiger_ctx {
@@ -24,6 +28,8 @@ typedef struct tiger_ctx {
 
 
 void tiger_digest(struct tiger_ctx *ctx, word8 * s);
+void tiger_digest160(struct tiger_ctx *ctx, word8 * s);
+void tiger_digest128(struct tiger_ctx *ctx, word8 * s);
 void tiger_final(struct tiger_ctx *ctx);
 void tiger_update(struct tiger_ctx *ctx, word8 * buffer, word32 len);
 void tiger_init(struct tiger_ctx *ctx);

@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2001/01/03 22:11:50 $)
+mhash ChangeLog ($Date: 2001/01/21 17:17:09 $)
 ===============================================================================
 
 People
@@ -8,6 +8,8 @@ People
 
 Version 0.8.6
 - Corrected Tiger implementation (NM, bug pointed out by Gordon Mohr <gojomo@usa.net>)
+- Added MD4
+- Added TIGER128 and TIGER160
 
 Version 0.8.5 (released on January 2001)
 - added checks for malloc failures (NM, some patches by Sami Farin <sfarin@ratol.fi>)

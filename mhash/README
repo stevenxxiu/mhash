@@ -1,4 +1,4 @@
-mhash README ($Date: 2000/04/02 15:16:11 $)
+mhash README ($Date: 2000/04/04 10:34:20 $)
 ===============================================================================
 
   OVERVIEW
@@ -16,7 +16,7 @@ mhash README ($Date: 2000/04/02 15:16:11 $)
 
    o  Open-Source software (GNU Lesser General Public License)
    o  Useable for both commercial and non-commercial use
-   o  Reentrancy support through POSIX threads 
+   o  Reentrancy support
    o  Support for known strong algorithms
    o  Support for less-known algorithms such as GOST
    o  Should work on every ANSI C conforming platform
@@ -35,7 +35,7 @@ mhash README ($Date: 2000/04/02 15:16:11 $)
   ------------
 
   Information on how to retrieve new versions of mhash can be found on
-  <URL:http://schumann.cx/mhash/>.
+  <URL:http://mhash.sourceforge.net>.
 
   Credits
   -------

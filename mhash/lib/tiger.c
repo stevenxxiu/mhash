@@ -24,6 +24,9 @@
  * Tiger has no usage restrictions nor patents. It can be used freely, with the
  * reference implementation, with other implementations or with a modification 
  * to the reference implementation (as long as it still implements Tiger).
+ *
+ * This implementation is based on the reference implementation.
+ *
  *							--nikos
  */
 
@@ -390,4 +393,45 @@ void tiger_digest(struct tiger_ctx *ctx, word8 * s)
 		s+=8;
 	}
 
+}
+
+void tiger128_digest(struct tiger_ctx *ctx, word8 * s)
+{
+	int i;
+
+	for (i = 0; i < TIGER128_DIGESTLEN; i+=2) { /* 64 bit and LITTLE ENDIAN -that's cool! */
+		s[7] = ctx->digest[i];
+		s[6] = 0xff & (ctx->digest[i] >> 8);
+		s[5] = 0xff & (ctx->digest[i] >> 16);
+		s[4] = 0xff & ctx->digest[i] >> 24;
+		s[3] = ctx->digest[i+1];
+		s[2] = 0xff & (ctx->digest[i+1] >> 8);
+		s[1] = 0xff & (ctx->digest[i+1] >> 16);
+		s[0] = 0xff & ctx->digest[i+1] >> 24;
+		s+=8;
+	}
+
+}
+
+
+void tiger160_digest(struct tiger_ctx *ctx, word8 * s)
+{
+	int i;
+
+	for (i = 0; i < TIGER160_DIGESTLEN-1; i+=2) { /* 64 bit and LITTLE ENDIAN -that's cool! */
+		s[7] = ctx->digest[i];
+		s[6] = 0xff & (ctx->digest[i] >> 8);
+		s[5] = 0xff & (ctx->digest[i] >> 16);
+		s[4] = 0xff & ctx->digest[i] >> 24;
+		s[3] = ctx->digest[i+1];
+		s[2] = 0xff & (ctx->digest[i+1] >> 8);
+		s[1] = 0xff & (ctx->digest[i+1] >> 16);
+		s[0] = 0xff & ctx->digest[i+1] >> 24;
+		s+=8;
+	}
+	/* last block */
+	s[3] = ctx->digest[i+1];
+	s[2] = 0xff & (ctx->digest[i+1] >> 8);
+	s[1] = 0xff & (ctx->digest[i+1] >> 16);
+	s[0] = 0xff & ctx->digest[i+1] >> 24;
 }

@@ -3,5 +3,5 @@
 aclocal && \
 libtoolize -c --force && \
 autoheader  && \
-automake -i -a -c || automake -a -c -i
+automake -a -c
 autoconf 

@@ -1,6 +1,6 @@
 #! /bin/sh
 
-# $Id: hash_test.sh,v 1.3 2000/04/14 19:09:06 nmav Exp $
+# $Id: hash_test.sh,v 1.4 2001/01/21 17:14:52 nmav Exp $
 
 if (echo "testing\c"; echo 1,2,3) | grep c >/dev/null; then
   if (echo $ac_n testing; echo 1,2,3) | sed s/-n/xn/ | grep xn >/dev/null; then
@@ -107,7 +107,6 @@ test_hash 5 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789 \
 echo ""
 
 
-# the TIGER test program displays values in the wrong endian
 echo $ac_n "testing TIGER $ac_c"
 test_hash 7 "" 24F0130C63AC933216166E76B1BB925FF373DE2D49584E7A
 test_hash 7 abc F258C1E88414AB2A527AB541FFC5B8BF935F7B951C132951
@@ -122,7 +121,25 @@ test_hash 7 "Tiger - A Fast New Hash Function, by Ross Anderson and Eli Biham, p
 		 EBF591D5AFA655CE7F22894FF87F54AC89C811B6B0DA3193
 test_hash 7 "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-" \
 		 00B83EB4E53440C576AC6AAEE0A7485825FD15E70A59FFE4
-echo
+echo ""
+
+echo $ac_n "testing TIGER160 $ac_c"
+test_hash 15 "" 24F0130C63AC933216166E76B1BB925FF373DE2D
+test_hash 15 abc F258C1E88414AB2A527AB541FFC5B8BF935F7B95
+test_hash 15 Tiger 9F00F599072300DD276ABB38C8EB6DEC37790C11
+test_hash 15 ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+- \
+		 87FB2A9083851CF7470D2CF810E6DF9EB5864450
+test_hash 15 "ABCDEFGHIJKLMNOPQRSTUVWXYZ=abcdefghijklmnopqrstuvwxyz+0123456789" \
+		467DB80863EBCE488DF1CD1261655DE957896565
+echo ""
+
+echo $ac_n "testing TIGER128 $ac_c"
+test_hash 14 "" 24F0130C63AC933216166E76B1BB925F
+test_hash 14 abc F258C1E88414AB2A527AB541FFC5B8BF
+test_hash 14 Tiger 9F00F599072300DD276ABB38C8EB6DEC
+echo ""
+
+
 
 echo $ac_n "testing GOST $ac_c"
 test_hash 8 "This is message, length=32 bytes" \
@@ -131,6 +148,15 @@ test_hash 8 "Suppose the original message has length = 50 bytes" \
 		471ABA57A60A770D3A76130635C1FBEA4EF14DE51F78B4AE57DD893B62F55208
 echo ""
 
+echo $ac_n "testing MD4 $ac_c"
+test_hash 16 "" 31d6cfe0d16ae931b73c59d7e0c089c0
+test_hash 16 a bde52cb31de33e46245e05fbdbd6fb24
+test_hash 16 abc a448017aaf21d8525fc10ae87aa6729d
+test_hash 16 "message digest" d9130a8164549fe818874806e1c7014b
+test_hash 16 abcdefghijklmnopqrstuvwxyz d79e1c308aa5bbcdeea8ed63df412da9
+test_hash 16 12345678901234567890123456789012345678901234567890123456789012345678901234567890 \
+		e33b4ddc9c38f2199c3e7b164fcc0536
+echo ""
 
 
 echo "everything seems to be fine :-)"

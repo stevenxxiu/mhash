@@ -1,0 +1,212 @@
+2001-01-03  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/NEWS: *** empty log message ***
+
+	* /cvsroot/mhash/mhash/lib/keygen_s2k.c: more fixes
+
+	* /cvsroot/mhash/mhash/NEWS: *** empty log message ***
+
+	* /cvsroot/mhash/mhash/lib/keygen_mcrypt.c, /cvsroot/mhash/mhash/lib/keygen_s2k.c, /cvsroot/mhash/mhash/lib/mhash.c:
+	Corrected bugs reported by:
+	sami Farin <sfarin@ratol.fi>
+	Joe Hohertz <jhohertz@wiretap.net>
+
+2000-12-17  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/NEWS: *** empty log message ***
+
+2000-12-15  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/lib/crc32.c: removed deprecated comments
+
+	* /cvsroot/mhash/mhash/NEWS: *** empty log message ***
+
+	* /cvsroot/mhash/mhash/lib/crc-32b.c: crc32b was moved to crc32.c
+
+	* /cvsroot/mhash/mhash/doc/mhash.pod, /cvsroot/mhash/mhash/lib/libmhash.sym, /cvsroot/mhash/mhash/lib/mhash.c, /cvsroot/mhash/mhash/lib/mhash.h, /cvsroot/mhash/mhash/lib/mhash_int.h, /cvsroot/mhash/mhash/configure.in, /cvsroot/mhash/mhash/NEWS:
+	added new functions
+
+	* /cvsroot/mhash/mhash/lib/crc-32b.c, /cvsroot/mhash/mhash/lib/crc32.c, /cvsroot/mhash/mhash/lib/gosthash.c, /cvsroot/mhash/mhash/lib/gosthash.h, /cvsroot/mhash/mhash/lib/Makefile.am, /cvsroot/mhash/mhash/lib/mhash.c, /cvsroot/mhash/mhash/lib/mhash_crc32.h:
+	CRC32B and GOST are now thread safe - and use less initialization time.
+
+2000-10-30  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/configure.in, /cvsroot/mhash/mhash/doc/mhash.pod, /cvsroot/mhash/mhash/lib/crc32.c, /cvsroot/mhash/mhash/lib/mhash.c, /cvsroot/mhash/mhash/lib/mhash_crc32.h, /cvsroot/mhash/mhash/NEWS:
+	Added mhash_end_m() and mhash_hmac_end_m() functions.
+
+2000-10-26  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/NEWS: *** empty log message ***
+
+	* /cvsroot/mhash/mhash/lib/keygen.c, /cvsroot/mhash/mhash/lib/mhash.c, /cvsroot/mhash/mhash/lib/mhash_int.h, /cvsroot/mhash/mhash/src/keygen_test.c, /cvsroot/mhash/mhash/configure.in, /cvsroot/mhash/mhash/NEWS:
+	More win32 changes
+
+2000-10-24  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/acconfig.h, /cvsroot/mhash/mhash/ChangeLog, /cvsroot/mhash/mhash/configure.in, /cvsroot/mhash/mhash/NEWS:
+	*** empty log message ***
+
+	* /cvsroot/mhash/mhash/lib/keygen_asis.c, /cvsroot/mhash/mhash/lib/keygen.c:
+	corrected bug in the KEYGEN_ASIS transformation
+
+2000-10-20  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/configure.in, /cvsroot/mhash/mhash/lib/keygen.c, /cvsroot/mhash/mhash/lib/libdefs.h, /cvsroot/mhash/mhash/lib/Makefile.am, /cvsroot/mhash/mhash/lib/mhash.c, /cvsroot/mhash/mhash/NEWS:
+	changes for WIN32
+
+2000-05-12  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/NEWS: *** empty log message ***
+
+2000-05-10  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/TODO:
+	updated TODO list
+
+	* /cvsroot/mhash/mhash/ChangeLog, /cvsroot/mhash/mhash/configure.in, /cvsroot/mhash/mhash/NEWS:
+	*** empty log message ***
+
+	* /cvsroot/mhash/mhash/lib/mhash.c:
+	Corrected memory leaks in HMAC. Patches by Marios Hadjieleftheriou <marioh@cs.ucr.edu>
+
+2000-04-14  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/lib/mhash.c, /cvsroot/mhash/mhash/lib/mhash.h, /cvsroot/mhash/mhash/lib/mhash_int.h, /cvsroot/mhash/mhash/src/hash_test.sh:
+	Added HAVAL224
+
+	* /cvsroot/mhash/mhash/lib/mhash.c: *** empty log message ***
+
+2000-04-11  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/lib/mhash.h, /cvsroot/mhash/mhash/lib/mhash_int.h, /cvsroot/mhash/mhash/lib/mhash.c, /cvsroot/mhash/mhash/NEWS:
+	*** empty log message ***
+
+	* /cvsroot/mhash/mhash/lib/mhash.c:
+	Corrected hmac implementation.
+
+	* /cvsroot/mhash/mhash/lib/mhash.h, /cvsroot/mhash/mhash/lib/mhash_int.h:
+	*** empty log message ***
+
+	* /cvsroot/mhash/mhash/configure.in, /cvsroot/mhash/mhash/doc/Makefile.am, /cvsroot/mhash/mhash/doc/md2.license, /cvsroot/mhash/mhash/doc/md2-rfc1319.txt, /cvsroot/mhash/mhash/doc/mhash.pod, /cvsroot/mhash/mhash/lib/Makefile.am, /cvsroot/mhash/mhash/lib/md2c.c, /cvsroot/mhash/mhash/lib/mhash.c, /cvsroot/mhash/mhash/lib/mhash.h, /cvsroot/mhash/mhash/lib/mhash_int.h, /cvsroot/mhash/mhash/lib/mhash_md2.h, /cvsroot/mhash/mhash/src/hash_test.sh:
+	MD2 algorithm was removed.
+
+2000-04-09  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/doc/mhash.pod: *** empty log message ***
+
+	* /cvsroot/mhash/mhash/configure.in, /cvsroot/mhash/mhash/doc/mhash.pod, /cvsroot/mhash/mhash/lib/mhash.h, /cvsroot/mhash/mhash/lib/mhash_int.h, /cvsroot/mhash/mhash/lib/snefru.c:
+	snefru was removed.
+
+2000-04-06  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/src/driver.c, /cvsroot/mhash/mhash/src/hmac_test.c, /cvsroot/mhash/mhash/src/keygen_test.c:
+	Corrected problem in the includes.
+
+2000-04-05  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/NEWS: *** empty log message ***
+
+2000-04-04  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/configure.in, /cvsroot/mhash/mhash/.cvsignore:
+	*** empty log message ***
+
+	* /cvsroot/mhash/mhash/lib/mhash_int.h, /cvsroot/mhash/mhash/lib/mhash_ripemd.h, /cvsroot/mhash/mhash/src/driver.c, /cvsroot/mhash/mhash/src/hash_test.sh, /cvsroot/mhash/mhash/src/hmac_test.c, /cvsroot/mhash/mhash/src/keygen_test.c, /cvsroot/mhash/mhash/src/Makefile.am:
+	New file.
+
+	* /cvsroot/mhash/mhash/lib/mhash_int.h, /cvsroot/mhash/mhash/lib/mhash_ripemd.h, /cvsroot/mhash/mhash/src/driver.c, /cvsroot/mhash/mhash/src/hash_test.sh, /cvsroot/mhash/mhash/src/hmac_test.c, /cvsroot/mhash/mhash/src/keygen_test.c, /cvsroot/mhash/mhash/src/Makefile.am:
+	project started in sourceforge
+
+	* /cvsroot/mhash/mhash/lib/gosthash.h, /cvsroot/mhash/mhash/lib/keygen.h, /cvsroot/mhash/mhash/lib/mhash.h, /cvsroot/mhash/mhash/lib/mhash_haval.h, /cvsroot/mhash/mhash/lib/mhash_md2.h, /cvsroot/mhash/mhash/lib/mhash_md5.h, /cvsroot/mhash/mhash/lib/mhash_sha1.h, /cvsroot/mhash/mhash/lib/mhash_tiger.h:
+	New file.
+
+	* /cvsroot/mhash/mhash/lib/gosthash.h, /cvsroot/mhash/mhash/lib/keygen.h, /cvsroot/mhash/mhash/lib/mhash.h, /cvsroot/mhash/mhash/lib/mhash_haval.h, /cvsroot/mhash/mhash/lib/mhash_md2.h, /cvsroot/mhash/mhash/lib/mhash_md5.h, /cvsroot/mhash/mhash/lib/mhash_sha1.h, /cvsroot/mhash/mhash/lib/mhash_tiger.h:
+	project started in sourceforge
+
+	* /cvsroot/mhash/mhash/lib/libdefs.h, /cvsroot/mhash/mhash/lib/mhash_crc32.h, /cvsroot/mhash/mhash/lib/tiger_sboxes.c:
+	New file.
+
+	* /cvsroot/mhash/mhash/lib/libdefs.h, /cvsroot/mhash/mhash/lib/mhash_crc32.h, /cvsroot/mhash/mhash/lib/tiger_sboxes.c:
+	project started in sourceforge
+
+	* /cvsroot/mhash/mhash/lib/tiger.c: New file.
+
+	* /cvsroot/mhash/mhash/lib/tiger.c:
+	project started in sourceforge
+
+	* /cvsroot/mhash/mhash/lib/swap.c: New file.
+
+	* /cvsroot/mhash/mhash/lib/swap.c:
+	project started in sourceforge
+
+	* /cvsroot/mhash/mhash/lib/snefru.c: New file.
+
+	* /cvsroot/mhash/mhash/lib/snefru.c:
+	project started in sourceforge
+
+	* /cvsroot/mhash/mhash/lib/sha1.c: New file.
+
+	* /cvsroot/mhash/mhash/lib/sha1.c:
+	project started in sourceforge
+
+	* /cvsroot/mhash/mhash/lib/ripemd.c: New file.
+
+	* /cvsroot/mhash/mhash/lib/ripemd.c:
+	project started in sourceforge
+
+	* /cvsroot/mhash/mhash/lib/mhash.c: New file.
+
+	* /cvsroot/mhash/mhash/lib/mhash.c:
+	project started in sourceforge
+
+	* /cvsroot/mhash/mhash/lib/md5.c: New file.
+
+	* /cvsroot/mhash/mhash/lib/md5.c:
+	project started in sourceforge
+
+	* /cvsroot/mhash/mhash/lib/keygen_s2k.c, /cvsroot/mhash/mhash/lib/md2c.c:
+	New file.
+
+	* /cvsroot/mhash/mhash/lib/keygen_s2k.c, /cvsroot/mhash/mhash/lib/md2c.c:
+	project started in sourceforge
+
+	* /cvsroot/mhash/mhash/lib/haval.c, /cvsroot/mhash/mhash/lib/keygen_asis.c, /cvsroot/mhash/mhash/lib/keygen.c, /cvsroot/mhash/mhash/lib/keygen_hex.c, /cvsroot/mhash/mhash/lib/keygen_mcrypt.c:
+	New file.
+
+	* /cvsroot/mhash/mhash/lib/haval.c, /cvsroot/mhash/mhash/lib/keygen_asis.c, /cvsroot/mhash/mhash/lib/keygen.c, /cvsroot/mhash/mhash/lib/keygen_hex.c, /cvsroot/mhash/mhash/lib/keygen_mcrypt.c:
+	project started in sourceforge
+
+	* /cvsroot/mhash/mhash/doc/md2-rfc1319.txt, /cvsroot/mhash/mhash/lib/bzero.c, /cvsroot/mhash/mhash/lib/crc-32b.c, /cvsroot/mhash/mhash/lib/crc32.c, /cvsroot/mhash/mhash/lib/gosthash.c, /cvsroot/mhash/mhash/lib/libmhash.sym, /cvsroot/mhash/mhash/lib/Makefile.am:
+	New file.
+
+	* /cvsroot/mhash/mhash/doc/md2-rfc1319.txt, /cvsroot/mhash/mhash/lib/bzero.c, /cvsroot/mhash/mhash/lib/crc-32b.c, /cvsroot/mhash/mhash/lib/crc32.c, /cvsroot/mhash/mhash/lib/gosthash.c, /cvsroot/mhash/mhash/lib/libmhash.sym, /cvsroot/mhash/mhash/lib/Makefile.am:
+	project started in sourceforge
+
+	* /cvsroot/mhash/mhash/acconfig.h, /cvsroot/mhash/mhash/acinclude.m4, /cvsroot/mhash/mhash/buildconf, /cvsroot/mhash/mhash/changelog-update.sh, /cvsroot/mhash/mhash/doc/.cvsignore, /cvsroot/mhash/mhash/doc/Makefile.am, /cvsroot/mhash/mhash/doc/md2.license, /cvsroot/mhash/mhash/doc/md5-rfc1321.txt, /cvsroot/mhash/mhash/doc/mhash.pod, /cvsroot/mhash/mhash/mhash.spec, /cvsroot/mhash/mhash/NEWS, /cvsroot/mhash/mhash/README, /cvsroot/mhash/mhash/TODO:
+	New file.
+
+	* /cvsroot/mhash/mhash/acconfig.h, /cvsroot/mhash/mhash/acinclude.m4, /cvsroot/mhash/mhash/buildconf, /cvsroot/mhash/mhash/changelog-update.sh, /cvsroot/mhash/mhash/doc/.cvsignore, /cvsroot/mhash/mhash/doc/Makefile.am, /cvsroot/mhash/mhash/doc/md2.license, /cvsroot/mhash/mhash/doc/md5-rfc1321.txt, /cvsroot/mhash/mhash/doc/mhash.pod, /cvsroot/mhash/mhash/mhash.spec, /cvsroot/mhash/mhash/NEWS, /cvsroot/mhash/mhash/README, /cvsroot/mhash/mhash/TODO:
+	project started in sourceforge
+
+	* /cvsroot/mhash/mhash/INSTALL, /cvsroot/mhash/mhash/Makefile.am:
+	New file.
+
+	* /cvsroot/mhash/mhash/INSTALL, /cvsroot/mhash/mhash/Makefile.am:
+	project started in sourceforge
+
+	* /cvsroot/mhash/mhash/ChangeLog: New file.
+
+	* /cvsroot/mhash/mhash/ChangeLog:
+	project started in sourceforge
+
+	* /cvsroot/mhash/mhash/COPYING: New file.
+
+	* /cvsroot/mhash/mhash/COPYING:
+	project started in sourceforge
+
+	* /cvsroot/mhash/mhash/AUTHORS, /cvsroot/mhash/mhash/.cvsignore:
+	New file.
+
+	* /cvsroot/mhash/mhash/AUTHORS, /cvsroot/mhash/mhash/.cvsignore:
+	project started in sourceforge
+
