@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2000/10/24 23:12:42 $)
+mhash ChangeLog ($Date: 2000/10/26 13:37:09 $)
 ===============================================================================
 
 People
@@ -7,8 +7,8 @@ People
    SS - Sascha Schumann <sascha@schumann.cx>
 
 Version 0.8.3 (released on October 25 2000)
-- Compiles under Win32 using cygwin (with -mno-cygwin)
-- Bugfixes in KEYGEN_ASIS
+- Compiles under Win32 using cygwin (with -mno-cygwin) (NM)
+- Bugfixes in KEYGEN_ASIS (NM)
 
 Version 0.8.2 (released on May 12 2000)
 - Corrected Memory leaks in HMAC implementation (NM, contributed by Marios Hadjieleftheriou <marioh@cs.ucr.edu>)
