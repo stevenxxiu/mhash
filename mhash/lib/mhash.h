@@ -1,6 +1,6 @@
 /*
  *    Copyright (C) 1998 Nikos Mavroyanopoulos
- *    Copyright (C) 1999,2000 Sascha Schumman, Nikos Mavroyanopoulos
+ *    Copyright (C) 1999,2000,2001 Sascha Schumman, Nikos Mavroyanopoulos
  *
  *    This library is free software; you can redistribute it and/or modify it 
  *    under the terms of the GNU Library General Public License as published 
@@ -22,7 +22,7 @@
 #ifndef MHASH_H
 #define MHASH_H
 
-/* $Id: mhash.h,v 1.9 2001/02/04 12:06:10 nmav Exp $ */
+/* $Id: mhash.h,v 1.10 2001/07/09 07:24:28 nmav Exp $ */
 
 #ifdef __cplusplus
 extern "C" {

@@ -38,10 +38,13 @@ B< Update Functions >
 
 B< Finalizing Functions >
 
+ void    mhash_deinit(MHASH thread, void *result);
  void    *mhash_end(MHASH thread);
- void    *mhash_hmac_end(MHASH thread);
  void    *mhash_end_m(MHASH thread, void* (*hash_malloc)(size_t));
+
+ void    *mhash_hmac_end(MHASH thread);
  void    *mhash_hmac_end_m(MHASH thread, void* (*hash_malloc)(size_t));
+ int     mhash_hmac_deinit(MHASH thread, void *result);
 
 B< Available Hashes >
 
@@ -150,7 +153,7 @@ Returns the algorithm used in the state of I<src>.
 
 This setups a context to begin hashing using the algorithm I<type>. It returns
 a descriptor to that context which will result in leaking memory, if you do not
-call mhash_end(3) later. Returns C<MHASH_FAILED> on failure.
+call mhash_deinit(3) later. Returns C<MHASH_FAILED> on failure.
 
 =item MHASH B<mhash_hmac_init>(const hashid I<type>, void *I<key>, int I<keysize>, int I<block>);
 
@@ -160,7 +163,7 @@ key and I<keysize> its len. The I<block> is the block size (in bytes) that the a
 operates. It should be obtained by mhash_get_hash_pblock(). If its 0 it defaults to 64.
 After calling it you should use mhash() to update the context.
 It returns a descriptor to that context which will result in leaking memory,
-if you do not call mhash_hmac_end(3) later.
+if you do not call mhash_hmac_deinit(3) later.
 Returns C<MHASH_FAILED> on failure.
 
 =item MHASH B<mhash_cp>(MHASH I<src>);
@@ -177,10 +180,21 @@ the length of I<plaintext> which may be binary data.
 This frees all resources associated with I<thread> and returns the result of
 the whole hashing operation (the ``I<digest>'').
 
+=item void B<mhash_deinit>(MHASH I<thread>, void* digest);
+
+This frees all resources associated with I<thread> and stores the result of
+the whole hashing operation in memory pointed by digest.
+
 =item void *B<mhash_hmac_end>(MHASH I<thread>);
 
 This frees all resources associated with thread and returns the result of the
 whole hashing operation (the ``I<mac>'').
+
+=item int B<mhash_hmac_deinit>(MHASH I<thread>, void* digest);
+
+This frees all resources associated with I<thread> and stores the result of
+the whole hashing operation in memory pointed by digest. Returns non-zero
+in case of an error;
 
 =item void *B<mhash_end_m>(MHASH I<thread>, void* (*hash_malloc)(size_t));
 

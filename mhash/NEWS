@@ -1,10 +1,14 @@
-mhash ChangeLog ($Date: 2001/02/04 10:25:51 $)
+mhash ChangeLog ($Date: 2001/02/04 12:06:10 $)
 ===============================================================================
 
 People
 
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
+
+Version 0.8.10 
+- New mhash_deinit() and mhash_hmac_deinit() functions based on the
+  proposal, and patches by William Ahern <wahern@25thandClement.com>
 
 Version 0.8.9 (released on February 04 2001)
 - TIGER runs on alpha (NM)
