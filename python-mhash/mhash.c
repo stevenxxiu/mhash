@@ -196,34 +196,34 @@ static PyMethodDef MHASH_methods[] = {
 	{NULL,		NULL}		/* sentinel */
 };
 
-static char MHASH__doc__[] =
-"This is the base class, offering basic hashing functionality. MHASH is\n\
-implmented as a newstyle class. It means you may subclass it in your\n\
-python programs and extend its functionality. Don't forget to call its\n\
-__init__ method if you do this.\n\
-\n\
-Constructor:\n\
-\n\
-MHASH(algorithm [, string])\n\
-\n\
-The first parameter is one of the MHASH_* constants provided in the mhash\n\
-module. This will select the hashing algorithm you want to use. The second\n\
-is a string which will update the hash state. It's useful when you want a\n\
-oneliner hash, such as the following:\n\
-\n\
-MHASH(MHASH_SHA1, \"My hashed string\").hexdigest()\n\
-\n\
-Methods:\n\
-\n\
-update(string)  - Update the hash state with 'string'.\n\
-digest()        - Retrieve the currect digest.\n\
-hexdigest()     - Retrieve the current digest in hex format.\n\
-copy()          - Create a new MHASH object, copying the current state.\n\
-\n\
-Attributes:\n\
-\n\
-type            - Selected algorithm.\n\
-digest_size     - Digest size of the selected algorithm.
+static char MHASH__doc__[] = \
+"This is the base class, offering basic hashing functionality. MHASH is\n \
+implmented as a newstyle class. It means you may subclass it in your\n \
+python programs and extend its functionality. Don't forget to call its\n \
+__init__ method if you do this.\n \
+\n \
+Constructor:\n \
+\n \
+MHASH(algorithm [, string])\n \
+\n \
+The first parameter is one of the MHASH_* constants provided in the mhash\n \
+module. This will select the hashing algorithm you want to use. The second\n \
+is a string which will update the hash state. It's useful when you want a\n \
+oneliner hash, such as the following:\n \
+\n \
+MHASH(MHASH_SHA1, \"My hashed string\").hexdigest()\n \
+\n \
+Methods:\n \
+\n \
+update(string)  - Update the hash state with 'string'.\n \
+digest()        - Retrieve the currect digest.\n \
+hexdigest()     - Retrieve the current digest in hex format.\n \
+copy()          - Create a new MHASH object, copying the current state.\n \
+\n \
+Attributes:\n \
+\n \
+type            - Selected algorithm.\n \
+digest_size     - Digest size of the selected algorithm.\
 ";
 
 statichere PyTypeObject MHASH_Type = {
