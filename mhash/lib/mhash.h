@@ -22,7 +22,7 @@
 #ifndef MHASH_H
 #define MHASH_H
 
-/* $Id: mhash.h,v 1.6 2000/04/14 19:09:06 nmav Exp $ */
+/* $Id: mhash.h,v 1.7 2000/12/15 12:42:33 nmav Exp $ */
 
 #ifdef __cplusplus
 extern "C" {
@@ -53,7 +53,10 @@ extern "C" {
 		MHASH_HAVAL224 = 10,
 		MHASH_HAVAL192,
 		MHASH_HAVAL160,
-		MHASH_HAVAL128
+		MHASH_HAVAL128,
+		MHASH_TIGER128,
+		MHASH_TIGER160,
+		MHASH_MD4
 	};
 
 	enum keygenid {
