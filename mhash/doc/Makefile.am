@@ -1,6 +1,6 @@
 
 EXTRA_DIST = mhash.pod md5-rfc1321.txt \
-		mhash.html mhash.0 mhash.3 skid2-authentication
+		mhash.html mhash.0 mhash.3 skid2-authentication example.c
 
 man_MANS = $(srcdir)/mhash.3
 
