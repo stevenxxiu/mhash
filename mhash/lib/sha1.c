@@ -9,7 +9,7 @@
  * Adapted to pike and some cleanup by Niels Möller.
  */
 
-/* $Id: sha1.c,v 1.2 2001/01/24 08:20:29 nmav Exp $ */
+/* $Id: sha1.c,v 1.3 2001/10/27 09:42:22 nmav Exp $ */
 
 /* SHA: NIST's Secure Hash Algorithm */
 
@@ -265,13 +265,13 @@ void sha_update(struct sha_ctx *ctx, word8 *buffer, word32 len)
       unsigned left = SHA_DATASIZE - ctx->index;
       if (len < left)
 	{
-	  memmove(ctx->block + ctx->index, buffer, len);
+	  memcpy(ctx->block + ctx->index, buffer, len);
 	  ctx->index += len;
 	  return; /* Finished */
 	}
       else
 	{
-	  memmove(ctx->block + ctx->index, buffer, left);
+	  memcpy(ctx->block + ctx->index, buffer, left);
 	  sha_block(ctx, ctx->block);
 	  buffer += left;
 	  len -= left;
@@ -285,7 +285,7 @@ void sha_update(struct sha_ctx *ctx, word8 *buffer, word32 len)
     }
   if ((ctx->index = len))     /* This assignment is intended */
     /* Buffer leftovers */
-    memmove(ctx->block, buffer, len);
+    memcpy(ctx->block, buffer, len);
 }
 	  
 /* Final wrapup - pad to SHA_DATASIZE-byte boundary with the bit pattern
@@ -333,11 +333,12 @@ void sha_digest(struct sha_ctx *ctx, word8 *s)
 {
   int i;
 
-  for (i = 0; i < SHA_DIGESTLEN; i++)
-    {
-      *s++ =         ctx->digest[i] >> 24;
-      *s++ = 0xff & (ctx->digest[i] >> 16);
-      *s++ = 0xff & (ctx->digest[i] >> 8);
-      *s++ = 0xff &  ctx->digest[i];
-    }
+  if (s!=NULL)
+	  for (i = 0; i < SHA_DIGESTLEN; i++)
+	    {
+	      *s++ =         ctx->digest[i] >> 24;
+	      *s++ = 0xff & (ctx->digest[i] >> 16);
+	      *s++ = 0xff & (ctx->digest[i] >> 8);
+	      *s++ = 0xff &  ctx->digest[i];
+	    }
 }

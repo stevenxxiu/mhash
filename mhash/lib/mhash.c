@@ -20,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.25 2001/11/12 14:14:24 nmav Exp $ */
+/* $Id: mhash.c,v 1.26 2001/11/19 11:52:17 nmav Exp $ */
 
 #include <stdlib.h>
 
@@ -460,7 +460,6 @@ WIN32DLL_DEFINE
 	tmptd = mhash_init(thread->algorithm_given);
 	mhash(tmptd, opad, thread->hmac_block);
 
-	if (result!=NULL)
 	switch (thread->algorithm_given) {
 	case MHASH_CRC32:
 	case MHASH_CRC32B:
@@ -511,8 +510,9 @@ WIN32DLL_DEFINE
 		break;
 	}
 
-	mhash(tmptd, result,
-	      mhash_get_block_size(thread->algorithm_given));
+	if (result!=NULL)
+		mhash(tmptd, result,
+		      mhash_get_block_size(thread->algorithm_given));
 
 	free(thread->state);
 
@@ -585,7 +585,7 @@ WIN32DLL_DEFINE
 			ret->hmac_key = mhash_end(tmptd);
 		} else {
 			ret->hmac_key = calloc(1, ret->hmac_block);
-			memmove(ret->hmac_key, key, keysize);
+			memcpy(ret->hmac_key, key, keysize);
 			ret->hmac_key_size = ret->hmac_block;
 		}
 

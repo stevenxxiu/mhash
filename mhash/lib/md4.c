@@ -95,10 +95,10 @@ void MD4Update(struct MD4Context *ctx, unsigned char const *buf,
 
 		t = 64 - t;
 		if (len < t) {
-			memmove(p, buf, len);
+			memcpy(p, buf, len);
 			return;
 		}
-		memmove(p, buf, t);
+		memcpy(p, buf, t);
 		byteReverse(ctx->in, 16);
 		MD4Transform(ctx->buf, (word32 *) ctx->in);
 		buf += t;
@@ -107,7 +107,7 @@ void MD4Update(struct MD4Context *ctx, unsigned char const *buf,
 	/* Process data in 64-byte chunks */
 
 	while (len >= 64) {
-		memmove(ctx->in, buf, 64);
+		memcpy(ctx->in, buf, 64);
 		byteReverse(ctx->in, 16);
 		MD4Transform(ctx->buf, (word32 *) ctx->in);
 		buf += 64;
@@ -116,14 +116,14 @@ void MD4Update(struct MD4Context *ctx, unsigned char const *buf,
 
 	/* Handle any remaining bytes of data. */
 
-	memmove(ctx->in, buf, len);
+	memcpy(ctx->in, buf, len);
 }
 
 /*
  * Final wrapup - pad to 64-byte boundary with the bit pattern 
  * 1 0* (64-bit count of bits processed, MSB-first)
  */
-void MD4Final(unsigned char digest[16], struct MD4Context *ctx)
+void MD4Final(unsigned char* digest, struct MD4Context *ctx)
 {
 	unsigned int count;
 	unsigned char *p;
@@ -160,7 +160,9 @@ void MD4Final(unsigned char digest[16], struct MD4Context *ctx)
 
 	MD4Transform(ctx->buf, (word32 *) ctx->in);
 	byteReverse((unsigned char *) ctx->buf, 4);
-	memmove(digest, ctx->buf, 16);
+	
+	if (digest!=NULL)
+		memcpy(digest, ctx->buf, 16);
 	memset(ctx, 0, sizeof(ctx));	/* In case it's sensitive */
 }
 

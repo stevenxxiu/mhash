@@ -261,11 +261,11 @@ void tiger_update(struct tiger_ctx *ctx, word8 * buffer, word32 len)
 	if (ctx->index) {	/* Try to fill partial block */
 		unsigned left = TIGER_DATASIZE - ctx->index;
 		if (len < left) {
-			memmove(ctx->block + ctx->index, buffer, len);
+			memcpy(ctx->block + ctx->index, buffer, len);
 			ctx->index += len;
 			return;	/* Finished */
 		} else {
-			memmove(ctx->block + ctx->index, buffer, left);
+			memcpy(ctx->block + ctx->index, buffer, left);
 		     tiger_block(ctx, ctx->block);
 			buffer += left;
 			len -= left;
@@ -279,7 +279,7 @@ void tiger_update(struct tiger_ctx *ctx, word8 * buffer, word32 len)
 	if ((ctx->index = len))
 		/* This assignment is intended */
 		/* Buffer leftovers */
-		memmove(ctx->block, buffer, len);
+		memcpy(ctx->block, buffer, len);
 }
 
 void tiger_final(struct tiger_ctx *ctx)
@@ -323,6 +323,7 @@ void tiger_digest(struct tiger_ctx *ctx, word8 * s)
 {
 	int i;
 
+	if (s!=NULL)
 	for (i = 0; i < TIGER_DIGESTLEN; i+=2) { /* 64 bit and LITTLE ENDIAN -that's cool! */
 		s[7] = ctx->digest[i];
 		s[6] = 0xff & (ctx->digest[i] >> 8);
@@ -341,6 +342,7 @@ void tiger128_digest(struct tiger_ctx *ctx, word8 * s)
 {
 	int i;
 
+	if (s!=NULL)
 	for (i = 0; i < TIGER128_DIGESTLEN; i+=2) { /* 64 bit and LITTLE ENDIAN -that's cool! */
 		s[7] = ctx->digest[i];
 		s[6] = 0xff & (ctx->digest[i] >> 8);

@@ -1,10 +1,13 @@
-mhash ChangeLog ($Date: 2001/11/12 14:14:24 $)
+mhash ChangeLog ($Date: 2001/11/18 19:10:16 $)
 ===============================================================================
 
 People
 
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
+
+Version ?.?.?
+- mhash_deinit() and mhash_hmac_deinit() now accept a null digest parameter
 
 Version 0.8.13 (released November 18 2001)
 - Added ADLER32 algorithm (implementation by Manuel Kasper <mk@neon1.net>)

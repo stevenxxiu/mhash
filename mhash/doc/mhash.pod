@@ -210,7 +210,8 @@ the whole hashing operation (the ``I<digest>'').
 =item void B<mhash_deinit>(MHASH I<thread>, void* digest);
 
 This frees all resources associated with I<thread> and stores the result of
-the whole hashing operation in memory pointed by digest.
+the whole hashing operation in memory pointed by I<digest>. I<digest>
+may be null.
 
 =item void *B<mhash_hmac_end>(MHASH I<thread>);
 
@@ -220,8 +221,8 @@ whole hashing operation (the ``I<mac>'').
 =item int B<mhash_hmac_deinit>(MHASH I<thread>, void* digest);
 
 This frees all resources associated with I<thread> and stores the result of
-the whole hashing operation in memory pointed by digest. Returns non-zero
-in case of an error;
+the whole hashing operation in memory pointed by digest. Digest may be
+null. Returns non-zero in case of an error.
 
 =item void *B<mhash_end_m>(MHASH I<thread>, void* (*hash_malloc)(size_t));
 

@@ -35,7 +35,8 @@ void mhash_get_adler32(void *ret, const word32 * adler)
 #ifdef WORDS_BIGENDIAN
 	tmp = mhash_byteswap(tmp);
 #endif
-	memcpy(ret, &tmp, sizeof(word32));
+	if (ret!=NULL)
+		memcpy(ret, &tmp, sizeof(word32));
 }
 
 /*

@@ -355,11 +355,11 @@ void ripemd_update(struct ripemd_ctx *ctx, word8 * buffer, word32 len)
 	if (ctx->index) {	/* Try to fill partial block */
 		unsigned left = RIPEMD_DATASIZE - ctx->index;
 		if (len < left) {
-			memmove(ctx->block + ctx->index, buffer, len);
+			memcpy(ctx->block + ctx->index, buffer, len);
 			ctx->index += len;
 			return;	/* Finished */
 		} else {
-			memmove(ctx->block + ctx->index, buffer, left);
+			memcpy(ctx->block + ctx->index, buffer, left);
 			ripemd_block(ctx, ctx->block);
 			buffer += left;
 			len -= left;
@@ -373,7 +373,7 @@ void ripemd_update(struct ripemd_ctx *ctx, word8 * buffer, word32 len)
 	if ((ctx->index = len))
 		/* This assignment is intended */
 		/* Buffer leftovers */
-		memmove(ctx->block, buffer, len);
+		memcpy(ctx->block, buffer, len);
 }
 
 /* Final wrapup - pad to RIPEMD_DATASIZE-byte boundary with the bit pattern
@@ -420,6 +420,7 @@ void ripemd_digest(struct ripemd_ctx *ctx, word8 * s)
 {
 	int i;
 
+	if (s!=NULL)
 	for (i = 0; i < RIPEMD_DIGESTLEN; i++) {
 		*s++ = ctx->digest[i];
 		*s++ = 0xff & (ctx->digest[i] >> 8);

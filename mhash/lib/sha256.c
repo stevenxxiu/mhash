@@ -301,12 +301,13 @@ void sha256_digest(const struct sha256_ctx *ctx, byte * s)
 {
 	int i;
 
-	for (i = 0; i < _SHA256_DIGEST_LENGTH; i++) {
-		*s++ = ctx->state[i] >> 24;
-		*s++ = 0xff & (ctx->state[i] >> 16);
-		*s++ = 0xff & (ctx->state[i] >> 8);
-		*s++ = 0xff & ctx->state[i];
-	}
+	if (s!=NULL)
+		for (i = 0; i < _SHA256_DIGEST_LENGTH; i++) {
+			*s++ = ctx->state[i] >> 24;
+			*s++ = 0xff & (ctx->state[i] >> 16);
+			*s++ = 0xff & (ctx->state[i] >> 8);
+			*s++ = 0xff & ctx->state[i];
+		}
 }
 
 

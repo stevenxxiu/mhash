@@ -51,7 +51,7 @@ int _mhash_gen_key_hex(void *keyword, int key_size,
 		return -1;
 
 	for (i = 0; i < plen; i += 2) {
-		memmove(tmp, &chain[i], 2);
+		memcpy(tmp, &chain[i], 2);
 		tmp[2]='\0';
 		pkeyword[i / 2] = strtol(tmp, (char **) NULL, 16);
 	}

@@ -56,10 +56,10 @@ int _mhash_gen_key_s2k_simple(hashid algorithm, void *keyword, int key_size,
 		mhash(td, password, plen);
 		digest=mhash_end(td);
 		
-		memmove( &key[i*block_size], digest, block_size);
+		memcpy( &key[i*block_size], digest, block_size);
 		free(digest);
 	}
-	memmove(keyword, key, key_size);
+	memcpy(keyword, key, key_size);
 	mhash_bzero(key, key_size);
 	free(key);
 	return 0;
@@ -103,10 +103,10 @@ int _mhash_gen_key_s2k_salted(hashid algorithm, void *keyword, int key_size,
 		mhash(td, password, plen);
 		digest=mhash_end(td);
 		
-		memmove( &key[i*block_size], digest, block_size);
+		memcpy( &key[i*block_size], digest, block_size);
 		free(digest);
 	}
-	memmove(keyword, key, key_size);
+	memcpy(keyword, key, key_size);
 	mhash_bzero(key, key_size);
 	free(key);
 	return 0;
@@ -132,8 +132,8 @@ int _mhash_gen_key_s2k_isalted(hashid algorithm, unsigned long count,
 				     */
 	
 	if((saltpass = calloc(1, 8+plen)) == NULL) return -1; /* hmm */
-	memmove( saltpass, salt, 8);
-	memmove( &saltpass[8], password, plen);
+	memcpy( saltpass, salt, 8);
+	memcpy( &saltpass[8], password, plen);
 
 	times = key_size/block_size;
 	if (key_size%block_size != 0) times++;
@@ -162,10 +162,10 @@ int _mhash_gen_key_s2k_isalted(hashid algorithm, unsigned long count,
 		}
 		digest=mhash_end(td);
 		
-		memmove( &key[i*block_size], digest, block_size);
+		memcpy( &key[i*block_size], digest, block_size);
 		free(digest);
 	}
-	memmove(keyword, key, key_size);
+	memcpy(keyword, key, key_size);
 
 	mhash_bzero(key, key_size);
 	mhash_bzero(saltpass, 8+plen);

@@ -641,6 +641,8 @@ void gosthash_final(GostHashCtx * ctx, byte * digest)
 	 */
 
 	j = 0;
+
+	if (digest!=NULL)
 	for (i = 0; i < 8; i++) {
 		a = ctx->hash[i];
 		digest[j] = (byte) a;

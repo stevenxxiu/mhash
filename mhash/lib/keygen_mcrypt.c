@@ -53,17 +53,17 @@ int _mhash_gen_key_mcrypt(hashid algorithm, void *keyword, int key_size, void *s
 		digest=mhash_end(td);
 		
 		if (size > block_size) {
-			memmove(cp, digest, block_size);
+			memcpy(cp, digest, block_size);
 			free(digest);
 			size -= block_size;
 			cp += block_size;
 		} else {
-			memmove(cp, digest, size);
+			memcpy(cp, digest, size);
 			free(digest);
 			break;
 		}
 	}
-	memmove(keyword, key, key_size);
+	memcpy(keyword, key, key_size);
 	free( key);
 	return 0;
 }
@@ -77,7 +77,7 @@ int _mhash_gen_key_pkdes( void *keyword, int key_size,
 
 	if (plen>key_size) return -1;
 	mhash_bzero( keyword, key_size);
-	memmove( keyword, password, plen);
+	memcpy( keyword, password, plen);
 
 	for (cnt = 0; cnt < key_size; cnt++) {
 		c = 0;

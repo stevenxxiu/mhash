@@ -174,7 +174,8 @@ get_crc32(void* ret, const word32 * crc)
 #ifdef WORDS_BIGENDIAN
 	tmp = mhash_byteswap(tmp);
 #endif
-	memcpy( ret, &tmp, sizeof(word32));	
+	if (ret!=NULL)
+		memcpy( ret, &tmp, sizeof(word32));	
 }
 
 void

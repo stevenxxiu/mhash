@@ -77,10 +77,10 @@ void MD5Update(struct MD5Context *ctx, unsigned char const *buf, unsigned len)
 
 	t = 64 - t;
 	if (len < t) {
-	    memmove(p, buf, len);
+	    memcpy(p, buf, len);
 	    return;
 	}
-	memmove(p, buf, t);
+	memcpy(p, buf, t);
 	byteReverse(ctx->in, 16);
 	MD5Transform(ctx->buf, (word32 *) ctx->in);
 	buf += t;
@@ -89,7 +89,7 @@ void MD5Update(struct MD5Context *ctx, unsigned char const *buf, unsigned len)
     /* Process data in 64-byte chunks */
 
     while (len >= 64) {
-	memmove(ctx->in, buf, 64);
+	memcpy(ctx->in, buf, 64);
 	byteReverse(ctx->in, 16);
 	MD5Transform(ctx->buf, (word32 *) ctx->in);
 	buf += 64;
@@ -98,14 +98,14 @@ void MD5Update(struct MD5Context *ctx, unsigned char const *buf, unsigned len)
 
     /* Handle any remaining bytes of data. */
 
-    memmove(ctx->in, buf, len);
+    memcpy(ctx->in, buf, len);
 }
 
 /*
  * Final wrapup - pad to 64-byte boundary with the bit pattern 
  * 1 0* (64-bit count of bits processed, MSB-first)
  */
-void MD5Final(unsigned char digest[16], struct MD5Context *ctx)
+void MD5Final(unsigned char* digest, struct MD5Context *ctx)
 {
     unsigned int count;
     unsigned char *p;
@@ -142,7 +142,9 @@ void MD5Final(unsigned char digest[16], struct MD5Context *ctx)
 
     MD5Transform(ctx->buf, (word32 *) ctx->in);
     byteReverse((unsigned char *) ctx->buf, 4);
-    memmove(digest, ctx->buf, 16);
+    
+    if (digest!=NULL)
+	    memcpy(digest, ctx->buf, 16);
     memset(ctx, 0, sizeof(ctx));	/* In case it's sensitive */
 }
 
