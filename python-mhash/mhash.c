@@ -24,15 +24,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "Python.h"
 #include "structmember.h"
 
-static char __authors__[] =
+static char __author__[] =
 "The mhash python module was developed by:\n\
 \n\
     Gustavo Niemeyer <niemeyer@conectiva.com>\n\
-\n\
-The mhash library was developed by:\n\
-\n\
-    Nikos Mavroyanopoulos <nmav@hellug.gr>\n\
-    Sascha Schumann <sascha@schumann.cx>\n\
 ";
 
 typedef struct {
@@ -234,7 +229,7 @@ digest_size     - Digest size of the selected algorithm.
 statichere PyTypeObject MHASH_Type = {
 	PyObject_HEAD_INIT(NULL)
 	0,			/*ob_size*/
-	"MHASH",		/*tp_name*/
+	"mhash.MHASH",		/*tp_name*/
 	sizeof(MHASHObject),	/*tp_basicsize*/
 	0,			/*tp_itemsize*/
 	(destructor)MHASH_dealloc, /*tp_dealloc*/
@@ -330,7 +325,7 @@ MHASH(MHASH_MD5, \"My secret key\", \"My hashed string\").hexdigest()\n\
 statichere PyTypeObject HMAC_Type = {
 	PyObject_HEAD_INIT(NULL)
 	0,			/*ob_size*/
-	"HMAC",			/*tp_name*/
+	"mhash.HMAC",		/*tp_name*/
 	sizeof(MHASHObject),	/*tp_basicsize*/
 	0,			/*tp_itemsize*/
 	(destructor)MHASH_dealloc, /*tp_dealloc*/
@@ -635,8 +630,8 @@ initmhash(void)
 	PyDict_SetItemString(d, "MHASH", (PyObject *)&MHASH_Type);
 	Py_INCREF(&HMAC_Type);
 	PyDict_SetItemString(d, "HMAC", (PyObject *)&HMAC_Type);
-	PyDict_SetItemString(d, "__authors__",
-			     PyString_FromString(__authors__));
+	PyDict_SetItemString(d, "__author__",
+			     PyString_FromString(__author__));
 	PyDict_SetItemString(d, "__version__",
 			     PyString_FromString(VERSION));
 
