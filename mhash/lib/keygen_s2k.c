@@ -40,11 +40,13 @@ int _mhash_gen_key_s2k_simple(hashid algorithm, void *keyword, int key_size,
 	times = key_size/block_size;
 	if (key_size%block_size != 0) times++;
 
-	key=calloc(1, times*block_size);
+	if( (key = calloc(1, times*block_size) ) == NULL)
+		return -1; /* or what? */
+
 	
 	for (i=0;i<times;i++) {
 		td = mhash_init(algorithm);
-		if (td<0) return -1;
+		if (td==MHASH_FAILED) return -1;
 		
 		for (j=0;j<i;j++)
 			mhash(td, &null, 1);
@@ -80,11 +82,13 @@ int _mhash_gen_key_s2k_salted(hashid algorithm, void *keyword, int key_size,
 	times = key_size/block_size;
 	if (key_size%block_size != 0) times++;
 
-	key=calloc(1, times*block_size);
+	if((key=calloc(1, times*block_size)) == NULL)
+		return -1; /* or what? */
+
 	
 	for (i=0;i<times;i++) {
 		td = mhash_init(algorithm);
-		if (td<0) return -1;
+		if (td==MHASH_FAILED) return -1;
 		
 		for (j=0;j<i;j++)
 			mhash(td, &null, 1);
@@ -129,7 +133,7 @@ int _mhash_gen_key_s2k_isalted(hashid algorithm, unsigned long count,
 	
 	for (i=0;i<times;i++) {
 		td = mhash_init(algorithm);
-		if (td<0) return -1;
+		if (td==MHASH_FAILED) return -1;
 	
 		for (j=0;j<i;j++)
 			mhash(td, &null, 1);

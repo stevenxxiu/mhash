@@ -43,7 +43,7 @@ int _mhash_gen_key_mcrypt(hashid algorithm, void *keyword, int key_size, void *s
 	
 	while (1) {
 		td = mhash_init(algorithm);
-		if (td<0) return -1;
+		if (td==MHASH_FAILED) return -1;
 		
 		if (salt_z == 0)
 			mhash(td, salt, salt_size);
