@@ -561,8 +561,14 @@ static void gosthash_bytes(GostHashCtx * ctx, const byte * buf, size_t bits)
 		j += 4;
 		m[i] = a;
 		c = a + c + ctx->sum[i];
-		ctx->sum[i] = c;
-		c = c < a ? 1 : 0;
+		
+		if ((a==0xFFFFFFFFUL) && (ctx->sum[i]==0xFFFFFFFFUL)) {
+			ctx->sum[i] = c;
+			c = 1;
+		} else {
+			ctx->sum[i] = c;
+			c = c < a ? 1 : 0;
+		}
 	}
 
 	/*
