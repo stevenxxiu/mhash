@@ -80,42 +80,40 @@ typedef struct mhash_hash_entry mhash_hash_entry;
 
 /* information prototypes */
 
-WIN32DLL_DEFINE size_t mhash_count(void);
-WIN32DLL_DEFINE size_t mhash_get_block_size(hashid type);
-WIN32DLL_DEFINE char *mhash_get_hash_name(hashid type);
+size_t mhash_count(void);
+size_t mhash_get_block_size(hashid type);
+char *mhash_get_hash_name(hashid type);
 
 /* initializing prototypes */
 
-WIN32DLL_DEFINE MHASH mhash_init(hashid type);
-WIN32DLL_DEFINE MHASH mhash_init_int(hashid type);
+MHASH mhash_init(hashid type);
+MHASH mhash_init_int(hashid type);
 
 /* update prototype */
 
-WIN32DLL_DEFINE int mhash(MHASH thread, const void *plaintext, size_t size);
+int mhash(MHASH thread, const void *plaintext, size_t size);
 
 /* finalizing prototype */
 
-WIN32DLL_DEFINE void *mhash_end(MHASH thread);
+void *mhash_end(MHASH thread);
 
-WIN32DLL_DEFINE size_t mhash_get_hash_pblock(hashid type);
-WIN32DLL_DEFINE MHASH hmac_mhash_init(const hashid type, void *key, int keysize,
+size_t mhash_get_hash_pblock(hashid type);
+MHASH hmac_mhash_init(const hashid type, void *key, int keysize,
 		      int block);
-WIN32DLL_DEFINE void *hmac_mhash_end(MHASH thread);
+void *hmac_mhash_end(MHASH thread);
 
 /* Key generation functions */
-WIN32DLL_DEFINE int mhash_keygen(keygenid algorithm, hashid opt_algorithm,
+int mhash_keygen(keygenid algorithm, hashid opt_algorithm,
 		 unsigned long count, void *keyword, int keysize,
 		 void *salt, int saltsize, unsigned char *password,
 		 int passwordlen);
-WIN32DLL_DEFINE int mhash_keygen_ext(keygenid algorithm, KEYGEN data,
+int mhash_keygen_ext(keygenid algorithm, KEYGEN data,
 	 void *keyword, int keysize,
 	 unsigned char *password, int passwordlen);
 
-WIN32DLL_DEFINE char *mhash_get_keygen_name(hashid type);
-WIN32DLL_DEFINE size_t mhash_get_keygen_salt_size(keygenid type);
-WIN32DLL_DEFINE size_t mhash_keygen_count(void);
-WIN32DLL_DEFINE int mhash_keygen_uses_salt(keygenid type);
-WIN32DLL_DEFINE int mhash_keygen_uses_count(keygenid type);
-WIN32DLL_DEFINE int mhash_keygen_uses_hash_algorithm(keygenid type);
-WIN32DLL_DEFINE void mhash_bzero(void *s, int n);
-WIN32DLL_DEFINE word32 mhash_byteswap(word32 x);
+char *mhash_get_keygen_name(hashid type);
+size_t mhash_get_keygen_salt_size(keygenid type);
+size_t mhash_keygen_count(void);
+int mhash_keygen_uses_salt(keygenid type);
+int mhash_keygen_uses_count(keygenid type);
+int mhash_keygen_uses_hash_algorithm(keygenid type);

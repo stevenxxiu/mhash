@@ -25,7 +25,7 @@
 
 #include "mhash_crc32.h"
 
-/* This polynomial ( 0xEDB88320L) DOES generate the same CRC values as ZMODEM and PKZIP
+/** This polynomial ( 0xEDB88320L) DOES generate the same CRC values as ZMODEM and PKZIP
  */
 static const word32 crc32_table_b[256] =
 {
@@ -84,7 +84,7 @@ static const word32 crc32_table_b[256] =
 };
 
 
-/* This polynomial (0x04c11db7) is used at: AUTODIN II, Ethernet, & FDDI 
+/** This polynomial (0x04c11db7) is used at: AUTODIN II, Ethernet, & FDDI 
  */
 
 static const word32 crc32_table[256] =

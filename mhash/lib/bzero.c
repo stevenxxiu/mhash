@@ -25,18 +25,24 @@
 
 #include "libdefs.h"
 
-WIN32DLL_DEFINE void
+/**
+ * Platform-independent memset/bzero wrapper, with a simple implementation in the
+ * event there is no memset or bzero defined.
+ */
+
+void
 mhash_bzero(void *s, int n)
 {
 #ifdef HAVE_MEMSET
-	memset(s, '\0', n);
-#elif HAVE_BZERO
+	memset(s, (int) '\0', n);
+#else
+#ifdef HAVE_BZERO
 	bzero(s, n);
 #else
-	char *stmp = s;
+	char *stmp = (char *) s;
 
-	for (int i = 0; i < n; i++)
-		stmp[i] = '\0';
+	for (int i = 0; i < n; i++, stmp++)
+		*stmp = '\0';
 
 #endif
 #endif

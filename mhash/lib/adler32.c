@@ -43,7 +43,7 @@ void mhash_get_adler32( const word32 * adler, void* ret)
 		memcpy(ret, &tmp, sizeof(word32));
 }
 
-/*
+/**
  *    Generic C implementation of Adler32
  *    Peak performance:
  *      VC++:       52 MB/s on AMD K7 600 MHz
@@ -52,15 +52,15 @@ void mhash_get_adler32( const word32 * adler, void* ret)
  *      (all with speed optimizations on)
  */
 
-void mhash_adler32(word32 * adler, const void *given_buf, int len)
+void mhash_adler32(word32 * adler, const void *given_buf, word32 len)
 {
 	word32 s1 = (*adler) & 0x0000FFFF;
 	word32 s2 = ((*adler) >> 16) & 0x0000FFFF;
 	word32 n;
-	const unsigned char *p = given_buf;
+	unsigned char *p = given_buf;
 
-	for (n = 0; n < len; n++) {
-		s1 = (s1 + p[n]);
+	for (n = 0; n < len; n++, p++) {
+		s1 += *p;
 		if (s1 >= 65521)	/* using modulo took about 7 times longer on my CPU! */
 			s1 -= 65521;	/* WARNING: it's meant to be >= 65521, not just > ! */
 		s2 += s1;
