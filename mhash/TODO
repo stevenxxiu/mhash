@@ -4,5 +4,4 @@ mhash TODO
 - add RIPEMD-256 and RIPEMD-320 
   (see http://www.esat.kuleuven.ac.be/~bosselae/ripemd160.html)
 - add PANAMA hash algorithm.
-- add SHA-256, SHA-384, and SHA-512.
 - add 64 bit version of Tiger.

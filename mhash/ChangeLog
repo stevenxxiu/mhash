@@ -1,4 +1,134 @@
+2001-10-27  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/configure.in, /cvsroot/mhash/mhash/lib/Makefile.am, /cvsroot/mhash/mhash/lib/mhash.c, /cvsroot/mhash/mhash/lib/mhash.h, /cvsroot/mhash/mhash/lib/mhash_int.h, /cvsroot/mhash/mhash/lib/mhash_sha1.h, /cvsroot/mhash/mhash/lib/mhash_sha256.h, /cvsroot/mhash/mhash/lib/sha1.c, /cvsroot/mhash/mhash/lib/sha256.c, /cvsroot/mhash/mhash/NEWS, /cvsroot/mhash/mhash/src/hash_test.sh:
+	added SHA-256
+
+2001-10-26  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/lib/keygen.c, /cvsroot/mhash/mhash/lib/mhash.c:
+	corrected bug in get_name()
+
+2001-10-23  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/lib/libmhash.sym, /cvsroot/mhash/mhash/src/mhash_save_restore_test.c:
+	corrected bugs
+
+2001-10-21  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/lib/mhash.h, /cvsroot/mhash/mhash/NEWS, /cvsroot/mhash/mhash/src/mhash_save_restore_test.c:
+	*** empty log message ***
+
+2001-10-19  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/lib/keygen.c, /cvsroot/mhash/mhash/lib/mhash.c, /cvsroot/mhash/mhash/lib/mhash.h, /cvsroot/mhash/mhash/src/mhash_save_restore_test.c, /cvsroot/mhash/mhash/configure.in, /cvsroot/mhash/mhash/doc/mhash.pod, /cvsroot/mhash/mhash/NEWS:
+	Added mhash_get_name_static()
+	Corrected mhash_get_name() and mhash_count()
+
+2001-10-16  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/src/.cvsignore, /cvsroot/mhash/mhash/src/hmac_test.c, /cvsroot/mhash/mhash/src/mhash_save_restore_test.c, /cvsroot/mhash/mhash/NEWS:
+	*** empty log message ***
+
+	* /cvsroot/mhash/mhash/src/Makefile.am, /cvsroot/mhash/mhash/src/mhash_save_restore_test.c, /cvsroot/mhash/mhash/doc/mhash.pod, /cvsroot/mhash/mhash/lib/libmhash.sym, /cvsroot/mhash/mhash/lib/mhash.c, /cvsroot/mhash/mhash/lib/mhash.h, /cvsroot/mhash/mhash/NEWS, /cvsroot/mhash/mhash/THANKS:
+	added capability to save/restore the mhash state.
+	Initial patches and ideas by Blake Stephen <Stephen.Blake@veritect.com>
+
+2001-09-21  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/doc/mhash.pod, /cvsroot/mhash/mhash/lib/haval.c, /cvsroot/mhash/mhash/lib/keygen.c, /cvsroot/mhash/mhash/lib/libdefs.h, /cvsroot/mhash/mhash/lib/mhash.c, /cvsroot/mhash/mhash/lib/mhash.h, /cvsroot/mhash/mhash/lib/mhash_int.h:
+	some fixes in included files
+
+2001-09-09  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/doc/mhash.pod, /cvsroot/mhash/mhash/lib/keygen.c, /cvsroot/mhash/mhash/lib/mhash.c, /cvsroot/mhash/mhash/lib/mhash.h, /cvsroot/mhash/mhash/lib/mhash_int.h, /cvsroot/mhash/mhash/NEWS:
+	mhash_*_get_name() return a constant string
+
+2001-07-12  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/configure.in, /cvsroot/mhash/mhash/src/driver.c:
+	moving to mhash 0.8.10
+
+2001-07-09  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/doc/mhash.pod, /cvsroot/mhash/mhash/lib/mhash.h, /cvsroot/mhash/mhash/NEWS:
+	*** empty log message ***
+
+	* /cvsroot/mhash/mhash/lib/libmhash.sym, /cvsroot/mhash/mhash/lib/mhash.c, /cvsroot/mhash/mhash/lib/mhash.h:
+	added functions to allow non-malloced results
+
+2001-05-10  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/src/hash_test.sh: tr fixes
+
+2001-04-25  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/src/hash_test.sh:
+	all outputs in hash_test are now specified in upper case
+
+2001-04-06  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/src/hash_test.sh: corrected some case problems
+
+2001-02-24  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/src/hash_test.sh: fixed a case problem
+
+2001-02-11  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/TODO: updated todo list
+
+2001-02-10  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/doc/mhash.pod: updated information for md4
+
+2001-02-04  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/doc/mhash.pod, /cvsroot/mhash/mhash/lib/mhash.h, /cvsroot/mhash/mhash/NEWS, /cvsroot/mhash/mhash/README:
+	updated documentation
+
+	* /cvsroot/mhash/mhash/doc/example.c, /cvsroot/mhash/mhash/doc/Makefile.am:
+	added example program
+
+	* /cvsroot/mhash/mhash/NEWS: *** empty log message ***
+
+	* /cvsroot/mhash/mhash/lib/tiger_sboxes.c:
+	removed 64 bit version of tiger tables
+
+2001-02-01  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/configure.in, /cvsroot/mhash/mhash/NEWS:
+	moving to 0.8.9
+
+	* /cvsroot/mhash/mhash/lib/tiger_sboxes.c: removed support for 64 bit
+
+2001-01-29  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/lib/mhash_tiger.h: removed 64bit version
+
+2001-01-28  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/doc/skid2-authentication: corrected
+
+	* /cvsroot/mhash/mhash/lib/tiger_sboxes.c, /cvsroot/mhash/mhash/ChangeLog, /cvsroot/mhash/mhash/configure.in, /cvsroot/mhash/mhash/lib/Makefile.am, /cvsroot/mhash/mhash/lib/mhash_tiger.h, /cvsroot/mhash/mhash/Makefile.am, /cvsroot/mhash/mhash/NEWS:
+	*** empty log message ***
+
+2001-01-26  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/lib/md4.c, /cvsroot/mhash/mhash/lib/md5.c:
+	made a function static so it does not cause problems in big endian systems
+
+2001-01-24  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/lib/md4.c, /cvsroot/mhash/mhash/lib/md5.c, /cvsroot/mhash/mhash/lib/sha1.c:
+	some speedups
+
+	* /cvsroot/mhash/mhash/doc/mhash.pod, /cvsroot/mhash/mhash/doc/skid2-authentication, /cvsroot/mhash/mhash/doc/Makefile.am:
+	added document that describes skid2 authentication protocol
+
 2001-01-21  Nikos Mavroyanopoulos  <nmav@crystal>
+
+	* /cvsroot/mhash/mhash/lib/haval.c, /cvsroot/mhash/mhash/lib/tiger.c:
+	removed unneeded functions
 
 	* /cvsroot/mhash/mhash/buildconf, /cvsroot/mhash/mhash/ChangeLog, /cvsroot/mhash/mhash/lib/keygen_hex.c, /cvsroot/mhash/mhash/lib/Makefile.am, /cvsroot/mhash/mhash/lib/md5.c, /cvsroot/mhash/mhash/lib/mhash_md5.h, /cvsroot/mhash/mhash/lib/mhash_tiger.h, /cvsroot/mhash/mhash/lib/tiger.c, /cvsroot/mhash/mhash/NEWS, /cvsroot/mhash/mhash/README, /cvsroot/mhash/mhash/src/hash_test.sh, /cvsroot/mhash/mhash/TODO:
 	changes for MD4, TIGER160 and TIGER128

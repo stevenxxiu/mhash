@@ -1,4 +1,4 @@
-mhash ChangeLog ($Date: 2001/10/21 15:01:21 $)
+mhash ChangeLog ($Date: 2001/10/27 09:42:22 $)
 ===============================================================================
 
 People
@@ -6,11 +6,11 @@ People
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
 
-Version 0.8.12
+Version 0.8.12 (released October 29 2001)
 - Corrected bugs in mhash_get_name() functions
 - Added SHA-256 from libnettle.
 
-Version 0.8.11 (release October 21 2001)
+Version 0.8.11 (released October 21 2001)
 - added mhash_save_state_mem() and mhash_restore_state_mem() functions,
   initial patches and idea by Blake Stephen <Stephen.Blake@veritect.com>
 - Added mhash_get_name_static()
