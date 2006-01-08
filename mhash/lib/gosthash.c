@@ -21,7 +21,7 @@
    lookup tables : each of these has two rotated 4-bit S-Boxes 
  */
 
-static const word32 gost_sbox_1[256] = {
+static __const mutils_word32 gost_sbox_1[256] = {
 
 	0x72000UL, 0x75000UL, 0x74800UL, 0x71000UL, 0x76800UL,
 	0x74000UL, 0x70000UL, 0x77000UL, 0x73000UL, 0x75800UL,
@@ -76,7 +76,7 @@ static const word32 gost_sbox_1[256] = {
 	0x48800UL, 0x4E000UL, 0x4B800UL, 0x4F800UL, 0x4A800UL,
 	0x49800UL,
 };
-static const word32 gost_sbox_2[256] = {
+static __const mutils_word32 gost_sbox_2[256] = {
 
 	0x3A80000UL, 0x3C00000UL, 0x3880000UL, 0x3E80000UL, 0x3D00000UL,
 	0x3980000UL, 0x3A00000UL, 0x3900000UL, 0x3F00000UL, 0x3F80000UL,
@@ -131,7 +131,7 @@ static const word32 gost_sbox_2[256] = {
 	0x1E00000UL, 0x1B80000UL, 0x1B00000UL, 0x1800000UL, 0x1C80000UL,
 	0x1D80000UL,
 };
-static const word32 gost_sbox_3[256] = {
+static __const mutils_word32 gost_sbox_3[256] = {
 
 	0x30000002UL, 0x60000002UL, 0x38000002UL, 0x8000002UL,
 	0x28000002UL, 0x78000002UL, 0x68000002UL, 0x40000002UL, 
@@ -198,7 +198,7 @@ static const word32 gost_sbox_3[256] = {
 	0x20000007UL, 0x50000007UL, 0x48000007UL, 0x70000007UL, 
 	0x7UL,        0x18000007UL, 0x58000007UL, 0x10000007UL,
 };
-static const word32 gost_sbox_4[256] = {
+static __const mutils_word32 gost_sbox_4[256] = {
 
 	0xE8UL,  0xD8UL,  0xA0UL,  0x88UL,  0x98UL,
 	0xF8UL,  0xA8UL,  0xC8UL,  0x80UL,  0xD0UL,
@@ -254,57 +254,6 @@ static const word32 gost_sbox_4[256] = {
 	0x660UL,
 };
 
-#if 0				/* No longer used in mhash */
-word32 gost_sbox_1[256];
-word32 gost_sbox_2[256];
-word32 gost_sbox_3[256];
-word32 gost_sbox_4[256];
-
-/*
-   initialize the lookup tables 
- */
-void gosthash_init()
-{
-	int a, b, i;
-	word32 ax, bx, cx, dx;
-
-	/*
-	   4-bit S-Boxes 
-	 */
-
-	const word32 sbox[8][16] = {
-		{4, 10, 9, 2, 13, 8, 0, 14, 6, 11, 1, 12, 7, 15, 5, 3},
-		{14, 11, 4, 12, 6, 13, 15, 10, 2, 3, 8, 1, 0, 7, 5, 9},
-		{5, 8, 1, 13, 10, 3, 4, 2, 14, 15, 12, 7, 6, 0, 9, 11},
-		{7, 13, 10, 1, 0, 8, 9, 15, 14, 4, 6, 12, 11, 2, 5, 3},
-		{6, 12, 7, 1, 5, 15, 13, 8, 4, 10, 9, 14, 0, 3, 11, 2},
-		{4, 11, 10, 0, 7, 2, 1, 13, 3, 6, 8, 5, 9, 12, 15, 14},
-		{13, 11, 4, 1, 3, 15, 5, 9, 0, 10, 14, 7, 6, 8, 2, 12},
-		{1, 15, 13, 0, 5, 7, 10, 4, 9, 2, 3, 14, 6, 11, 8, 12}
-	};
-
-	/*
-	   s-box precomputation 
-	 */
-
-	i = 0;
-	for (a = 0; a < 16; a++) {
-		ax = sbox[1][a] << 15;
-		bx = sbox[3][a] << 23;
-		cx = sbox[5][a];
-		cx = (cx >> 1) | (cx << 31);
-		dx = sbox[7][a] << 7;
-
-		for (b = 0; b < 16; b++) {
-			gost_sbox_1[i] = ax | (sbox[0][b] << 11);
-			gost_sbox_2[i] = bx | (sbox[2][b] << 19);
-			gost_sbox_3[i] = cx | (sbox[4][b] << 27);
-			gost_sbox_4[i++] = dx | (sbox[6][b] << 3);
-		}
-	}
-}
-#endif
-
 /*
  *  A macro that performs a full encryption round of GOST 28147-89.
  *  Temporary variable t assumed and variables r and l for left and right
@@ -348,13 +297,13 @@ l = t;
  *  "chi" compression function. the result is stored over h
  */
 
-static void gosthash_compress(word32 * h, word32 * m)
+static void gosthash_compress(mutils_word32 * h, mutils_word32 * m)
 {
-	int i;
-	word32 l, r, t, key[8], u[8], v[8], w[8], s[8];
+	mutils_word32 i;
+	mutils_word32 l, r, t, key[8], u[8], v[8], w[8], s[8];
 
-	memcpy(u, h, sizeof(u));
-	memcpy(v, m, sizeof(u));
+	mutils_memcpy(u, h, sizeof(u));
+	mutils_memcpy(v, m, sizeof(u));
 
 	for (i = 0; i < 8; i += 2) {
 		w[0] = u[0] ^ v[0];	/*
@@ -506,10 +455,10 @@ static void gosthash_compress(word32 * h, word32 * m)
 
 void gosthash_reset(GostHashCtx * ctx)
 {
-	mhash_bzero(ctx->sum, 32);
-	mhash_bzero(ctx->hash, 32);
-	mhash_bzero(ctx->len, 32);
-	mhash_bzero(ctx->partial, 32);
+	mutils_bzero(ctx->sum, 32);
+	mutils_bzero(ctx->hash, 32);
+	mutils_bzero(ctx->len, 32);
+	mutils_bzero(ctx->partial, 32);
 	ctx->partial_bytes = 0;
 }
 
@@ -517,10 +466,11 @@ void gosthash_reset(GostHashCtx * ctx)
    Mix in a 32-byte chunk ("stage 3") 
  */
 
-static void gosthash_bytes(GostHashCtx * ctx, const byte * buf, size_t bits)
+static void gosthash_bytes(GostHashCtx * ctx, __const mutils_word8 * buf, mutils_word32 bits)
 {
-	int i, j;
-	word32 a, c, m[8];
+	mutils_word32 i;
+	mutils_word32 j;
+	mutils_word32 a, c, m[8];
 
 	/*
 	   convert bytes to a long words and compute the sum 
@@ -529,7 +479,7 @@ static void gosthash_bytes(GostHashCtx * ctx, const byte * buf, size_t bits)
 	j = 0;
 	c = 0;
 	for (i = 0; i < 8; i++) {
-		a = ((word32) buf[j]) | (((word32) buf[j + 1]) << 8) | (((word32) buf[j + 2]) << 16) | (((word32) buf[j + 3]) << 24);
+		a = ((mutils_word32) buf[j]) | (((mutils_word32) buf[j + 1]) << 8) | (((mutils_word32) buf[j + 2]) << 16) | (((mutils_word32) buf[j + 3]) << 24);
 		j += 4;
 		m[i] = a;
 		c = a + c + ctx->sum[i];
@@ -562,9 +512,9 @@ static void gosthash_bytes(GostHashCtx * ctx, const byte * buf, size_t bits)
    Mix in len bytes of data for the given buffer. 
  */
 
-void gosthash_update(GostHashCtx * ctx, const byte * buf, size_t len)
+void gosthash_update(GostHashCtx * ctx, __const mutils_word8 * buf, mutils_word32 len)
 {
-	size_t i, j;
+	mutils_word32 i, j;
 
 	i = ctx->partial_bytes;
 	j = 0;
@@ -593,17 +543,18 @@ void gosthash_update(GostHashCtx * ctx, const byte * buf, size_t len)
    Compute and save the 32-byte digest. 
  */
 
-void gosthash_final(GostHashCtx * ctx, byte * digest)
+void gosthash_final(GostHashCtx * ctx, mutils_word8 * digest)
 {
-	int i, j;
-	word32 a;
+	mutils_word32 i;
+	mutils_word32 j;
+	mutils_word32 a;
 
 	/*
 	   adjust and mix in the last chunk 
 	 */
 
 	if (ctx->partial_bytes > 0) {
-		mhash_bzero(&ctx->partial[ctx->partial_bytes], 32 - ctx->partial_bytes);
+		mutils_bzero(&ctx->partial[ctx->partial_bytes], 32 - ctx->partial_bytes);
 		gosthash_bytes(ctx, ctx->partial, ctx->partial_bytes << 3);
 	}
 
@@ -620,13 +571,13 @@ void gosthash_final(GostHashCtx * ctx, byte * digest)
 
 	j = 0;
 
-	if (digest!=NULL)
+	if (digest != NULL)
 	for (i = 0; i < 8; i++) {
 		a = ctx->hash[i];
-		digest[j] = (byte) a;
-		digest[j + 1] = (byte) (a >> 8);
-		digest[j + 2] = (byte) (a >> 16);
-		digest[j + 3] = (byte) (a >> 24);
+		digest[j] = (mutils_word8) a;
+		digest[j + 1] = (mutils_word8) (a >> 8);
+		digest[j + 2] = (mutils_word8) (a >> 16);
+		digest[j + 3] = (mutils_word8) (a >> 24);
 		j += 4;
 	}
 }

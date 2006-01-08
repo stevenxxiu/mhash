@@ -51,8 +51,8 @@
 #define s0(x) (ROTR(1,(x)) ^ ROTR(8,(x)) ^ SHR(7,(x)))
 #define s1(x) (ROTR(19,(x)) ^ ROTR(61,(x)) ^ SHR(6,(x)))
 
-/* The sha512/384 round constants. */
-static const word64 K[80] = {
+/* The sha512/384 round __constants. */
+static __const mutils_word64 K[80] = {
   0x428a2f98d728ae22ULL, 0x7137449123ef65cdULL, 0xb5c0fbcfec4d3b2fULL, 
   0xe9b5dba58189dbbcULL, 0x3956c25bf348b538ULL, 0x59f111f1b605d019ULL, 
   0x923f82a4af194f9bULL, 0xab1c5ed5da6d8118ULL, 0xd807aa98a3030242ULL, 
@@ -116,7 +116,7 @@ static const word64 K[80] = {
    from the W[] array each time */
 
 #define ROUND(a,b,c,d,e,f,g,h,k,data) do {		\
-  word64 T1 = h + S1(e) + Choice(e,f,g) + k + data;	\
+  mutils_word64 T1 = h + S1(e) + Choice(e,f,g) + k + data;	\
   d += T1;						\
   h = T1 + S0(a) + Majority(a,b,c);		        \
 } while (0)
@@ -124,13 +124,11 @@ static const word64 K[80] = {
 
 /* Helper macros derived from those in mhash_sha1.h */
 
-#if 1
-
 #ifndef EXTRACT_UCHAR
 #define EXTRACT_UCHAR(p)  (*(unsigned char *)(p))
 #endif
 
-#define STRING2INT64(s) ((((((((((((((word64)(EXTRACT_UCHAR(s) << 8)    \
+#define STRING2INT64(s) ((((((((((((((mutils_word64)(EXTRACT_UCHAR(s) << 8)    \
 			 | EXTRACT_UCHAR(s+1)) << 8)  \
 			 | EXTRACT_UCHAR(s+2)) << 8)  \
 			 | EXTRACT_UCHAR(s+3)) << 8)  \
@@ -138,31 +136,19 @@ static const word64 K[80] = {
 			 | EXTRACT_UCHAR(s+5)) << 8)  \
 			 | EXTRACT_UCHAR(s+6)) << 8)  \
 			 | EXTRACT_UCHAR(s+7))
-#else
-word64 STRING2INT64(word8 *s)
-{
-  word64 r;
-  int i;
-
-  for (i = 0, r = 0; i < 8; i++, s++)
-    r = (r << 8) | *s;
-  return r;
-}
-#endif
-
 
 /* Initialize the SHA512/384 values */
 
 void sha512_init(struct sha512_sha384_ctx *ctx)
 {
   /* Initial values */
-	static const word64 H0[_SHA512_SHA384_STATE_LENGTH] = {
+	static __const mutils_word64 H0[_SHA512_SHA384_STATE_LENGTH] = {
 	  0x6a09e667f3bcc908ULL, 0xbb67ae8584caa73bULL, 0x3c6ef372fe94f82bULL, 
 	  0xa54ff53a5f1d36f1ULL, 0x510e527fade682d1ULL, 0x9b05688c2b3e6c1fULL, 
 	  0x1f83d9abfb41bd6bULL, 0x5be0cd19137e2179ULL
 	};
 
-	memcpy(ctx->state, H0, sizeof(H0));
+	mutils_memcpy(ctx->state, H0, sizeof(H0));
 
 	/* Initialize bit count */
 	ctx->bitcount_low = ctx->bitcount_high = 0;
@@ -174,13 +160,13 @@ void sha512_init(struct sha512_sha384_ctx *ctx)
 void sha384_init(struct sha512_sha384_ctx *ctx)
 {
   /* Initial values */
-	static const word64 H0[_SHA512_SHA384_STATE_LENGTH] = {
+	static __const mutils_word64 H0[_SHA512_SHA384_STATE_LENGTH] = {
 	  0xcbbb9d5dc1059ed8ULL, 0x629a292a367cd507ULL, 0x9159015a3070dd17ULL,
 	  0x152fecd8f70e5939ULL, 0x67332667ffc00b31ULL, 0x8eb44a8768581511ULL,
 	  0xdb0c2e0d64f98fa7ULL, 0x47b5481dbefa4fa4ULL,
 	};
 
-	memcpy(ctx->state, H0, sizeof(H0));
+	mutils_memcpy(ctx->state, H0, sizeof(H0));
 
 	/* Initialize bit count */
 	ctx->bitcount_low = ctx->bitcount_high = 0;
@@ -196,12 +182,12 @@ void sha384_init(struct sha512_sha384_ctx *ctx)
 
    Note that this function destroys the data area */
 
-static void sha512_sha384_transform(word64 * state, word64 * data)
+static void sha512_sha384_transform(mutils_word64 * state, mutils_word64 * data)
 {
-	word64 A, B, C, D, E, F, G, H;	/* Local vars */
-	unsigned i;
-	const word64 *k;
-	word64 *d;
+	mutils_word64 A, B, C, D, E, F, G, H;	/* Local vars */
+	mutils_word8 i;
+	__const mutils_word64 *k;
+	mutils_word64 *d;
 
 	/* Set up first buffer and local data buffer */
 	A = state[0];
@@ -258,40 +244,49 @@ static void sha512_sha384_transform(word64 * state, word64 * data)
 }
 
 static void 
-sha512_sha384_block(struct sha512_sha384_ctx *ctx, const byte * block)
+sha512_sha384_block(struct sha512_sha384_ctx *ctx, __const mutils_word8 * block)
 {
-	word64 data[SHA512_SHA384_DATA_LENGTH];
-	int i;
+	mutils_word64 data[SHA512_SHA384_DATA_LENGTH];
+	mutils_word32 i;
 
 	/* Update bit counter */
 	if ((ctx->bitcount_low += 1024) < 1024)
-	  ctx->bitcount_high++;
+	{
+		ctx->bitcount_high++;
+	}
 
 	/* Endian independent conversion */
 	for (i = 0; i < SHA512_SHA384_DATA_LENGTH; i++, block += 8)
+	{
 		data[i] = STRING2INT64(block);
+	}
 
 	sha512_sha384_transform(ctx->state, data);
 }
 
 void
-sha512_sha384_update(struct sha512_sha384_ctx *ctx, const byte * buffer, 
-		     unsigned length)
+sha512_sha384_update(struct sha512_sha384_ctx *ctx, __const mutils_word8 * buffer, 
+		     mutils_word32 length)
 {
-	if (ctx->index) {	/* Try to fill partial block */
-		unsigned left = SHA512_SHA384_DATA_SIZE - ctx->index;
-		if (length < left) {
-			memcpy(ctx->block + ctx->index, buffer, length);
+	mutils_word32 left;
+
+	if (ctx->index)
+	{	/* Try to fill partial block */
+		left = SHA512_SHA384_DATA_SIZE - ctx->index;
+		if (length < left)
+		{
+			mutils_memcpy(ctx->block + ctx->index, buffer, length);
 			ctx->index += length;
 			return;	/* Finished */
 		} else {
-			memcpy(ctx->block + ctx->index, buffer, left);
+			mutils_memcpy(ctx->block + ctx->index, buffer, left);
 			sha512_sha384_block(ctx, ctx->block);
 			buffer += left;
 			length -= left;
 		}
 	}
-	while (length >= SHA512_SHA384_DATA_SIZE) {
+	while (length >= SHA512_SHA384_DATA_SIZE)
+	{
 		sha512_sha384_block(ctx, buffer);
 		buffer += SHA512_SHA384_DATA_SIZE;
 		length -= SHA512_SHA384_DATA_SIZE;
@@ -300,7 +295,7 @@ sha512_sha384_update(struct sha512_sha384_ctx *ctx, const byte * buffer,
 /* NOTE: The corresponding sha1 code checks for the special case length == 0.
  * That seems supoptimal, as I suspect it increases the number of branches. */
 
-	memcpy(ctx->block, buffer, length);
+	mutils_memcpy(ctx->block, buffer, length);
 	ctx->index = length;
 }
 
@@ -309,9 +304,9 @@ sha512_sha384_update(struct sha512_sha384_ctx *ctx, const byte * buffer,
 
 void sha512_sha384_final(struct sha512_sha384_ctx *ctx)
 {
-	word64 data[SHA512_SHA384_DATA_LENGTH];
-	int i;
-	int words;
+	mutils_word64 data[SHA512_SHA384_DATA_LENGTH];
+	mutils_word32 i;
+	mutils_word32 words;
 
 	i = ctx->index;
 
@@ -343,40 +338,41 @@ void sha512_sha384_final(struct sha512_sha384_ctx *ctx)
 			data[i] = 0;
 
 	if ((ctx->bitcount_low += 8 * ctx->index) < 8 * ctx->index)
-	  ctx->bitcount_high++;
-	data[SHA512_SHA384_DATA_LENGTH - 2] =
-	  ctx->bitcount_high;
-	data[SHA512_SHA384_DATA_LENGTH - 1] =
-	  ctx->bitcount_low;
+		ctx->bitcount_high++;
+	data[SHA512_SHA384_DATA_LENGTH - 2] = ctx->bitcount_high;
+	data[SHA512_SHA384_DATA_LENGTH - 1] = ctx->bitcount_low;
 	sha512_sha384_transform(ctx->state, data);
 }
 
 static void 
-sha512_sha384_digest(const struct sha512_sha384_ctx *ctx, byte * s, int len)
+sha512_sha384_digest(__const struct sha512_sha384_ctx *ctx, mutils_word8 * s, mutils_word32 len)
 {
-  int i;
+	mutils_word32 i;
 
-  if (s!=NULL)
-    for (i = 0; i < len; i++) {
-      *s++ = ctx->state[i] >> 56;
-      *s++ = 0xff & (ctx->state[i] >> 48);
-      *s++ = 0xff & (ctx->state[i] >> 40);
-      *s++ = 0xff & (ctx->state[i] >> 32);
-      *s++ = 0xff & (ctx->state[i] >> 24);
-      *s++ = 0xff & (ctx->state[i] >> 16);
-      *s++ = 0xff & (ctx->state[i] >> 8);
-      *s++ = 0xff & ctx->state[i];
-    }
+	if (s != NULL)
+        {
+		for (i = 0; i < len; i++)
+		{
+			*s++ = ctx->state[i] >> 56;
+			*s++ = 0xff & (ctx->state[i] >> 48);
+			*s++ = 0xff & (ctx->state[i] >> 40);
+			*s++ = 0xff & (ctx->state[i] >> 32);
+			*s++ = 0xff & (ctx->state[i] >> 24);
+			*s++ = 0xff & (ctx->state[i] >> 16);
+			*s++ = 0xff & (ctx->state[i] >> 8);
+			*s++ = 0xff & ctx->state[i];
+		}
+	}
 }
 
-void sha512_digest(const struct sha512_sha384_ctx *ctx, byte * s)
+void sha512_digest(__const struct sha512_sha384_ctx *ctx, mutils_word8 * s)
 {
-  sha512_sha384_digest(ctx, s, SHA512_DIGEST_SIZE / 8);
+	sha512_sha384_digest(ctx, s, SHA512_DIGEST_SIZE / 8);
 }
 
-void sha384_digest(const struct sha512_sha384_ctx *ctx, byte * s)
+void sha384_digest(__const struct sha512_sha384_ctx *ctx, mutils_word8 * s)
 {
-  sha512_sha384_digest(ctx, s, SHA384_DIGEST_SIZE / 8);
+	sha512_sha384_digest(ctx, s, SHA384_DIGEST_SIZE / 8);
 }
 
 #endif /* ENABLE_SHA512_SHA384 */

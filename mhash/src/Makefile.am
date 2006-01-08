@@ -1,5 +1,7 @@
 ## Process this file with automake to produce Makefile.in
 
+AM_CPPFLAGS = -I../include
+
 EXTRA_DIST = hash_test.sh 
 
 TESTS = hash_test.sh hmac_test keygen_test rest_test frag_test

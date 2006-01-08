@@ -1,5 +1,5 @@
 #AUTOMAKE_OPTIONS = foreign
-SUBDIRS = lib doc src
+SUBDIRS = include lib doc src
 EXTRA_DIST = mhash.spec.in mhash.spec
 
 ChangeLog:

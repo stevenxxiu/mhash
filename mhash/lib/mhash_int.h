@@ -1,81 +1,5 @@
-
-#include <libdefs.h>
-
-char* mystrdup(char*);
-
-enum hashid {
-	MHASH_CRC32,
-	MHASH_MD5,
-	MHASH_SHA1,
-	MHASH_HAVAL256,
-	MHASH_RIPEMD160 = 5,
-	MHASH_TIGER = 7,
-	MHASH_GOST,
-	MHASH_CRC32B,
-	MHASH_HAVAL224=10,
-	MHASH_HAVAL192,
-	MHASH_HAVAL160,
-	MHASH_HAVAL128,
-	MHASH_TIGER128,
-	MHASH_TIGER160,
-	MHASH_MD4,
-	MHASH_SHA256,
-	MHASH_ADLER32,
-	MHASH_SHA224,
-	MHASH_SHA512,
-	MHASH_SHA384,
-	MHASH_WHIRLPOOL,
-	MHASH_RIPEMD128,
-	MHASH_RIPEMD256,
-	MHASH_RIPEMD320,
-	MHASH_SNEFRU128,
-	MHASH_SNEFRU256,
-	MHASH_MD2,
-};
-
-enum keygenid {
-	KEYGEN_MCRYPT,		/* The key generator used in mcrypt */
-	KEYGEN_ASIS,		/* Just returns the password as binary key */
-	KEYGEN_HEX,		/* Just converts a hex key into a binary one */
-	KEYGEN_PKDES,		/* The transformation used in Phil Karn's DES
-				 * encryption program */
-	KEYGEN_S2K_SIMPLE,	/* The OpenPGP (rfc2440) Simple S2K */
-	KEYGEN_S2K_SALTED,	/* The OpenPGP Salted S2K */
-	KEYGEN_S2K_ISALTED	/* The OpenPGP Iterated Salted S2K */
-};
-
-typedef enum hashid hashid;
-typedef enum keygenid keygenid;
-
-typedef struct keygen {
-	hashid 		hash_algorithm[2];
-	unsigned int 	count;
-	void*		salt;
-	int		salt_size;
-} KEYGEN;
-
-typedef void (*INIT_FUNC)( void*);
-typedef void (*HASH_FUNC)(void*, const void*, int);
-typedef void (*FINAL_FUNC)(void*);
-typedef void (*DEINIT_FUNC)(void*, unsigned char*);
-
-typedef struct {
-	size_t hmac_key_size;
-	int hmac_block;
-	unsigned char *hmac_key;
-
-	word8 *state;
-	size_t state_size;
-	hashid algorithm_given;
-
-	HASH_FUNC hash_func;
-	FINAL_FUNC final_func;
-	DEINIT_FUNC deinit_func;
-	                        
-} MHASH_INSTANCE;
-
-typedef MHASH_INSTANCE * MHASH;
-
+#if !defined(__MHASH_INT)
+#define __MHASH_INT
 
 typedef struct mhash_hash_entry mhash_hash_entry;
 
@@ -83,9 +7,9 @@ typedef struct mhash_hash_entry mhash_hash_entry;
 
 /* information prototypes */
 
-size_t mhash_count(void);
-size_t mhash_get_block_size(hashid type);
-char *mhash_get_hash_name(hashid type);
+mutils_word32 mhash_count(void);
+mutils_word32 mhash_get_block_size(hashid type);
+mutils_word8 *mhash_get_hash_name(hashid type);
 
 /* initializing prototypes */
 
@@ -94,29 +18,37 @@ MHASH mhash_init_int(hashid type);
 
 /* update prototype */
 
-int mhash(MHASH thread, const void *plaintext, size_t size);
+mutils_boolean mhash(MHASH thread, __const void *plaintext, mutils_word32 size);
 
 /* finalizing prototype */
 
 void *mhash_end(MHASH thread);
 
-size_t mhash_get_hash_pblock(hashid type);
-MHASH hmac_mhash_init(const hashid type, void *key, int keysize,
-		      int block);
+mutils_word32 mhash_get_hash_pblock(hashid type);
+
+MHASH hmac_mhash_init(__const hashid type, void *key, mutils_word32 keysize,
+		      mutils_word32 block);
+
 void *hmac_mhash_end(MHASH thread);
 
 /* Key generation functions */
-int mhash_keygen(keygenid algorithm, hashid opt_algorithm,
-		 unsigned long count, void *keyword, int keysize,
-		 void *salt, int saltsize, unsigned char *password,
-		 int passwordlen);
-int mhash_keygen_ext(keygenid algorithm, KEYGEN data,
-	 void *keyword, int keysize,
-	 unsigned char *password, int passwordlen);
 
-char *mhash_get_keygen_name(hashid type);
-size_t mhash_get_keygen_salt_size(keygenid type);
-size_t mhash_keygen_count(void);
-int mhash_keygen_uses_salt(keygenid type);
-int mhash_keygen_uses_count(keygenid type);
-int mhash_keygen_uses_hash_algorithm(keygenid type);
+mutils_error mhash_keygen(keygenid algorithm, hashid opt_algorithm,
+			  mutils_word64 count,
+			  void *keyword, mutils_word32 keysize,
+			  void *salt, mutils_word32 saltsize,
+			  mutils_word8 *password, mutils_word32 passwordlen);
+
+mutils_error mhash_keygen_ext(keygenid algorithm, KEYGEN data,
+			      void *keyword, mutils_word32 keysize,
+			      mutils_word8 *password, mutils_word32 passwordlen);
+
+mutils_word8 *mhash_get_keygen_name(hashid type);
+mutils_word32 mhash_get_keygen_salt_size(keygenid type);
+mutils_word32 mhash_keygen_count(void);
+mutils_boolean mhash_keygen_uses_salt(keygenid type);
+mutils_boolean mhash_keygen_uses_count(keygenid type);
+mutils_boolean mhash_keygen_uses_hash_algorithm(keygenid type);
+
+#endif
+

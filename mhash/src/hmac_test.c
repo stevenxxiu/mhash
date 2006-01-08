@@ -19,10 +19,7 @@
  */
 
 
-
-#include "../lib/mhash.h"
-#include <stdio.h>
-#include <stdlib.h>
+#include <mhash.h>
 
 #define KEY1 "Jefe"
 #define DATA1 "what do ya want for nothing?"
@@ -35,90 +32,86 @@
 int main()
 {
 
-	char tmp[128];
-	char tmp2[3];
-	char *password;
-	int passlen;
-	char *data;
-	int datalen;
+	mutils_word8 *tmp;
+	mutils_word8 *password;
+	mutils_word32 passlen;
+	mutils_word8 *data;
+	mutils_word32 datalen;
 	MHASH td;
-	unsigned char *mac;
-	int j;
+	mutils_word8 *mac;
+	mutils_word32 j;
+	int result;
 
-	memset(tmp, 0, sizeof(tmp));
+	mutils_bzero(tmp, sizeof(tmp));
 
 	passlen=sizeof(KEY1) - 1;
-	password = malloc(passlen+1);
-	memcpy(password, KEY1, passlen);
-	
-	datalen=strlen(DATA1);
-	data=malloc(datalen+1);
-	strcpy(data, DATA1);
+	password = mutils_malloc(passlen + 1);
+	mutils_memcpy(password, (mutils_word8 *) KEY1, passlen);
 
-	td =
-	    mhash_hmac_init(MHASH_MD5, password, passlen,
+	datalen = mutils_strlen((mutils_word8 *) DATA1);
+	data = mutils_malloc(datalen+1);
+	mutils_strcpy(data, (mutils_word8 *) DATA1);
+
+	td = mhash_hmac_init(MHASH_MD5, password, passlen,
 			    mhash_get_hash_pblock(MHASH_MD5));
 
 	mhash(td, data, datalen);
 	mac = mhash_hmac_end(td);
 
-	tmp2[2]='\0';
+	tmp = mutils_asciify(mac, mhash_get_block_size(MHASH_MD5));
 	
-	for (j = 0; j < mhash_get_block_size(MHASH_MD5); j++) {
-		sprintf(tmp2, "%.2x", mac[j]);
-		strcat(tmp, tmp2);
-	}
+	result = mutils_strcmp((mutils_word8 *) DIGEST1, tmp);
 
-	if (strcmp(DIGEST1, tmp)!=0) {
+	mutils_free(password);
+	mutils_free(data);
+
+	if (result != 0) {
 		fprintf(stderr, "HMAC-Test: Failed\n");
-		fprintf(stderr, "Expecting: 0x%s\nGot: 0x%s\n", DIGEST1, tmp);
-		free(password);
-		free(data);
-		return 1;
+		fprintf(stderr, "Digest size: %d\n", mhash_get_block_size(MHASH_MD5));
+		result = strlen(DIGEST1);
+		fprintf(stderr, "Expecting: 0x%s of length %d\n", DIGEST1, result);
+		result = strlen(tmp);
+		fprintf(stderr, "Got: 0x%s of length %d\n", tmp, result);
+		return(MUTILS_INVALID_RESULT);
 	}
 
-		free(password);
-		free(data);
-	
-	/* Test No 2 */	
+	mutils_free(tmp);
 
-	memset( tmp, 0, sizeof(tmp));
+	/* Test No 2 */	
+	
+	mutils_memset(tmp, 0, sizeof(tmp));
 	
 	passlen=sizeof(KEY2) - 1;
-	password = malloc(passlen+1);
-	memcpy(password, KEY2, passlen);
+	password = (mutils_word8 *) mutils_malloc(passlen+1);
+	mutils_memcpy(password, KEY2, passlen);
 	
-	datalen=strlen(DATA2);
-	data=malloc(datalen+1);
-	strcpy(data, DATA2);
+	datalen = mutils_strlen((mutils_word8 *) DATA2);
+	data = (mutils_word8 *) mutils_malloc(datalen+1);
+	mutils_strcpy(data, (mutils_word8 *) DATA2);
 
-	td =
-	    mhash_hmac_init(MHASH_MD5, password, passlen,
+	td = mhash_hmac_init(MHASH_MD5, password, passlen,
 			    mhash_get_hash_pblock(MHASH_MD5));
 
 	mhash(td, data, datalen);
 	mac = mhash_hmac_end(td);
 
-	tmp2[2]='\0';
+	tmp = mutils_asciify(mac, mhash_get_block_size(MHASH_MD5));
 	
-	for (j = 0; j < mhash_get_block_size(MHASH_MD5); j++) {
-		sprintf(tmp2, "%.2x", mac[j]);
-		strcat(tmp, tmp2);
-	}
+	result = mutils_strcmp((mutils_word8 *) DIGEST2, tmp);
 
-	if (strcmp(DIGEST2, tmp)!=0) {
+	mutils_free(password);
+	mutils_free(data);
+
+	if (result != 0)
+	{
 		fprintf(stderr, "HMAC-Test: Failed\n");
 		fprintf(stderr, "Expecting: 0x%s\nGot: 0x%s\n", DIGEST2, tmp);
-		free(password);
-		free(data);
-		return 1;
+		return(MUTILS_INVALID_RESULT);
 	}
-
-
-	free(password);
-	free(data);
 
 	fprintf(stderr, "MD5 HMAC-Test: Ok\n");
 
-	return 0;
+	mutils_free(tmp);
+
+	return(MUTILS_OK);
 }

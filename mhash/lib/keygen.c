@@ -20,24 +20,24 @@
 
 
 
-#include "libdefs.h"
-#include "mhash_int.h"
-#include "keygen.h"
+#include <libdefs.h>
+#include <mhash_int.h>
+#include <keygen.h>
 
 #define KEYGEN_ENTRY(name, uses_hash_algorithm, uses_count, uses_salt, salt_size, max_key_size) \
-        { #name, name, uses_hash_algorithm, uses_count, uses_salt, salt_size, max_key_size }
+        { (mutils_word8 *) #name, name, uses_hash_algorithm, uses_count, uses_salt, salt_size, max_key_size }
 
 typedef struct mhash_keygen_entry {
-	char *name;
+	mutils_word8 *name;
 	keygenid id;
-	int uses_hash_algorithm;
-	int uses_count;
-	int uses_salt;
-	size_t salt_size;
-	size_t max_key_size;
+	mutils_boolean uses_hash_algorithm;
+	mutils_boolean uses_count;
+	mutils_boolean uses_salt;
+	mutils_word32 salt_size;
+	mutils_word32 max_key_size;
 } mhash_keygen_entry;
 
-static const mhash_keygen_entry keygen_algorithms[] = {
+static __const mhash_keygen_entry keygen_algorithms[] = {
 	KEYGEN_ENTRY(KEYGEN_ASIS, 0, 0, 0, 0, 0),
 	KEYGEN_ENTRY(KEYGEN_PKDES, 0, 0, 0, 0, 0),
 	KEYGEN_ENTRY(KEYGEN_HEX, 0, 0, 0, 0, 0),
@@ -49,36 +49,34 @@ static const mhash_keygen_entry keygen_algorithms[] = {
 };
 
 #define KEYGEN_LOOP(b) \
-        const mhash_keygen_entry *p; \
-                for(p = keygen_algorithms; p->name != NULL; p++) { b ; }
+        __const mhash_keygen_entry *p; \
+                for (p = keygen_algorithms; p->name != NULL; p++) { b ; }
 
 #define KEYGEN_ALG_LOOP(a) \
-                        KEYGEN_LOOP( if(p->id == type) { a; break; } )
+                        KEYGEN_LOOP(if (p->id == type) { a; break; } )
 
 WIN32DLL_DEFINE
-int mhash_keygen_uses_hash_algorithm(keygenid type)
+mutils_boolean mhash_keygen_uses_hash_algorithm(keygenid type)
 {
-	int ret = 0;
+	mutils_boolean ret = MUTILS_FALSE;
 	KEYGEN_ALG_LOOP(ret = p->uses_hash_algorithm);
-	return ret;
+	return(ret);
 }
 
-
 WIN32DLL_DEFINE
-int mhash_keygen_uses_count(keygenid type)
+mutils_boolean mhash_keygen_uses_count(keygenid type)
 {
-	int ret = 0;
+	mutils_boolean ret = MUTILS_FALSE;
 	KEYGEN_ALG_LOOP(ret = p->uses_count);
-	return ret;
+	return(ret);
 }
 
-
 WIN32DLL_DEFINE
-int mhash_keygen_uses_salt(keygenid type)
+mutils_boolean mhash_keygen_uses_salt(keygenid type)
 {
-	int ret = 0;
+	mutils_boolean ret = MUTILS_FALSE;
 	KEYGEN_ALG_LOOP(ret = p->uses_salt);
-	return ret;
+	return(ret);
 }
 
 #ifndef MMAX
@@ -86,155 +84,170 @@ int mhash_keygen_uses_salt(keygenid type)
 #endif
 
 WIN32DLL_DEFINE
-size_t mhash_keygen_count(void)
+mutils_word32 mhash_keygen_count(void)
 {
 	keygenid count = 0;
 
 	KEYGEN_LOOP(count = MMAX(p->id, count) );
 
-	return count;
+	return(count);
 }
 
 WIN32DLL_DEFINE
-size_t mhash_get_keygen_salt_size(keygenid type)
+mutils_word32 mhash_get_keygen_salt_size(keygenid type)
 {
-	size_t ret = 0;
+	mutils_word32 ret = 0;
 
 	KEYGEN_ALG_LOOP(ret = p->salt_size);
-	return ret;
+
+	return(ret);
 }
 
 WIN32DLL_DEFINE
-size_t mhash_get_keygen_max_key_size(keygenid type)
+mutils_word32 mhash_get_keygen_max_key_size(keygenid type)
 {
-	size_t ret = 0;
+	mutils_word32 ret = 0;
 
 	KEYGEN_ALG_LOOP(ret = p->max_key_size);
-	return ret;
+
+	return(ret);
 }
 
 WIN32DLL_DEFINE
-char *mhash_get_keygen_name(hashid type)
+mutils_word8 *mhash_get_keygen_name(hashid type)
 {
-	char *ret = NULL;
+	mutils_word8 *ret = NULL;
 
 	/* avoid prefix */
-	KEYGEN_ALG_LOOP(ret = p->name);
-	if ( ret!=NULL) ret += sizeof("KEYGEN_") - 1;
 
-	return mystrdup(ret);
+	KEYGEN_ALG_LOOP(ret = p->name);
+
+	if (ret != NULL)
+		ret += sizeof("KEYGEN_") - 1;
+
+	return(mutils_strdup(ret));
 }
 
 WIN32DLL_DEFINE
-const char *mhash_get_keygen_name_static(hashid type)
+__const mutils_word8 *mhash_get_keygen_name_static(hashid type)
 {
-	char *ret = NULL;
+	mutils_word8 *ret = NULL;
 
 	/* avoid prefix */
-	KEYGEN_ALG_LOOP(ret = p->name);
-	if (ret!=NULL) ret += sizeof("KEYGEN_") - 1;
 
-	return ret;
+	KEYGEN_ALG_LOOP(ret = p->name);
+
+	if (ret != NULL)
+		ret += sizeof("KEYGEN_") - 1;
+
+	return(ret);
 }
 
 
 WIN32DLL_DEFINE
-int mhash_keygen(keygenid algorithm, hashid opt_algorithm,
-		 unsigned long count, void *keyword, int keysize,
-		 void *salt, int saltsize, unsigned char *password,
-		 int passwordlen)
+mutils_error mhash_keygen(keygenid algorithm, hashid opt_algorithm,
+			  mutils_word64 count,
+			  void *keyword, mutils_word32 keysize,
+			  void *salt, mutils_word32 saltsize,
+			  mutils_word8 *password, mutils_word32 passwordlen)
 {
-int x;
+	mutils_error x;
 
 	switch (algorithm) {
 
 	case KEYGEN_MCRYPT:
-		x=_mhash_gen_key_mcrypt(opt_algorithm, keyword, keysize,
-				      salt, saltsize, password,
-				      passwordlen);
+		x=_mhash_gen_key_mcrypt(opt_algorithm,
+					keyword, keysize,
+					salt, saltsize,
+					password, passwordlen);
 		break;
 	case KEYGEN_ASIS:
-		x=_mhash_gen_key_asis(keyword, keysize, password,
-				    passwordlen);
+		x=_mhash_gen_key_asis(keyword, keysize,
+				      password, passwordlen);
 		break;
 	case KEYGEN_PKDES:
-		x=_mhash_gen_key_pkdes(keyword, keysize, password,
-				    passwordlen);
+		x=_mhash_gen_key_pkdes(keyword, keysize,
+				       password, passwordlen);
 		break;
 	case KEYGEN_HEX:
-		x=_mhash_gen_key_hex(keyword, keysize, password,
-				   passwordlen);
+		x=_mhash_gen_key_hex(keyword, keysize,
+				     password, passwordlen);
 		break;
 	case KEYGEN_S2K_SIMPLE:
-		x=_mhash_gen_key_s2k_simple(opt_algorithm, keyword, keysize,
-					  password, passwordlen);
+		x=_mhash_gen_key_s2k_simple(opt_algorithm,
+					    keyword, keysize,
+					    password, passwordlen);
 		break;
 	case KEYGEN_S2K_SALTED:
-		x=_mhash_gen_key_s2k_salted(opt_algorithm, keyword, keysize,
-					  salt, saltsize, password,
-					  passwordlen);
+		x=_mhash_gen_key_s2k_salted(opt_algorithm,
+					    keyword, keysize,
+					    salt, saltsize,
+					    password, passwordlen);
 		break;
 	case KEYGEN_S2K_ISALTED:
-		x=_mhash_gen_key_s2k_isalted(opt_algorithm, count, keyword,
-					   keysize, salt, saltsize,
-					   password, passwordlen);
+		x=_mhash_gen_key_s2k_isalted(opt_algorithm, count,
+					     keyword, keysize,
+					     salt, saltsize,
+					     password, passwordlen);
 		break;
 	default:
-		return -1;
+		return(-MUTILS_INVALID_FUNCTION);
 	}
 
-	return x;
+	return(x);
 }
 
-
-
 WIN32DLL_DEFINE
-int mhash_keygen_ext(keygenid algorithm, KEYGEN data,
-		 void *keyword, int keysize,
-		 unsigned char *password, int passwordlen)
+mutils_error mhash_keygen_ext(keygenid algorithm, KEYGEN data,
+			      void *keyword, mutils_word32 keysize,
+			      mutils_word8 *password, mutils_word32 passwordlen)
 {
-int x;
-hashid opt_algorithm = data.hash_algorithm[0];
-unsigned int count = data.count;
-void* salt = data.salt;
-int saltsize= data.salt_size;
+	mutils_error x;
+	hashid opt_algorithm = data.hash_algorithm[0];
+	mutils_word64 count = data.count;
+	void *salt = data.salt;
+	mutils_word32 saltsize = data.salt_size;
 
 	switch (algorithm) {
 
 	case KEYGEN_MCRYPT:
-		x=_mhash_gen_key_mcrypt(opt_algorithm, keyword, keysize,
-				      salt, saltsize, password,
-				      passwordlen);
+		x=_mhash_gen_key_mcrypt(opt_algorithm,
+					keyword, keysize,
+					salt, saltsize,
+					password, passwordlen);
 		break;
 	case KEYGEN_ASIS:
-		x=_mhash_gen_key_asis(keyword, keysize, password,
-				    passwordlen);
+		x=_mhash_gen_key_asis(keyword, keysize,
+				      password, passwordlen);
 		break;
 	case KEYGEN_PKDES:
-		x=_mhash_gen_key_pkdes(keyword, keysize, password,
-				    passwordlen);
+		x=_mhash_gen_key_pkdes(keyword, keysize,
+				       password, passwordlen);
 		break;
 	case KEYGEN_HEX:
-		x=_mhash_gen_key_hex(keyword, keysize, password,
-				   passwordlen);
+		x=_mhash_gen_key_hex(keyword, keysize,
+				     password, passwordlen);
 		break;
 	case KEYGEN_S2K_SIMPLE:
-		x=_mhash_gen_key_s2k_simple(opt_algorithm, keyword, keysize,
-					  password, passwordlen);
+		x=_mhash_gen_key_s2k_simple(opt_algorithm,
+					    keyword, keysize,
+					    password, passwordlen);
 		break;
 	case KEYGEN_S2K_SALTED:
-		x=_mhash_gen_key_s2k_salted(opt_algorithm, keyword, keysize,
-					  salt, saltsize, password,
-					  passwordlen);
+		x=_mhash_gen_key_s2k_salted(opt_algorithm,
+					    keyword, keysize,
+					    salt, saltsize,
+					    password, passwordlen);
 		break;
 	case KEYGEN_S2K_ISALTED:
-		x=_mhash_gen_key_s2k_isalted(opt_algorithm, count, keyword,
-					   keysize, salt, saltsize,
-					   password, passwordlen);
+		x=_mhash_gen_key_s2k_isalted(opt_algorithm, count,
+					     keyword, keysize,
+					     salt, saltsize,
+					     password, passwordlen);
 		break;
 	default:
-		return -1;
+		return(-MUTILS_INVALID_FUNCTION);
 	}
 
-	return x;
+	return(x);
 }

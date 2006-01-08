@@ -51,7 +51,7 @@
 
 #include "mhash_md2.h"
 
-static const byte
+static __const mutils_word8
 S[256] = {
   41, 46, 67, 201, 162, 216, 124, 1, 61, 54, 84, 161, 236, 240, 6,
   19, 98, 167, 5, 243, 192, 199, 115, 140, 152, 147, 43, 217, 188,
@@ -74,92 +74,79 @@ S[256] = {
 };
 
 static void
-md2_transform(struct md2_ctx *ctx, const byte *data)
+md2_transform(struct md2_ctx *ctx, __const mutils_word8 *data)
 {
-  unsigned i;
-  byte t;
+	mutils_word8 i;
+	mutils_word8 j;
+	mutils_word8 t;
   
-  memcpy(ctx->X + 16, data, MD2_DATA_SIZE);
+	mutils_memcpy(ctx->X + 16, data, MD2_DATA_SIZE);
 
-  for (i = 0, t = ctx->C[15];
-       i<MD2_DATA_SIZE; i++)
-    {
-      ctx->X[2 * MD2_DATA_SIZE + i]
-	= ctx->X[i] ^ ctx->X[MD2_DATA_SIZE + i];
-      t = (ctx->C[i] ^= S[data[i]^t]);
-    }
-  for (i = t = 0;
-       i< MD2_DATA_SIZE + 2;
-       t = (t + i) & 0xff, i++)
-    {
-      unsigned j;
-      for (j = 0; j < 3 * MD2_DATA_SIZE; j++)
-	t = (ctx->X[j] ^= S[t]);
-    }
+	for (i = 0, t = ctx->C[15]; i<MD2_DATA_SIZE; i++)
+	{
+		ctx->X[2 * MD2_DATA_SIZE + i]
+		  = ctx->X[i] ^ ctx->X[MD2_DATA_SIZE + i];
+		t = (ctx->C[i] ^= S[data[i]^t]);
+	}
+	for (i = t = 0; i< MD2_DATA_SIZE + 2; t = (t + i) & 0xff, i++)
+	{
+		for (j = 0; j < 3 * MD2_DATA_SIZE; j++)
+			t = (ctx->X[j] ^= S[t]);
+	}
 }
-
-#if 0
-static void
-md2_final(struct md2_ctx *ctx)
-{
-  unsigned left = MD2_DATA_SIZE - ctx->index;
-  memset(ctx->buffer + ctx->index, left, left);
-  md2_transform(ctx, ctx->buffer);
-}
-#endif
 
 void
 md2_init(struct md2_ctx *ctx)
 {
-  memset(ctx, 0, sizeof(*ctx));
+	mutils_bzero(ctx, sizeof(*ctx));
 }
 
 void
 md2_update(struct md2_ctx *ctx,
-	   const byte *data,
-	   int length)
+	   __const mutils_word8 *data,
+	   mutils_word32 length)
 {
-  if (ctx->index)
-    {
-      /* Try to fill partial block */
-      unsigned left = MD2_DATA_SIZE - ctx->index;
-      if (length < left)
+	if (ctx->index)
 	{
-	  memcpy(ctx->buffer + ctx->index, data, length);
-	  ctx->index += length;
-	  return; /* Finished */
+		/* Try to fill partial block */
+		mutils_word32 left = MD2_DATA_SIZE - ctx->index;
+		if (length < left)
+		{
+			mutils_memcpy(ctx->buffer + ctx->index, data, length);
+			ctx->index += length;
+			return; /* Finished */
+		}
+		else
+		{
+			mutils_memcpy(ctx->buffer + ctx->index, data, left);
+			md2_transform(ctx, ctx->buffer);
+			data += left;
+			length -= left;
+		}
 	}
-      else
+	while (length >= MD2_DATA_SIZE)
 	{
-	  memcpy(ctx->buffer + ctx->index, data, left);
-	  md2_transform(ctx, ctx->buffer);
-	  data += left;
-	  length -= left;
+		md2_transform(ctx, data);
+		data += MD2_DATA_SIZE;
+		length -= MD2_DATA_SIZE;
 	}
-    }
-  while (length >= MD2_DATA_SIZE)
-    {
-      md2_transform(ctx, data);
-      data += MD2_DATA_SIZE;
-      length -= MD2_DATA_SIZE;
-    }
-  if ((ctx->index = length))     /* This assignment is intended */
-    /* Buffer leftovers */
-    memcpy(ctx->buffer, data, length);
+	if ((ctx->index = length))     /* This assignment is intended */
+		/* Buffer leftovers */
+		mutils_memcpy(ctx->buffer, data, length);
 }
 
 void
-md2_digest(struct md2_ctx *ctx, byte *digest)
+md2_digest(struct md2_ctx *ctx, mutils_word8 *digest)
 {
-  byte left;
+	mutils_word8 left;
   
-  left = MD2_DATA_SIZE - ctx->index;
-  memset(ctx->buffer + ctx->index, left, left);
-  md2_transform(ctx, ctx->buffer);
+	left = MD2_DATA_SIZE - ctx->index;
+	mutils_memset(ctx->buffer + ctx->index, left, left);
+	md2_transform(ctx, ctx->buffer);
   
-  md2_transform(ctx, ctx->C);
-  memcpy(digest, ctx->X, MD2_DIGEST_SIZE);
-  md2_init(ctx);
+	md2_transform(ctx, ctx->C);
+	mutils_memcpy(digest, ctx->X, MD2_DIGEST_SIZE);
+	md2_init(ctx);
 }
 
 #endif /* ENABLE_MD2 */

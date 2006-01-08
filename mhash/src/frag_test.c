@@ -35,96 +35,100 @@
  * properly.
  */
 
-#include <string.h>
-#include <assert.h>
-#include <stdio.h>
-#include "../lib/mhash.h"
-
+#include <mhash.h>
 
 #define MAX_DIGEST_SIZE 256
 #define MAX_INPUT_SIZE 256
 
-
 int frag_test(hashid hashid)
 {
-  unsigned char digest1[MAX_DIGEST_SIZE]; /* enough space to hold digests */
-  unsigned char digest2[MAX_DIGEST_SIZE];
-  unsigned char buf1[MAX_INPUT_SIZE + 1];
-  unsigned char buf2[MAX_INPUT_SIZE];
-  MHASH td1, td2;
-  size_t input_size, digest_size;
-  int i, offs, left;
-  unsigned char val = 0;
+	mutils_word8 digest1[MAX_DIGEST_SIZE]; /* enough space to hold digests */
+	mutils_word8 digest2[MAX_DIGEST_SIZE];
+	mutils_word8 buf1[MAX_INPUT_SIZE + 1];
+	mutils_word8 buf2[MAX_INPUT_SIZE];
+	MHASH td1, td2;
+	size_t input_size, double_input, digest_size;
+	mutils_word32 i;
+	mutils_word32 offs;
+	mutils_word32 left;
+	mutils_word8 val = 0;
 
-  input_size = mhash_get_hash_pblock(hashid);
-  assert(input_size <= MAX_INPUT_SIZE);
+	input_size = mhash_get_hash_pblock(hashid);
+	assert(input_size <= MAX_INPUT_SIZE);
 
-  digest_size = mhash_get_block_size(hashid);
-  assert(digest_size <= MAX_DIGEST_SIZE);
+	digest_size = mhash_get_block_size(hashid);
+	assert(digest_size <= MAX_DIGEST_SIZE);
 
-  td1 = mhash_init(hashid);               /* get two mhash instances */
-  td2 = mhash_init(hashid);
+	td1 = mhash_init(hashid);               /* get two mhash instances */
+	td2 = mhash_init(hashid);
 
-  for(i = offs = 0; i < 2 * input_size; i++, val++) /* first part */
-    {
-      memset(buf1, val, input_size + 1);  /* the first instance gets framgments */
-      mhash(td1, buf1, input_size + 1);   /* of size (input_size+1)             */
+	double_input = 2 * input_size;
 
-      left = input_size - offs;           /* the second instance gets fragments */
-      memset(buf2 + offs, val, left);     /* of size input_size                 */
-      mhash(td2, buf2, input_size);
-
-      offs = (input_size + 1) - left;
-      memset(buf2, val, offs);
-      if (offs == input_size)
+	for (i = offs = 0; i < double_input; i++, val++) /* first part */
 	{
-	  mhash(td2, buf2, input_size);
-	  offs = 0;
-	}
-    }
-  mhash(td2, buf2, offs);
+		mutils_memset(buf1, val, input_size + 1);  /* the first instance gets framgments */
+		mhash(td1, buf1, input_size + 1);   /* of size (input_size+1)             */
 
-  for(i = offs = 0; i < 2 * input_size; i++, val++) /* second part */
-    {
-      memset(buf1, val, input_size - 1);  /* the first instance gets framgments */
-      mhash(td1, buf1, input_size - 1);   /* of size (input_size-1)             */
+		left = input_size - offs;           /* the second instance gets fragments */
+		mutils_memset(buf2 + offs, val, left);     /* of size input_size                 */
+		mhash(td2, buf2, input_size);
+
+		offs = (input_size + 1) - left;
+		mutils_memset(buf2, val, offs);
+		if (offs == input_size)
+		{
+			mhash(td2, buf2, input_size);
+			offs = 0;
+		}
+	}
+
+	mhash(td2, buf2, offs);
+
+	for (i = offs = 0; i < 2 * input_size; i++, val++)	/* second part */
+	{
+		mutils_memset(buf1, val, input_size - 1);	/* the first instance gets framgments */
+		mhash(td1, buf1, input_size - 1);		/* of size (input_size-1)             */
       
-      if (offs == 0)                      /* the second instance gets fragments */
-	{                                 /* of size input_size                 */
-	  offs = input_size - 1;
-	  memset(buf2, val, offs);
-	}
-      else
-	{
-	  left = input_size - offs;
-	  memset(buf2 + offs, val, left);
+		if (offs == 0)					/* the second instance gets fragments */
+		{						/* of size input_size                 */
+			offs = input_size - 1;
+			mutils_memset(buf2, val, offs);
+		}
+		else
+		{
+			left = input_size - offs;
+			mutils_memset(buf2 + offs, val, left);
 
-	  mhash(td2, buf2, input_size);
-	  offs = (input_size - 1) - left;
-	  memset(buf2, val, offs);
+			mhash(td2, buf2, input_size);
+			offs = (input_size - 1) - left;
+			mutils_memset(buf2, val, offs);
+		}
 	}
-    }
-  mhash(td2, buf2, offs);
 
-  mhash_deinit(td1, digest1);   /* return 1 if the calculated hash values match */
-  mhash_deinit(td2, digest2);
-  return ! strncmp(digest1, digest2, digest_size);
+	mhash(td2, buf2, offs);
+
+	mhash_deinit(td1, digest1);   /* return 1 if the calculated hash values match */
+	mhash_deinit(td2, digest2);
+
+	return ! mutils_strncmp(digest1, digest2, digest_size);
 }
 
 int main(void)
 {
-  hashid hashid;
-  const char *s;
-  int ok, allok = 1;
+	hashid hashid;
+	const mutils_word8 *s;
+	int ok, allok = 1;
+	mutils_word32 total = mhash_count();
 
-  for(hashid = 0; hashid <= mhash_count(); hashid++)
-    if ((s = mhash_get_hash_name_static(hashid)) &&
-	mhash_get_hash_pblock(hashid))
-    {
-      printf("Checking fragmentation capabilities of %s: ", s); 
-      fflush(stdout);
-      printf((ok = frag_test(hashid)) ? "OK\n" : "Failed\n");
-      allok &= ok;
-    }
-  return allok ? 0 : 1;
+	for (hashid = 0; hashid <= total; hashid++)
+	{
+		if ((s = mhash_get_hash_name_static(hashid)) && mhash_get_hash_pblock(hashid))
+		{
+			printf("Checking fragmentation capabilities of %s: ", s); 
+			fflush(stdout);
+			printf((ok = frag_test(hashid)) ? "OK\n" : "Failed\n");
+			allok &= ok;
+		}
+	}
+	return allok ? 0 : 1;
 }

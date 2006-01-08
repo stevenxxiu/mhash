@@ -1,10 +1,10 @@
 #AUTOMAKE_OPTIONS = foreign
 
-include_HEADERS = mhash.h
+AM_CPPFLAGS = -I../include
 
 lib_LTLIBRARIES = libmhash.la
 
-FRAMEWORK = mhash.c swap.c bzero.c mhash.h mhash_int.h libdefs.h
+FRAMEWORK = mhash.c stdfns.c mhash.h mhash_int.h libdefs.h
 
 KEYGEN = keygen_hex.c keygen_mcrypt.c keygen_asis.c keygen.c keygen_s2k.c \
 		keygen.h

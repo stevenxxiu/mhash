@@ -22,10 +22,10 @@
 #define TIGER160_DIGESTLEN 2 /* 2.5 actually. */
 
 typedef struct tiger_ctx {
-  word64 digest[TIGER_DIGESTLEN];  /* Message digest */ 
-  word64 count;	 /* 64-bit block count */
-  word8 block[TIGER_DATASIZE];     /* RIPEMD data buffer */  
-  unsigned int index;                             /* index into buffer */
+  mutils_word64 digest[TIGER_DIGESTLEN];  /* Message digest */ 
+  mutils_word64 count;	 /* 64-bit block count */
+  mutils_word8 block[TIGER_DATASIZE];     /* RIPEMD data buffer */  
+  mutils_word32 index;                             /* index into buffer */
 } TIGER_CTX;
 
 
@@ -44,22 +44,22 @@ typedef struct tiger_ctx {
 #define TIGER160_DIGESTLEN 5
 
 typedef struct tiger_ctx {
-  word32 digest[TIGER_DIGESTLEN];  /* Message digest */ 
-  word32 count_l, count_h;	 /* 64-bit block count */
-  word8 block[TIGER_DATASIZE];     /* RIPEMD data buffer */  
-  int index;                             /* index into buffer */
+  mutils_word32 digest[TIGER_DIGESTLEN];  /* Message digest */ 
+  mutils_word32 count_l, count_h;	 /* 64-bit block count */
+  mutils_word8 block[TIGER_DATASIZE];     /* RIPEMD data buffer */  
+  mutils_word32 index;                             /* index into buffer */
 } TIGER_CTX;
 
 #endif /* !TIGER_64BIT */
 
-void tiger_digest(struct tiger_ctx *ctx, word8 * s);
-void tiger_digest160(struct tiger_ctx *ctx, word8 * s);
-void tiger_digest128(struct tiger_ctx *ctx, word8 * s);
+void tiger_digest(struct tiger_ctx *ctx, mutils_word8 * s);
+void tiger_digest160(struct tiger_ctx *ctx, mutils_word8 * s);
+void tiger_digest128(struct tiger_ctx *ctx, mutils_word8 * s);
 void tiger_final(struct tiger_ctx *ctx);
-void tiger_update(struct tiger_ctx *ctx, word8 * buffer, word32 len);
+void tiger_update(struct tiger_ctx *ctx, mutils_word8 * buffer, mutils_word32 len);
 void tiger_init(struct tiger_ctx *ctx);
-void tiger128_digest(struct tiger_ctx *ctx, word8 * s);
-void tiger160_digest(struct tiger_ctx *ctx, word8 * s);
+void tiger128_digest(struct tiger_ctx *ctx, mutils_word8 * s);
+void tiger160_digest(struct tiger_ctx *ctx, mutils_word8 * s);
 
 #endif
 

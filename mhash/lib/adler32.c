@@ -27,20 +27,20 @@
 /* This is the implementation of Manuel Kasper <mk@neon1.net>. 
  */
 
-void mhash_clear_adler32(word32 * adler)
+void mhash_clear_adler32(mutils_word32 *adler)
 {
 	*adler = 0x1;
 }
 
-void mhash_get_adler32( const word32 * adler, void* ret)
+void mhash_get_adler32(__const mutils_word32 *adler, void *ret)
 {
-	word32 tmp = *adler;
+	mutils_word32 tmp = *adler;
 
 #ifdef WORDS_BIGENDIAN
-	tmp = mhash_byteswap(tmp);
+	tmp = mutils_word32swap(tmp);
 #endif
 	if (ret!=NULL)
-		memcpy(ret, &tmp, sizeof(word32));
+		mutils_memcpy(ret, &tmp, sizeof(mutils_word32));
 }
 
 /**
@@ -52,12 +52,12 @@ void mhash_get_adler32( const word32 * adler, void* ret)
  *      (all with speed optimizations on)
  */
 
-void mhash_adler32(word32 * adler, const void *given_buf, word32 len)
+void mhash_adler32(mutils_word32 * adler, __const void *given_buf, mutils_word32 len)
 {
-	word32 s1 = (*adler) & 0x0000FFFF;
-	word32 s2 = ((*adler) >> 16) & 0x0000FFFF;
-	word32 n;
-	unsigned char *p = given_buf;
+	mutils_word32 s1 = (*adler) & 0x0000FFFF;
+	mutils_word32 s2 = ((*adler) >> 16) & 0x0000FFFF;
+	mutils_word32 n;
+	mutils_word8 *p = (mutils_word8 *) given_buf;
 
 	for (n = 0; n < len; n++, p++) {
 		s1 += *p;

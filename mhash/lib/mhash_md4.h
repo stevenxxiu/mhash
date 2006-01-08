@@ -4,16 +4,15 @@
 #define __MHASH_MD4_H
 
 struct MD4Context {
-	word32 buf[4];
-	word32 bits[2];
-	unsigned char in[64];
+	mutils_word32 buf[4];
+	mutils_word32 bits[2];
+	mutils_word8  in[64];
 };
 
 void MD4Init(struct MD4Context *context);
-void MD4Update(struct MD4Context *context, unsigned char const *buf,
-	       unsigned len);
-void MD4Final( struct MD4Context *context, unsigned char *digest);
-void MD4Transform(word32 buf[4], word32 const in[16]);
+void MD4Update(struct MD4Context *context, mutils_word8 __const *buf, mutils_word32 len);
+void MD4Final( struct MD4Context *context, mutils_word8 *digest);
+void MD4Transform(mutils_word32 buf[4], mutils_word32 __const in[16]);
 
 typedef struct MD4Context MD4_CTX;
 

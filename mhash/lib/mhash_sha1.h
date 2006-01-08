@@ -20,22 +20,22 @@
 /* The structure for storing SHA info */
 
 typedef struct sha_ctx {
-  word32 digest[SHA_DIGESTLEN];  /* Message digest */
-  word32 count_l, count_h;       /* 64-bit block count */
-  word8 block[SHA_DATASIZE];     /* SHA data buffer */
-  int index;                             /* index into buffer */
+  mutils_word32 digest[SHA_DIGESTLEN];  /* Message digest */
+  mutils_word32 count_l, count_h;       /* 64-bit block count */
+  mutils_word8 block[SHA_DATASIZE];     /* SHA data buffer */
+  mutils_word32 index;                  /* index into buffer */
 } SHA_CTX;
 
 void sha_init(struct sha_ctx *ctx);
-void sha_update(struct sha_ctx *ctx, word8 *buffer, word32 len);
+void sha_update(struct sha_ctx *ctx, mutils_word8 *buffer, mutils_word32 len);
 void sha_final(struct sha_ctx *ctx);
-void sha_digest(struct sha_ctx *ctx, word8 *s);
+void sha_digest(struct sha_ctx *ctx, mutils_word8 *s);
 void sha_copy(struct sha_ctx *dest, struct sha_ctx *src);
 
 #if 1
 
 #ifndef EXTRACT_UCHAR
-#define EXTRACT_UCHAR(p)  (*(unsigned char *)(p))
+#define EXTRACT_UCHAR(p)  (*(mutils_word8 *)(p))
 #endif
 
 #define STRING2INT(s) ((((((EXTRACT_UCHAR(s) << 8)    \
@@ -43,10 +43,10 @@ void sha_copy(struct sha_ctx *dest, struct sha_ctx *src);
 			 | EXTRACT_UCHAR(s+2)) << 8)  \
 			 | EXTRACT_UCHAR(s+3))
 #else
-word32 STRING2INT(word8 *s)
+mutils_word32 STRING2INT(mutils_word8 *s)
 {
-  word32 r;
-  int i;
+  mutils_word32 r;
+  mutils_word32 i;
   
   for (i = 0, r = 0; i < 4; i++, s++)
     r = (r << 8) | *s;

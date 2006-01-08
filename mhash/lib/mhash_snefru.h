@@ -31,20 +31,20 @@
 
 typedef struct snefru_ctx
 {
-  byte buffer[SNEFRU128_DATA_SIZE];	   /* buffer of data to hash */
-  word64 hashlen;                          /* number of hashed bits */
-  int index;		                   /* index to buffer */
-  word32 hash[SNEFRU_BLOCK_LEN];           /* the hashing state */
+  mutils_word8 buffer[SNEFRU128_DATA_SIZE];	   /* buffer of data to hash */
+  mutils_word64 hashlen;                          /* number of hashed bits */
+  mutils_word32 index;		                   /* index to buffer */
+  mutils_word32 hash[SNEFRU_BLOCK_LEN];           /* the hashing state */
 } SNEFRU_CTX;
 
 void
 snefru_init(struct snefru_ctx *ctx);
 
 void
-snefru128_update(struct snefru_ctx *ctx, const byte *data, unsigned length);
+snefru128_update(struct snefru_ctx *ctx, __const mutils_word8 *data, mutils_word32 length);
 
 void
-snefru256_update(struct snefru_ctx *ctx, const byte *data, unsigned length);
+snefru256_update(struct snefru_ctx *ctx, __const mutils_word8 *data, mutils_word32 length);
 
 void
 snefru128_final(struct snefru_ctx *ctx);
@@ -53,10 +53,10 @@ void
 snefru256_final(struct snefru_ctx *ctx);
 
 void
-snefru128_digest(const struct snefru_ctx *ctx, byte *digest);
+snefru128_digest(__const struct snefru_ctx *ctx, mutils_word8 *digest);
 
 void
-snefru256_digest(const struct snefru_ctx *ctx, byte *digest);
+snefru256_digest(__const struct snefru_ctx *ctx, mutils_word8 *digest);
 
 
 #endif   /* MHASH_SNEFRU_H_INCLUDED */

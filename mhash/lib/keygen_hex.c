@@ -31,57 +31,61 @@ static char hexdigits[] = { '0', '1', '2', '3', '4',
 			'a', 'b', 'c', 'd', 'e', 'f',
 			'A', 'B', 'C', 'D', 'E', 'F' } ;
 
-static int ishexdigit (char d)
+static mutils_boolean ishexdigit (mutils_word8 d)
 {
-	int i;
+	mutils_word8 i;
 
-	for (i = 0 ; i < 22 ; i++)
+	for (i = 0; i < 22 ; i++)
 		if (d == hexdigits[i]) 
-			return -1;
+			return(MUTILS_TRUE);
 
-	return 0 ;
+	return(MUTILS_FALSE);
 }
 #else
 # include <ctype.h>
 # define ishexdigit isxdigit
 #endif
 
-static int check_hex(char *given_chain, int len)
+static mutils_boolean check_hex(mutils_word8 *given_chain, mutils_word32 len)
 {
-	int i;
+	mutils_word8 i;
 
 	for (i = 0; i < len; i++)
-		if (ishexdigit(given_chain[i]) == 0)
-			return -1;
+		if (ishexdigit(given_chain[i]) == MUTILS_FALSE)
+			return(MUTILS_FALSE);
 
-	return 0;
+	return(MUTILS_TRUE);
 }
 
 
-int _mhash_gen_key_hex(void *keyword, int key_size, 
-		unsigned char *password, int plen)
+mutils_error _mhash_gen_key_hex(void *keyword, mutils_word32 key_size, 
+				mutils_word8 *password, mutils_word32 plen)
 {
-	char *chain = (char*) password;
-	char* pkeyword=keyword;
-	char tmp[3];
-	int i;
+	mutils_word8 *chain = password;
+	mutils_word8 *pkeyword = keyword;
+	mutils_word8 tmp[3];
+	mutils_word32 i;
 
-	mhash_bzero( keyword, key_size);
+	mutils_bzero(keyword, key_size);
+
 	/* The chain should have 2*n characters 
 	 */
-	if (plen % 2 != 0 || plen > key_size*2)
-		return -1;
-	if (check_hex(chain, plen) == -1)
-		return -1;
 
-	memset( keyword, 0, key_size);
+	if (plen % 2 != 0 || plen > key_size*2)
+		return(-MUTILS_INVALID_SIZE);
+
+	if (check_hex(chain, plen) == MUTILS_FALSE)
+		return(-MUTILS_INVALID_FORMAT);
+
+	mutils_bzero( keyword, key_size);
+
 	for (i = 0; i < plen; i += 2) {
-		memcpy(tmp, &chain[i], 2);
-		tmp[2]='\0';
-		pkeyword[i / 2] = strtol(tmp, (char **) NULL, 16);
+		mutils_memcpy(tmp, &chain[i], 2);
+		tmp[2] = '\0';
+		pkeyword[i / 2] = mutils_strtol(tmp, (mutils_word8 **) NULL, 16);
 	}
 
-	return 0;
+	return(MUTILS_OK);
 }
 
 

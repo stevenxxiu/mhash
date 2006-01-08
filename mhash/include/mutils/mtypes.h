@@ -1,6 +1,5 @@
 /*
- *    Copyright (C) 1998 Nikos Mavroyanopoulos
- *    Copyright (C) 1999,2000 Sascha Schumman, Nikos Mavroyanopoulos
+ *    Copyright (C) 2005 Jonathan Day, Nikos Mavroyanopoulos
  *
  *    This library is free software; you can redistribute it and/or modify it 
  *    under the terms of the GNU Library General Public License as published 
@@ -19,20 +18,37 @@
  */
 
 
+#if !defined(__MTYPES_H)
+#define __MTYPES_H
 
-#include <libdefs.h>
+typedef struct keygen {
+	hashid		 hash_algorithm[2];
+	mutils_word32	 count;
+	void		*salt;
+	mutils_word32	 salt_size;
+} KEYGEN;
 
-mutils_error _mhash_gen_key_asis(void *keyword, mutils_word32 key_size, mutils_word8 *password, mutils_word32 plen)
-{
-#if defined(MHASH_ROBUST)
-	if ((keyword == NULL) || (keysize == 0) ||
-	    (password == NULL) || (plen == 0))
-		return(-MUTILS_INVALID_LENGTH);
+typedef void (*INIT_FUNC)( void*);
+typedef void (*HASH_FUNC)(void*, const void*, int);
+typedef void (*FINAL_FUNC)(void*);
+typedef void (*DEINIT_FUNC)(void*, unsigned char*);
+
+typedef struct __MHASH_INSTANCE {
+	mutils_word32 hmac_key_size;
+	mutils_word32 hmac_block;
+	mutils_word8 *hmac_key;
+
+	mutils_word8 *state;
+	mutils_word32 state_size;
+	hashid algorithm_given;
+
+	HASH_FUNC hash_func;
+	FINAL_FUNC final_func;
+	DEINIT_FUNC deinit_func;
+} MHASH_INSTANCE;
+
+typedef MHASH_INSTANCE *MHASH;
+
+#define MHASH_FAILED ((MHASH) 0x0)
+
 #endif
-
-	if (plen > key_size)
-		plen=key_size;
-	mutils_bzero(keyword, key_size);
-	mutils_memcpy(keyword, password, plen);
-	return(MUTILS_OK);
-}

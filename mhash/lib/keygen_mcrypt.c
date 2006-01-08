@@ -20,75 +20,101 @@
 
 
 
-#include "mhash.h"
-#include "libdefs.h"
-#include "keygen.h"
-
+#include <mhash.h>
+#include <libdefs.h>
+#include <keygen.h>
 
 /* Key generation using any hash algorithm */
-int _mhash_gen_key_mcrypt(hashid algorithm, void *keyword, int key_size, void *salt, int salt_size,
-		  unsigned char *password, int plen)
+mutils_error _mhash_gen_key_mcrypt(hashid algorithm,
+				   void *keyword, mutils_word32 key_size,
+				   void *salt, mutils_word32 salt_size,
+				   mutils_word8 *password, mutils_word32 plen)
 {
-	word8* key=calloc(1, key_size);
-	word8 *digest=NULL;
-	int size = key_size;
+	mutils_word8 *key = mutils_malloc(key_size);
+	mutils_word8 *digest = NULL;
+	mutils_word32 size = key_size;
 	MHASH td;
-	word8 *cp = key, *cp0 = key;
-	int salt_z = 0;		/* flag to be used when freeing salt[] */
-	int block_size = mhash_get_block_size(algorithm);
+	mutils_word8 *cp = key, *cp0 = key;
+	mutils_boolean salt_z = MUTILS_TRUE;		/* flag to be used when freeing salt[] */
+	mutils_word32 block_size = mhash_get_block_size(algorithm);
+
+#if defined(MHASH_ROBUST)
+	if (key == NULL)
+		return(-MUTILS_SYSTEM_RESOURCE_ERROR);
+#endif
+
+	mutils_bzero(key, key_size);
 
 	if (salt == NULL) {
-		salt_z = 1;
+		salt_z = MUTILS_FALSE;
 	}
 	
 	while (1) {
 		td = mhash_init(algorithm);
-		if (td==MHASH_FAILED) return -1;
+		if (td == MHASH_FAILED)
+			return(-MUTILS_INVALID_FUNCTION);
 		
-		if (salt_z == 0)
+		if (salt_z == MUTILS_TRUE)
 			mhash(td, salt, salt_size);
+
 		mhash(td, password, plen);
+
 		if (cp - cp0 > 0)
 			mhash(td, cp0, cp - cp0);
-		digest=mhash_end(td);
-		
+
+		digest = mhash_end(td);
+
+#if defined(MHASH_ROBUST)
+		if (digest == NULL)
+			return(-MUTILS_INVALID_RESULT);
+#endif
+
 		if (size > block_size) {
-			memcpy(cp, digest, block_size);
-			free(digest);
+			mutils_memcpy(cp, digest, block_size);
+			mutils_free(digest);
 			size -= block_size;
 			cp += block_size;
 		} else {
-			memcpy(cp, digest, size);
-			free(digest);
+			mutils_memcpy(cp, digest, size);
+			mutils_free(digest);
 			break;
 		}
 	}
-	memcpy(keyword, key, key_size);
-	free( key);
-	return 0;
+	mutils_memcpy(keyword, key, key_size);
+	mutils_free(key);
+	return(MUTILS_OK);
 }
 
-
-int _mhash_gen_key_pkdes( void *keyword, int key_size,
-		 unsigned char *password, int plen)
+mutils_error _mhash_gen_key_pkdes(void *keyword, mutils_word32 key_size,
+				  mutils_word8 *password, mutils_word32 plen)
 {
-	char* pkeyword=keyword;
-	int cnt,i,c;
+	mutils_word8 *ptr = keyword;
+	mutils_word32 cnt;
+	mutils_word32 i;
+	mutils_word32 c;
 
-	if (plen>key_size) return -1;
-	mhash_bzero( keyword, key_size);
-	memcpy( keyword, password, plen);
+#if defined(MHASH_ROBUST)
+	if (keyword == NULL)
+		return(-MUTILS_SYSTEM_RESOURCE_ERROR);
+#endif
 
-	for (cnt = 0; cnt < key_size; cnt++) {
+	if (plen > key_size)
+		return(-MUTILS_INVALID_SIZE);
+
+	mutils_bzero(keyword, key_size);
+
+	mutils_memcpy(keyword, password, plen);
+
+	for (cnt = 0; cnt < key_size; cnt++, ptr++) {
 		c = 0;
 		for (i = 0; i < 7; i++)
-			if (pkeyword[cnt] & (1 << i))
+			if (*ptr & (1 << i))
 				c++;
 		if ((c & 1) == 0)
-			pkeyword[cnt] |= 0x80;
+			*ptr |= 0x80;
 		else
-			pkeyword[cnt] &= ~0x80;
+			*ptr &= ~0x80;
 	}
 
-	return 0;
+	return(MUTILS_OK);
 }

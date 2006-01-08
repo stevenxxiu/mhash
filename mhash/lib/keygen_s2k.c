@@ -28,170 +28,216 @@
 #define MAX_DIGEST_SIZE 40
 
 /* Key generation using OpenPGP Simple S2K algorithm */
-int _mhash_gen_key_s2k_simple(hashid algorithm, void *keyword, int key_size,
-		  unsigned char *password, int plen)
+mutils_error _mhash_gen_key_s2k_simple(hashid algorithm,
+				       void *keyword, mutils_word32 key_size,
+				       mutils_word8 *password, mutils_word32 plen)
 {
-	word8* key;
-	word8 digest[MAX_DIGEST_SIZE];
-	char null='\0';
-	int i,j, times;
+	mutils_word8* key;
+	mutils_word8 digest[MAX_DIGEST_SIZE];
+	char null = '\0';
+	mutils_word32 i,j, times, total;
 	MHASH td;
-	int block_size = mhash_get_block_size(algorithm);
+	mutils_word32 block_size = mhash_get_block_size(algorithm);
 
+	total = times * block_size;
 
-	times = key_size/block_size;
-	if (key_size%block_size != 0) times++;
+	times = key_size / block_size;
 
-	if( (key = calloc(1, times*block_size) ) == NULL)
-		return -1; /* or what? */
+	if (key_size % block_size != 0) times++;
 
-	
-	for (i=0;i<times;i++) {
+	key = mutils_malloc(total);
+
+#if defined(MHASH_ROBUST)
+	if (key == NULL)
+		return(-MUTILS_SYSTEM_RESOURCE_ERROR); /* or what? */
+#endif
+
+	mutils_bzero(key, total);
+
+	for (i = 0; i < times; i++) {
 		td = mhash_init(algorithm);
-		if (td==MHASH_FAILED) {
-			free(key);
-			return -1;
+		if (td == MHASH_FAILED) {
+			mutils_free(key);
+			return(-MUTILS_INVALID_FUNCTION);
 		}
 		
-		for (j=0;j<i;j++)
+		for (j = 0; j < i; j++)
 			mhash(td, &null, 1);
 		mhash(td, password, plen);
 		mhash_deinit(td, digest);
 
-		memcpy( &key[i*block_size], digest, block_size);
+		mutils_memcpy(&key[i * block_size], digest, block_size);
 	}
-	memcpy(keyword, key, key_size);
-	mhash_bzero(key, key_size);
-	free(key);
-	return 0;
+	mutils_memcpy(keyword, key, key_size);
+	mutils_bzero(key, key_size);
+	mutils_free(key);
+	return(MUTILS_OK);
 }
 
 
 /* Key generation using OpenPGP Salted S2K algorithm */
-int _mhash_gen_key_s2k_salted(hashid algorithm, void *keyword, int key_size,
-		  unsigned char* salt, int salt_size,
-		  unsigned char *password, int plen)
+mutils_error _mhash_gen_key_s2k_salted(hashid algorithm,
+				       void *keyword, mutils_word32 key_size,
+				       mutils_word8 *salt, mutils_word32 salt_size,
+				       mutils_word8 *password, mutils_word32 plen)
 {
-	word8* key;
-	word8 digest[MAX_DIGEST_SIZE];
+	mutils_word8 *key;
+	mutils_word8 digest[MAX_DIGEST_SIZE];
 	char null='\0';
-	int i,j, times;
+	mutils_word32 i;
+	mutils_word32 j;
+	mutils_word32 times;
 	MHASH td;
-	int block_size = mhash_get_block_size(algorithm);
+	mutils_word32 block_size = mhash_get_block_size(algorithm);
+	mutils_word32 total;
 
-	if (salt==NULL) return -1;
-	if (salt_size<8) return -1; /* This algorithm will use EXACTLY
-				     * 8 bytes salt.
-				     */
-	times = key_size/block_size;
-	if (key_size%block_size != 0) times++;
+	if (salt == NULL)
+		return(-MUTILS_INVALID_INPUT_BUFFER);
 
-	if((key=calloc(1, times*block_size)) == NULL)
-		return -1; /* or what? */
+	if (salt_size < 8)
+	  	return(-MUTILS_INVALID_SIZE);	/* This algorithm will use EXACTLY
+						 * 8 bytes salt.
+						 */
 
-	
-	for (i=0;i<times;i++) {
+	times = key_size / block_size;
+
+	if (key_size % block_size != 0)
+		times++;
+
+	total = times * block_size;
+
+	key = mutils_malloc(total);
+
+#if defined(MHASH_ROBUST)
+	if (key == NULL)
+		return(-MUTILS_SYSTEM_RESOURCE_ERROR); /* or what? */
+#endif
+
+	for (i = 0; i < times; i++) {
 		td = mhash_init(algorithm);
-		if (td==MHASH_FAILED) {
-			free(key);
-			return -1;
+		if (td == MHASH_FAILED) {
+			mutils_free(key);
+			return(-MUTILS_INVALID_FUNCTION);
 		}
 		
-		for (j=0;j<i;j++)
+		for (j = 0; j < i; j++)
 			mhash(td, &null, 1);
 
 		mhash(td, salt, 8);
 		mhash(td, password, plen);
 		mhash_deinit(td, digest);
 		
-		memcpy( &key[i*block_size], digest, block_size);
+		mutils_memcpy( &key[i*block_size], digest, block_size);
 	}
-	memcpy(keyword, key, key_size);
-	mhash_bzero(key, key_size);
-	free(key);
-	return 0;
+	mutils_memcpy(keyword, key, key_size);
+	mutils_bzero(key, key_size);
+	mutils_free(key);
+	return(MUTILS_OK);
 }
 
 #define EXPBIAS 6
            
 /* Key generation using OpenPGP Iterated and Salted S2K algorithm */
-int _mhash_gen_key_s2k_isalted(hashid algorithm, unsigned long _count, 
-		  void *keyword, int key_size,
-		  unsigned char* salt, int salt_size,
-		  unsigned char *password, int plen)
+mutils_error _mhash_gen_key_s2k_isalted(hashid algorithm, mutils_word64 _count, 
+					void *keyword, mutils_word32 key_size,
+					mutils_word8 *salt, mutils_word32 salt_size,
+					mutils_word8 *password, mutils_word32 plen)
 {
-	word8* key;
-	word8 digest[MAX_DIGEST_SIZE];
-	char null='\0';
-	int i,j, z, times;
+	mutils_word8 *key;
+	mutils_word8 digest[MAX_DIGEST_SIZE];
+	mutils_word8 null='\0';
+	mutils_word32 i;
+	mutils_word32 j;
+	mutils_word32 z;
+	mutils_word32 times;
 	MHASH td;
-	int block_size = mhash_get_block_size(algorithm);
-	char* saltpass;
-	int saltpass_size;
-	word32 bcount, rest;
-	word32 count = _count;
+	mutils_word32 block_size = mhash_get_block_size(algorithm);
+	mutils_word8 *saltpass;
+	mutils_word32 saltpass_size;
+	mutils_word32 bcount, rest;
+	mutils_word32 count = _count;
+	mutils_word32 total;
 
-	if (salt==NULL) return -1;
-	if (salt_size<8) return -1; /* This algorithm will use EXACTLY
-				     * 8 bytes salt.
-				     */
+	if (salt == NULL)
+		return(-MUTILS_INVALID_INPUT_BUFFER);
 
-	if((saltpass = calloc(1, 8+plen)) == NULL) return -1; /* hmm */
-	memcpy( saltpass, salt, 8);
-	memcpy( &saltpass[8], password, plen);
+	if (salt_size < 8)
+		return(-MUTILS_INVALID_SIZE);	/* This algorithm will use EXACTLY
+						 * 8 bytes salt.
+						 */
+
+	if ((saltpass = mutils_malloc(8 + plen)) == NULL)
+		return(-MUTILS_SYSTEM_RESOURCE_ERROR); /* hmm */
+
+	mutils_memcpy( saltpass, salt, 8);
+	mutils_memcpy( &saltpass[8], password, plen);
 	saltpass_size = plen+8;
 
 	times = key_size/block_size;
-	if (key_size%block_size != 0) times++;
-	if ( (key=calloc(1, times*block_size))==NULL) {
-	   mhash_bzero(saltpass, saltpass_size);
-	   free( saltpass);
-	   return -1;
+	if (key_size % block_size != 0)
+		times++;
+
+	total = times * block_size;
+
+	key = mutils_malloc(total);
+
+	if (key == NULL) {
+	   mutils_bzero(saltpass, saltpass_size);
+	   mutils_free(saltpass);
+	   return(-MUTILS_SYSTEM_RESOURCE_ERROR);
         }
+
+	mutils_bzero(key, total);
 
 	/* Calculate the iterations
 	 */
 	bcount /*bytes */ = 
-		((word32)16 + (count & 15)) << ((count >> 4) + EXPBIAS); 
+		((mutils_word32)16 + (count & 15)) << ((count >> 4) + EXPBIAS); 
 
 	count /* iterations */ = 
 		(bcount / saltpass_size);
 
 	rest = bcount % saltpass_size;
-	if (bcount < saltpass_size) {
+
+	if (bcount < saltpass_size)
+	{
 		count++;
 		rest = 0;
 	}
 	
-	for (i=0;i<times;i++) {
+	for (i = 0; i < times; i++)
+	{
 		td = mhash_init(algorithm);
-		if (td==MHASH_FAILED) {
-		        mhash_bzero( key, key_size);
-		        mhash_bzero( saltpass, saltpass_size);
-			free(key);
-			free(saltpass);
-			return -1;
+		if (td == MHASH_FAILED)
+		{
+		        mutils_bzero( key, key_size);
+		        mutils_bzero( saltpass, saltpass_size);
+			mutils_free(key);
+			mutils_free(saltpass);
+			return(-MUTILS_INVALID_FUNCTION);
 		}
 	
-		for (j=0;j<i;j++)
+		for (j = 0; j < i; j++)
 			mhash(td, &null, 1);
 
-		for (z=0;z<count;z++) {
+		for (z = 0; z < count; z++)
+		{
 			mhash(td, saltpass, saltpass_size);
 		}
-		mhash( td, saltpass, rest);
+
+		mhash(td, saltpass, rest);
 
 		mhash_deinit(td, digest);
 		
-		memcpy( &key[i*block_size], digest, block_size);
+		mutils_memcpy( &key[i*block_size], digest, block_size);
 	}
-	memcpy(keyword, key, key_size);
+	mutils_memcpy(keyword, key, key_size);
 
-	mhash_bzero(key, key_size);
-	mhash_bzero(saltpass, saltpass_size);
+	mutils_bzero(key, key_size);
+	mutils_bzero(saltpass, saltpass_size);
 
-	free(key);
-	free(saltpass);
+	mutils_free(key);
+	mutils_free(saltpass);
 
-	return 0;
+	return(MUTILS_OK);
 }

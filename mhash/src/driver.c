@@ -25,59 +25,67 @@
  *
  * It's ugly, limited and you should hit :q! now
  *
- * $Id: driver.c,v 1.4 2002/05/16 22:45:59 nmav Exp $
+ * $Id: driver.c,v 1.6 2004/05/02 20:13:34 imipak Exp $
  */
 
-#include <string.h>
-#include <assert.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include "../lib/mhash.h"
+#include <mhash.h>
 
 #define MAX_DIGEST_SIZE 256
 
 int main(int argc, char **argv)
 {
-	unsigned char digest[MAX_DIGEST_SIZE]; /* enough space to hold digests */
-	unsigned char data[1024];
+	mutils_word8 digest[MAX_DIGEST_SIZE]; /* enough space to hold digests */
+	mutils_word8 data[1024];
 	ssize_t r;
-	int i, found;
+	mutils_word32 i;
+	mutils_boolean found;
 	hashid hashid;
 	MHASH td;
 
 	if (argc != 2)
-	  {
-	    fprintf(stderr, "Syntax: %s <name of hash function>\n", argv[0]);
-	    exit(1);
-	  }
+	{
+		fprintf(stderr, "Syntax: %s <name of hash function>\n", argv[0]);
+		exit(1);
+	}
 
 	/* Look for the right mhash hash id */
-	for(found = hashid = 0; hashid <= mhash_count(); hashid++)
-	  if (mhash_get_hash_name_static(hashid))
-	    if (! strcmp(argv[1], mhash_get_hash_name_static(hashid)))
-	      {
-		found = 1;
-		break;
-	      }
-	if (! found)
-	  {
-	    fprintf(stderr, "FATAL: hash function %s not available!\n", argv[1]);
-	    exit(1);
-	  }
+	for (found = MUTILS_FALSE, hashid = 0; hashid <= mhash_count(); hashid++)
+	{
+		if (mhash_get_hash_name_static(hashid))
+		{
+			if (! mutils_strcmp((mutils_word8 *) argv[1], mhash_get_hash_name_static(hashid)))
+			{
+				found = MUTILS_TRUE;
+				break;
+			}
+		}
+	}
+
+	if (found == MUTILS_FALSE)
+	{
+		fprintf(stderr, "FATAL: hash function %s not available!\n", argv[1]);
+		exit(MUTILS_INVALID_FUNCTION);
+	}
 
 	assert(mhash_get_block_size(hashid) <= MAX_DIGEST_SIZE);
 
 	td = mhash_init(hashid);  /* hash stdin until EOF ist reached */
-	do {
-	  r = read(0, data, sizeof data);
-	  assert(r >= 0);
-	  mhash(td, data, r);
+
+	do
+	{
+		r = read(0, data, sizeof data);
+		assert(r >= 0);
+		mhash(td, data, r);
 	} while (r);
+
 	mhash_deinit(td, digest);
 
-	for(i = 0; i < mhash_get_block_size(hashid); i++)
-	  printf("%02X", digest[i]);
+	for (i = 0; i < mhash_get_block_size(hashid); i++)
+	{
+		printf("%02X", digest[i]);
+	}
+
 	printf("\n");
 	
-	return 0;
+	return(MUTILS_OK);
 }

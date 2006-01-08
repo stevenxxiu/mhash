@@ -47,7 +47,7 @@
  */
 #define OPTIMIZE_FOR_ALPHA
 
-extern const word64 tiger_table[4*256];
+extern __const mutils_word64 tiger_table[4*256];
 
 #define t1 (tiger_table)
 #define t2 (tiger_table+256)
@@ -73,14 +73,14 @@ extern const word64 tiger_table[4*256];
 /* (but works slower on Alpha) */
 #define round(a,b,c,x,mul) \
       c ^= x; \
-      a -= t1[(byte)(c)] ^ \
-           t2[(byte)(((word32)(c))>>(2*8))] ^ \
-	   t3[(byte)((c)>>(4*8))] ^ \
-           t4[(byte)(((word32)((c)>>(4*8)))>>(2*8))] ; \
-      b += t4[(byte)(((word32)(c))>>(1*8))] ^ \
-           t3[(byte)(((word32)(c))>>(3*8))] ^ \
-	   t2[(byte)(((word32)((c)>>(4*8)))>>(1*8))] ^ \
-           t1[(byte)(((word32)((c)>>(4*8)))>>(3*8))]; \
+      a -= t1[(mutils_word8)(c)] ^ \
+           t2[(mutils_word8)(((mutils_word32)(c))>>(2*8))] ^ \
+	   t3[(mutils_word8)((c)>>(4*8))] ^ \
+           t4[(mutils_word8)(((mutils_word32)((c)>>(4*8)))>>(2*8))] ; \
+      b += t4[(mutils_word8)(((mutils_word32)(c))>>(1*8))] ^ \
+           t3[(mutils_word8)(((mutils_word32)(c))>>(3*8))] ^ \
+	   t2[(mutils_word8)(((mutils_word32)((c)>>(4*8)))>>(1*8))] ^ \
+           t1[(mutils_word8)(((mutils_word32)((c)>>(4*8)))>>(3*8))]; \
       b *= mul;
 #endif
 
@@ -144,10 +144,10 @@ extern const word64 tiger_table[4*256];
 
 #define tiger_compress_macro(str, state) \
 { \
-  register word64 a, b, c, tmpa; \
-  word64 aa, bb, cc; \
-  register word64 x0, x1, x2, x3, x4, x5, x6, x7; \
-  int pass_no; \
+  register mutils_word64 a, b, c, tmpa; \
+  mutils_word64 aa, bb, cc; \
+  register mutils_word64 x0, x1, x2, x3, x4, x5, x6, x7; \
+  mutils_word8 pass_no;					 \
 \
   a = state[0]; \
   b = state[1]; \
@@ -165,22 +165,22 @@ extern const word64 tiger_table[4*256];
 
 #ifndef OPTIMIZE_FOR_ALPHA
 /* The compress function is a function. Requires smaller cache?    */
-static void tiger_compress(word64 *str, word64 state[3])
+static void tiger_compress(mutils_word64 *str, mutils_word64 state[3])
 {
-  tiger_compress_macro(((word64*)str), ((word64*)state));
+  tiger_compress_macro(((mutils_word64*)str), ((mutils_word64*)state));
 }
 
 #else /* OPTIMIZE_FOR_ALPHA */
 /* The compress function is inlined: works better on Alpha.        */
 #define tiger_compress(str, state) \
-  tiger_compress_macro(((word64*)str), ((word64*)state))
+  tiger_compress_macro(((mutils_word64*)str), ((mutils_word64*)state))
 #endif /* OPTIMIZE_FOR_ALPHA */
 
 #ifndef EXTRACT_UCHAR
-#define EXTRACT_UCHAR(p)  (*(unsigned char *)(p))
+#define EXTRACT_UCHAR(p)  (*(mutils_word8 *)(p))
 #endif
 
-#define STRING2INT64(s) ((((((((((((((word64)(EXTRACT_UCHAR(s+7) << 8)    \
+#define STRING2INT64(s) ((((((((((((((mutils_word64)(EXTRACT_UCHAR(s+7) << 8)    \
 			 | EXTRACT_UCHAR(s+6)) << 8)  \
 			 | EXTRACT_UCHAR(s+5)) << 8)  \
 			 | EXTRACT_UCHAR(s+4)) << 8)  \
@@ -189,16 +189,16 @@ static void tiger_compress(word64 *str, word64 state[3])
 			 | EXTRACT_UCHAR(s+1)) << 8)  \
 			 | EXTRACT_UCHAR(s))
 
-static void tiger_block(struct tiger_ctx *ctx, byte * str)
+static void tiger_block(struct tiger_ctx *ctx, mutils_word8 * str)
 {
-	word64 temp[TIGER_DATALEN];
+	mutils_word64 temp[TIGER_DATALEN];
 #ifdef WORDS_BIGENDIAN
-	unsigned j;
+	mutils_word32 j;
 	for(j=0; j<TIGER_DATALEN; j++, str+=8)
 		temp[j] = STRING2INT64(str);
 	tiger_compress(temp, ctx->digest);
 #else
-	memcpy(temp, str, TIGER_DATASIZE); /* Required to avoid un-aligned access on some arches */
+	mutils_memcpy(temp, str, TIGER_DATASIZE); /* Required to avoid un-aligned access on some arches */
 	tiger_compress(temp, ctx->digest);
 #endif
 	/* Update block count */
@@ -219,22 +219,26 @@ void tiger_init(struct tiger_ctx *ctx)
 	ctx->index = 0;
 }
 
-void tiger_update(struct tiger_ctx *ctx, word8 * buffer, word32 len)
+void tiger_update(struct tiger_ctx *ctx, mutils_word8 * buffer, mutils_word32 len)
 {
+	mutils_word32 left;
+
 	if (ctx->index) {	/* Try to fill partial block */
-		unsigned left = TIGER_DATASIZE - ctx->index;
-		if (len < left) {
-			memcpy(ctx->block + ctx->index, buffer, len);
+		left = TIGER_DATASIZE - ctx->index;
+		if (len < left)
+		{
+			mutils_memcpy(ctx->block + ctx->index, buffer, len);
 			ctx->index += len;
 			return;	/* Finished */
 		} else {
-			memcpy(ctx->block + ctx->index, buffer, left);
+			mutils_memcpy(ctx->block + ctx->index, buffer, left);
 			tiger_block(ctx, ctx->block);
 			buffer += left;
 			len -= left;
 		}
 	}
-	while (len >= TIGER_DATASIZE) {
+	while (len >= TIGER_DATASIZE)
+	{
 		tiger_block(ctx, buffer);
 		buffer += TIGER_DATASIZE;
 		len -= TIGER_DATASIZE;
@@ -242,13 +246,13 @@ void tiger_update(struct tiger_ctx *ctx, word8 * buffer, word32 len)
 	if ((ctx->index = len))
 		/* This assignment is intended */
 		/* Buffer leftovers */
-		memcpy(ctx->block, buffer, len);
+		mutils_memcpy(ctx->block, buffer, len);
 }
 
 void tiger_final(struct tiger_ctx *ctx)
 {
-	register word64 i, j;
-	word8 temp[TIGER_DATASIZE];
+	register mutils_word64 i, j;
+	mutils_word8 temp[TIGER_DATASIZE];
 	i = ctx->index;
 	
 #ifdef WORDS_BIGENDIAN
@@ -271,20 +275,20 @@ void tiger_final(struct tiger_ctx *ctx)
 	{
 		for(; j<64; j++)
 			temp[j] = 0;
-		tiger_compress(((word64*)temp), ctx->digest);
+		tiger_compress(((mutils_word64*)temp), ctx->digest);
 		j=0;
 	}
 
 	for(; j<56; j++)
 		temp[j] = 0;
 	/* Theres 512 = 2^9 bits in one block */
-	((word64*)(&(temp[56])))[0] = (ctx->count << 9) + (ctx->index << 3);
-	tiger_compress(((word64*)temp), ctx->digest);
+	((mutils_word64*)(&(temp[56])))[0] = (ctx->count << 9) + (ctx->index << 3);
+	tiger_compress(((mutils_word64*)temp), ctx->digest);
 }
 
-void tiger_digest(struct tiger_ctx *ctx, word8 * s)
+void tiger_digest(struct tiger_ctx *ctx, mutils_word8 * s)
 {
-	int i;
+	mutils_word32 i;
 
 	if (s!=NULL)
 	for (i = 0; i < TIGER_DIGESTLEN; i++) { /* 64 bit and LITTLE ENDIAN -that's cool! */
@@ -301,9 +305,9 @@ void tiger_digest(struct tiger_ctx *ctx, word8 * s)
 
 }
 
-void tiger128_digest(struct tiger_ctx *ctx, word8 * s)
+void tiger128_digest(struct tiger_ctx *ctx, mutils_word8 * s)
 {
-	int i;
+	mutils_word32 i;
 
 	if (s!=NULL)
 	for (i = 0; i < TIGER128_DIGESTLEN; i++) { /* 64 bit and LITTLE ENDIAN -that's cool! */
@@ -320,9 +324,9 @@ void tiger128_digest(struct tiger_ctx *ctx, word8 * s)
 
 }
 
-void tiger160_digest(struct tiger_ctx *ctx, word8 * s)
+void tiger160_digest(struct tiger_ctx *ctx, mutils_word8 * s)
 {
-	int i;
+	mutils_word32 i;
 	if (s==NULL) return;
 	for (i = 0; i < TIGER160_DIGESTLEN; i++) { /* 64 bit and LITTLE ENDIAN -that's cool! */
 		s[7] = ctx->digest[i];
@@ -349,7 +353,7 @@ void tiger160_digest(struct tiger_ctx *ctx, word8 * s)
 
 
 
-extern const word32 tiger_table[4*256][2];
+extern __const mutils_word32 tiger_table[4*256][2];
 
 #define t1 (tiger_table)
 #define t2 (tiger_table+256)
@@ -485,12 +489,12 @@ extern const word32 tiger_table[4*256][2];
 
 #define tiger_compress_macro(str, state) \
 { \
-  register word32 a0, a1, b0, b1, c0, c1, tmpa; \
-  word32 aa0, aa1, bb0, bb1, cc0, cc1; \
-  word32 x00, x01, x10, x11, x20, x21, x30, x31, \
+  register mutils_word32 a0, a1, b0, b1, c0, c1, tmpa; \
+  mutils_word32 aa0, aa1, bb0, bb1, cc0, cc1; \
+  mutils_word32 x00, x01, x10, x11, x20, x21, x30, x31, \
          x40, x41, x50, x51, x60, x61, x70, x71; \
-  register word32 temp0, temp1, tempt0, tempt1, temps0, tcarry; \
-  word32 i; \
+  register mutils_word32 temp0, temp1, tempt0, tempt1, temps0, tcarry; \
+  mutils_word32 i; \
   int pass_no; \
 \
   a0 = state[0]; \
@@ -519,18 +523,18 @@ extern const word32 tiger_table[4*256][2];
 #ifdef UNROLL_COMPRESS
 /* The compress function is inlined */
 #define tiger_compress(str, state) \
-  tiger_compress_macro(((word32*)str), ((word32*)state))
+  tiger_compress_macro(((mutils_word32*)str), ((mutils_word32*)state))
 #else
 /* The compress function is a function */
-tiger_compress(const word32 *str, word32 state[6])
+tiger_compress(__const mutils_word32 *str, mutils_word32 state[6])
 {
-  tiger_compress_macro(((word32*)str), ((word32*)state));
+  tiger_compress_macro(((mutils_word32*)str), ((mutils_word32*)state));
 }
 #endif
 
 
 #ifndef EXTRACT_UCHAR
-#define EXTRACT_UCHAR(p)  (*(word8 *)(p))
+#define EXTRACT_UCHAR(p)  (*(mutils_word8 *)(p))
 #endif
 
 #define STRING2INT(s) ((((((EXTRACT_UCHAR(s+3) << 8)    \
@@ -538,17 +542,17 @@ tiger_compress(const word32 *str, word32 state[6])
 			 | EXTRACT_UCHAR(s+1)) << 8)  \
 			 | EXTRACT_UCHAR(s))
 
-static void tiger_block(struct tiger_ctx *ctx, word8 * block)
+static void tiger_block(struct tiger_ctx *ctx, mutils_word8 * block)
 {
-	word32 data[TIGER_DATALEN];
-	size_t i;
+	mutils_word32 data[TIGER_DATALEN];
+	mutils_word32 i;
 	
 	/* Update block count */
 	if (!++ctx->count_l)
 		++ctx->count_h;
 
 	/* Endian independent conversion */
-	for (i = 0; i < TIGER_DATALEN; i++, block += sizeof(word32))
+	for (i = 0; i < TIGER_DATALEN; i++, block += sizeof(mutils_word32))
 		data[i] = STRING2INT(block);
 
 	tiger_compress(data, ctx->digest);
@@ -571,37 +575,40 @@ void tiger_init(struct tiger_ctx *ctx)
 	ctx->index = 0;
 }
 
-void tiger_update(struct tiger_ctx *ctx, word8 * buffer, word32 len)
+void tiger_update(struct tiger_ctx *ctx, mutils_word8 * buffer, mutils_word32 len)
 {
 	if (ctx->index) {	/* Try to fill partial block */
-		unsigned left = TIGER_DATASIZE - ctx->index;
+		mutils_word32 left = TIGER_DATASIZE - ctx->index;
 		if (len < left) {
-			memcpy(ctx->block + ctx->index, buffer, len);
+			mutils_memcpy(ctx->block + ctx->index, buffer, len);
 			ctx->index += len;
 			return;	/* Finished */
 		} else {
-			memcpy(ctx->block + ctx->index, buffer, left);
+			mutils_memcpy(ctx->block + ctx->index, buffer, left);
 		     tiger_block(ctx, ctx->block);
 			buffer += left;
 			len -= left;
 		}
 	}
-	while (len >= TIGER_DATASIZE) {
-	     tiger_block(ctx, buffer);
+	while (len >= TIGER_DATASIZE)
+	{
+		tiger_block(ctx, buffer);
 		buffer += TIGER_DATASIZE;
 		len -= TIGER_DATASIZE;
 	}
 	if ((ctx->index = len))
+	{
 		/* This assignment is intended */
 		/* Buffer leftovers */
-		memcpy(ctx->block, buffer, len);
+		mutils_memcpy(ctx->block, buffer, len);
+	}
 }
 
 void tiger_final(struct tiger_ctx *ctx)
 {
-	word32 data[TIGER_DATALEN];
-	size_t i;
-	size_t words;
+	mutils_word32 data[TIGER_DATALEN];
+	mutils_word32 i;
+	mutils_word32 words;
 
 	i = ctx->index;
 	/* Set the first char of padding to 0x01.  This is safe since there is
@@ -634,12 +641,13 @@ void tiger_final(struct tiger_ctx *ctx)
 	tiger_compress( data, ctx->digest);
 }
 
-void tiger_digest(struct tiger_ctx *ctx, word8 * s)
+void tiger_digest(struct tiger_ctx *ctx, mutils_word8 * s)
 {
-	int i;
+	mutils_word32 i;
 
 	if (s!=NULL)
-	for (i = 0; i < TIGER_DIGESTLEN; i+=2) { /* 64 bit and LITTLE ENDIAN -that's cool! */
+	for (i = 0; i < TIGER_DIGESTLEN; i+=2)
+	{ /* 64 bit and LITTLE ENDIAN -that's cool! */
 		s[7] = ctx->digest[i];
 		s[6] = 0xff & (ctx->digest[i] >> 8);
 		s[5] = 0xff & (ctx->digest[i] >> 16);
@@ -653,12 +661,13 @@ void tiger_digest(struct tiger_ctx *ctx, word8 * s)
 
 }
 
-void tiger128_digest(struct tiger_ctx *ctx, word8 * s)
+void tiger128_digest(struct tiger_ctx *ctx, mutils_word8 * s)
 {
-	int i;
+	mutils_word32 i;
 
 	if (s!=NULL)
-	for (i = 0; i < TIGER128_DIGESTLEN; i+=2) { /* 64 bit and LITTLE ENDIAN -that's cool! */
+	for (i = 0; i < TIGER128_DIGESTLEN; i+=2)
+	{ /* 64 bit and LITTLE ENDIAN -that's cool! */
 		s[7] = ctx->digest[i];
 		s[6] = 0xff & (ctx->digest[i] >> 8);
 		s[5] = 0xff & (ctx->digest[i] >> 16);
@@ -673,9 +682,9 @@ void tiger128_digest(struct tiger_ctx *ctx, word8 * s)
 }
 
 
-void tiger160_digest(struct tiger_ctx *ctx, word8 * s)
+void tiger160_digest(struct tiger_ctx *ctx, mutils_word8 * s)
 {
-	int i;
+	mutils_word32 i;
 
 	for (i = 0; i < TIGER160_DIGESTLEN-1; i+=2) { /* 64 bit and LITTLE ENDIAN -that's cool! */
 		s[7] = ctx->digest[i];

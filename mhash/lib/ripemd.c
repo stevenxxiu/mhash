@@ -148,11 +148,11 @@ void ripemd320_init(struct ripemd_ctx *ctx)
 #define subRound160(a, b, c, d, e, f, k, r, data) \
     ( a = ROTL( r, a + f(b,c,d) + data + k) + e, c = ROTL(10, c) )
 
-static void ripemd128_transform(struct ripemd_ctx *ctx, word32 * data)
+static void ripemd128_transform(struct ripemd_ctx *ctx, mutils_word32 * data)
 {
-	word32 A, B, C, D;	/* Local vars */
-	word32 AA, BB, CC, DD;	/* Local vars */
-	word32 T;
+	mutils_word32 A, B, C, D;	/* Local vars */
+	mutils_word32 AA, BB, CC, DD;	/* Local vars */
+	mutils_word32 T;
 
 	/* Set up first buffer and local data buffer */
 	A = AA = ctx->digest[0];
@@ -307,11 +307,11 @@ static void ripemd128_transform(struct ripemd_ctx *ctx, word32 * data)
 	ctx->digest[0] = T;
 }
 
-static void ripemd160_transform(struct ripemd_ctx *ctx, word32 * data)
+static void ripemd160_transform(struct ripemd_ctx *ctx, mutils_word32 * data)
 {
-	word32 A, B, C, D, E;   	/* Local vars */
-	word32 AA, BB, CC, DD, EE;      /* Local vars */
-	word32 T;
+	mutils_word32 A, B, C, D, E;   	/* Local vars */
+	mutils_word32 AA, BB, CC, DD, EE;      /* Local vars */
+	mutils_word32 T;
 
 	/* Set up first buffer and local data buffer */
 	A = AA = ctx->digest[0];
@@ -505,11 +505,11 @@ static void ripemd160_transform(struct ripemd_ctx *ctx, word32 * data)
 }
 
 
-static void ripemd256_transform(struct ripemd_ctx *ctx, word32 * data)
+static void ripemd256_transform(struct ripemd_ctx *ctx, mutils_word32 * data)
 {
-	word32 A, B, C, D;	/* Local vars */
-	word32 AA, BB, CC, DD;	/* Local vars */
-	word32 T;
+	mutils_word32 A, B, C, D;	/* Local vars */
+	mutils_word32 AA, BB, CC, DD;	/* Local vars */
+	mutils_word32 T;
 
 	/* Set up first buffer and local data buffer */
 	A = ctx->digest[0];
@@ -679,11 +679,11 @@ static void ripemd256_transform(struct ripemd_ctx *ctx, word32 * data)
         ctx->digest[7] += D;
 }
 
-static void ripemd320_transform(struct ripemd_ctx *ctx, word32 * data)
+static void ripemd320_transform(struct ripemd_ctx *ctx, mutils_word32 * data)
 {
-	word32 A, B, C, D, E;   	/* Local vars */
-	word32 AA, BB, CC, DD, EE;      /* Local vars */
-	word32 T;
+	mutils_word32 A, B, C, D, E;   	/* Local vars */
+	mutils_word32 AA, BB, CC, DD, EE;      /* Local vars */
+	mutils_word32 T;
 
 	/* Set up first buffer and local data buffer */
 	A = ctx->digest[0];
@@ -894,7 +894,7 @@ static void ripemd320_transform(struct ripemd_ctx *ctx, word32 * data)
         ctx->digest[9] += E;
 }
 
-static void ripemd_transform(struct ripemd_ctx *ctx, word32 * data)
+static void ripemd_transform(struct ripemd_ctx *ctx, mutils_word32 * data)
 {
   switch(ctx->digest_len)  /* select the right compression function */
     {
@@ -909,32 +909,19 @@ static void ripemd_transform(struct ripemd_ctx *ctx, word32 * data)
     }
 }
 
-#if 1
-
 #ifndef EXTRACT_UCHAR
-#define EXTRACT_UCHAR(p)  (*(word8 *)(p))
+#define EXTRACT_UCHAR(p)  (*(mutils_word8 *)(p))
 #endif
 
 #define STRING2INT(s) ((((((EXTRACT_UCHAR(s+3) << 8)    \
 			 | EXTRACT_UCHAR(s+2)) << 8)  \
 			 | EXTRACT_UCHAR(s+1)) << 8)  \
 			 | EXTRACT_UCHAR(s))
-#else
-word32 STRING2INT(word8 * s)
-{
-	word32 r;
-	int i;
 
-	for (i = 0, r = 0; i < 4; i++)
-		r = (r << 8) | s[3-i];
-	return r;
-}
-#endif
-
-static void ripemd_block(struct ripemd_ctx *ctx, word8 * block)
+static void ripemd_block(struct ripemd_ctx *ctx, mutils_word8 *block)
 {
-	word32 data[RIPEMD_DATALEN];
-	int i;
+	mutils_word32 data[RIPEMD_DATALEN];
+	mutils_word32 i;
 
 	/* Update bit count */
 	ctx->bitcount += RIPEMD_DATASIZE * 8;
@@ -946,16 +933,16 @@ static void ripemd_block(struct ripemd_ctx *ctx, word8 * block)
 	ripemd_transform(ctx, data);
 }
 
-void ripemd_update(struct ripemd_ctx *ctx, word8 * buffer, word32 len)
+void ripemd_update(struct ripemd_ctx *ctx, mutils_word8 *buffer, mutils_word32 len)
 {
 	if (ctx->index) {	/* Try to fill partial block */
 		unsigned left = RIPEMD_DATASIZE - ctx->index;
 		if (len < left) {
-			memcpy(ctx->block + ctx->index, buffer, len);
+			mutils_memcpy(ctx->block + ctx->index, buffer, len);
 			ctx->index += len;
 			return;	/* Finished */
 		} else {
-			memcpy(ctx->block + ctx->index, buffer, left);
+			mutils_memcpy(ctx->block + ctx->index, buffer, left);
 			ripemd_block(ctx, ctx->block);
 			buffer += left;
 			len -= left;
@@ -969,7 +956,7 @@ void ripemd_update(struct ripemd_ctx *ctx, word8 * buffer, word32 len)
 	if ((ctx->index = len))
 		/* This assignment is intended */
 		/* Buffer leftovers */
-		memcpy(ctx->block, buffer, len);
+		mutils_memcpy(ctx->block, buffer, len);
 }
 
 /* Final wrapup - pad to RIPEMD_DATASIZE-byte boundary with the bit pattern
@@ -977,9 +964,9 @@ void ripemd_update(struct ripemd_ctx *ctx, word8 * buffer, word32 len)
 
 void ripemd_final(struct ripemd_ctx *ctx)
 {
-	word32 data[RIPEMD_DATALEN];
-	int i;
-	int words;
+	mutils_word32 data[RIPEMD_DATALEN];
+	mutils_word32 i;
+	mutils_word32 words;
 
 	i = ctx->index;
 	/* Set the first char of padding to 0x80.  This is safe since there is
@@ -1016,9 +1003,9 @@ void ripemd_final(struct ripemd_ctx *ctx)
 	ripemd_transform(ctx, data);
 }
 
-void ripemd_digest(struct ripemd_ctx *ctx, word8 * s)
+void ripemd_digest(struct ripemd_ctx *ctx, mutils_word8 * s)
 {
-	int i;
+	mutils_word32 i;
 
 	if (s!=NULL)
 	for (i = 0; i < ctx->digest_len / 32; i++) {

@@ -27,7 +27,7 @@
 
 /** This polynomial ( 0xEDB88320L) DOES generate the same CRC values as ZMODEM and PKZIP
  */
-static const word32 crc32_table_b[256] =
+static __const mutils_word32 crc32_table_b[256] =
 {
 	0x0UL, 0x77073096UL, 0xEE0E612CUL, 0x990951BAUL, 0x76DC419UL,
 	0x706AF48FUL, 0xE963A535UL, 0x9E6495A3UL, 0xEDB8832UL, 0x79DCB8A4UL,
@@ -87,7 +87,7 @@ static const word32 crc32_table_b[256] =
 /** This polynomial (0x04c11db7) is used at: AUTODIN II, Ethernet, & FDDI 
  */
 
-static const word32 crc32_table[256] =
+static __const mutils_word32 crc32_table[256] =
 {
 
 	0x00000000UL, 0x04c11db7UL, 0x09823b6eUL, 0x0d4326d9UL,
@@ -159,7 +159,7 @@ static const word32 crc32_table[256] =
 
 
 void
-mhash_clear_crc32(word32 * crc)
+mhash_clear_crc32(mutils_word32 *crc)
 {
 	*crc = 0xffffffff;			
 /*
@@ -168,24 +168,29 @@ mhash_clear_crc32(word32 * crc)
 }
 
 void
-mhash_get_crc32( const word32 * crc, void* ret)
+mhash_get_crc32(__const mutils_word32 *crc, void *ret)
 {
-	word32 tmp;
+	mutils_word32 tmp;
 	tmp = ~(*crc);
 	/*
 	 * transmit complement, per CRC-32 spec 
 	 */
 #ifdef WORDS_BIGENDIAN
-	tmp = mhash_byteswap(tmp);
+	tmp = mutils_word32swap(tmp);
 #endif
-	if (ret!=NULL)
-		memcpy( ret, &tmp, sizeof(word32));	
+	if (ret != NULL)
+		mutils_memcpy(ret, &tmp, sizeof(mutils_word32));	
 }
 
 void
-mhash_crc32(word32 * crc, const void *given_buf, int len)
+mhash_crc32(mutils_word32 *crc, __const void *given_buf, mutils_word32 len)
 {
-	const unsigned char *p;
+	__const mutils_word8 *p;
+
+#if defined(MHASH_ROBUST)	
+	if ((crc == NULL) || (given_buffer == NULL) || (len == 0))
+		return;
+#endif
 
 	for (p = given_buf; len > 0; ++p, --len) {
 		(*crc) = ((*crc) << 8) ^ crc32_table[((*crc) >> 24) ^ *p];
@@ -193,9 +198,14 @@ mhash_crc32(word32 * crc, const void *given_buf, int len)
 }
 
 void
-mhash_crc32b(word32 * crc, const void *buf, int len)
+mhash_crc32b(mutils_word32 *crc, __const void *buf, mutils_word32 len)
 {
-	const byte *p;
+	__const mutils_word8 *p;
+
+#if defined(MHASH_ROBUST)
+	if ((crc == NULL) || (given_buffer == NULL) || (len == 0))
+		return;
+#endif
 
 	for (p = buf; len > 0; ++p, --len)
 		(*crc) = (((*crc) >> 8) & 0x00FFFFFF) ^ crc32_table_b[(*crc ^ *p) & 0xff];

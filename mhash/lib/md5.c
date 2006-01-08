@@ -21,29 +21,9 @@
 
 #include "mhash_md5.h"
 
-#ifndef WORDS_BIGENDIAN
-#define byteReverse(buf, len)	/* Nothing */
-#else
-static void byteReverse(unsigned char *buf, unsigned longs);
-
-/*
- * Note: this code is harmless on little-endian machines.
- */
-static void byteReverse(unsigned char *buf, unsigned longs)
-{
-    word32 t;
-    do {
-	t = (word32) ((unsigned) buf[3] << 8 | buf[2]) << 16 |
-	    ((unsigned) buf[1] << 8 | buf[0]);
-	*(word32 *) buf = t;
-	buf += 4;
-    } while (--longs);
-}
-#endif
-
 /*
  * Start MD5 accumulation.  Set bit count to 0 and buffer to mysterious
- * initialization constants.
+ * initialization __constants.
  */
 void MD5Init(struct MD5Context *ctx)
 {
@@ -60,95 +40,101 @@ void MD5Init(struct MD5Context *ctx)
  * Update context to reflect the concatenation of another buffer full
  * of bytes.
  */
-void MD5Update(struct MD5Context *ctx, unsigned char const *buf, unsigned len)
+void MD5Update(struct MD5Context *ctx, __const mutils_word8 *buf, mutils_word32 len)
 {
-    register word32 t;
+	register mutils_word32 t;
+	mutils_word8 *p;
 
-    /* Update bitcount */
+	/* Update bitcount */
 
-    t = ctx->bits[0];
-    if ((ctx->bits[0] = t + ((word32) len << 3)) < t)
-	ctx->bits[1]++;		/* Carry from low to high */
-    ctx->bits[1] += len >> 29;
+	t = ctx->bits[0];
+	if ((ctx->bits[0] = t + ((mutils_word32) len << 3)) < t)
+		ctx->bits[1]++;		/* Carry from low to high */
+	ctx->bits[1] += len >> 29;
 
-    t = (t >> 3) & 0x3f;	/* Bytes already in shsInfo->data */
+	t = (t >> 3) & 0x3f;	/* Bytes already in shsInfo->data */
 
-    /* Handle any leading odd-sized chunks */
+	/* Handle any leading odd-sized chunks */
 
-    if (t) {
-	unsigned char *p = (unsigned char *) ctx->in + t;
+	if (t)
+	{
+		p = (mutils_word8 *) ctx->in + t;
 
-	t = 64 - t;
-	if (len < t) {
-	    memcpy(p, buf, len);
-	    return;
+		t = 64 - t;
+		if (len < t)
+		{
+			mutils_memcpy(p, buf, len);
+			return;
+		}
+		mutils_memcpy(p, buf, t);
+		mutils_word32nswap((mutils_word32 *) ctx->in, 16, MUTILS_TRUE);
+		MD5Transform(ctx->buf, (mutils_word32 *) ctx->in);
+		buf += t;
+		len -= t;
 	}
-	memcpy(p, buf, t);
-	byteReverse(ctx->in, 16);
-	MD5Transform(ctx->buf, (word32 *) ctx->in);
-	buf += t;
-	len -= t;
-    }
-    /* Process data in 64-byte chunks */
+	/* Process data in 64-byte chunks */
 
-    while (len >= 64) {
-	memcpy(ctx->in, buf, 64);
-	byteReverse(ctx->in, 16);
-	MD5Transform(ctx->buf, (word32 *) ctx->in);
-	buf += 64;
-	len -= 64;
-    }
+	while (len >= 64)
+	{
+		mutils_memcpy(ctx->in, buf, 64);
+		mutils_word32nswap((mutils_word32 *) ctx->in, 16, MUTILS_TRUE);
+		MD5Transform(ctx->buf, (mutils_word32 *) ctx->in);
+		buf += 64;
+		len -= 64;
+	}
 
-    /* Handle any remaining bytes of data. */
+	/* Handle any remaining bytes of data. */
 
-    memcpy(ctx->in, buf, len);
+	mutils_memcpy(ctx->in, buf, len);
 }
 
 /*
  * Final wrapup - pad to 64-byte boundary with the bit pattern 
  * 1 0* (64-bit count of bits processed, MSB-first)
  */
-void MD5Final(struct MD5Context *ctx, unsigned char* digest)
+void MD5Final(struct MD5Context *ctx, mutils_word8* digest)
 {
-    unsigned int count;
-    unsigned char *p;
+	mutils_word32 count;
+	mutils_word8 *p;
 
-    /* Compute number of bytes mod 64 */
-    count = (ctx->bits[0] >> 3) & 0x3F;
+	/* Compute number of bytes mod 64 */
+	count = (ctx->bits[0] >> 3) & 0x3F;
 
-    /* Set the first char of padding to 0x80.  This is safe since there is
-       always at least one byte free */
-    p = ctx->in + count;
-    *p++ = 0x80;
+	/* Set the first char of padding to 0x80.  This is safe since there is
+	   always at least one byte free */
+	p = ctx->in + count;
+	*p++ = 0x80;
 
-    /* Bytes of padding needed to make 64 bytes */
-    count = 64 - 1 - count;
+	/* Bytes of padding needed to make 64 bytes */
+	count = 64 - 1 - count;
 
-    /* Pad out to 56 mod 64 */
-    if (count < 8) {
-	/* Two lots of padding:  Pad the first block to 64 bytes */
-	memset(p, 0, count);
-	byteReverse(ctx->in, 16);
-	MD5Transform(ctx->buf, (word32 *) ctx->in);
+	/* Pad out to 56 mod 64 */
+	if (count < 8)
+	{
+		/* Two lots of padding:  Pad the first block to 64 bytes */
+		mutils_bzero(p, count);
+		mutils_word32nswap((mutils_word32 *) ctx->in, 16, MUTILS_TRUE);
+		MD5Transform(ctx->buf, (mutils_word32 *) ctx->in);
 
-	/* Now fill the next block with 56 bytes */
-	memset(ctx->in, 0, 56);
-    } else {
-	/* Pad block to 56 bytes */
-	memset(p, 0, count - 8);
-    }
-    byteReverse(ctx->in, 14);
+		/* Now fill the next block with 56 bytes */
+		mutils_bzero(ctx->in, 56);
+	} else {
+		/* Pad block to 56 bytes */
+		mutils_bzero(p, count - 8);
+	}
+	mutils_word32nswap((mutils_word32 *) ctx->in, 14, MUTILS_TRUE);
 
-    /* Append length in bits and transform */
-    ((word32 *) ctx->in)[14] = ctx->bits[0];
-    ((word32 *) ctx->in)[15] = ctx->bits[1];
+	/* Append length in bits and transform */
+	((mutils_word32 *) ctx->in)[14] = ctx->bits[0];
+	((mutils_word32 *) ctx->in)[15] = ctx->bits[1];
 
-    MD5Transform(ctx->buf, (word32 *) ctx->in);
-    byteReverse((unsigned char *) ctx->buf, 4);
+	MD5Transform(ctx->buf, (mutils_word32 *) ctx->in);
+	mutils_word32nswap((mutils_word32 *) ctx->buf, 4, MUTILS_TRUE);
     
-    if (digest!=NULL)
-	    memcpy(digest, ctx->buf, 16);
-    memset(ctx, 0, sizeof(ctx));	/* In case it's sensitive */
+	if (digest!=NULL)
+		mutils_memcpy(digest, ctx->buf, 16);
+
+	mutils_bzero(ctx, sizeof(ctx));	/* In case it's sensitive */
 }
 
 /* The four core functions - F1 is optimized somewhat */
@@ -168,9 +154,9 @@ void MD5Final(struct MD5Context *ctx, unsigned char* digest)
  * reflect the addition of 16 longwords of new data.  MD5Update blocks
  * the data and converts bytes into longwords for this routine.
  */
-void MD5Transform(word32 buf[4], word32 const in[16])
+void MD5Transform(mutils_word32 buf[4], mutils_word32 __const in[16])
 {
-    register word32 a, b, c, d;
+    register mutils_word32 a, b, c, d;
 
     a = buf[0];
     b = buf[1];

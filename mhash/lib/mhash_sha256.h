@@ -37,23 +37,23 @@
 
 typedef struct sha256_ctx
 {
-  word32 state[_SHA256_DIGEST_LENGTH];    /* State variables */
-  word32 count_low, count_high;           /* 64-bit block count */
-  byte block[SHA256_DATA_SIZE];          /* SHA256 data buffer */
-  unsigned int index;                       /* index into buffer */
+  mutils_word32 state[_SHA256_DIGEST_LENGTH];    /* State variables */
+  mutils_word32 count_low, count_high;           /* 64-bit block count */
+  mutils_word8 block[SHA256_DATA_SIZE];          /* SHA256 data buffer */
+  mutils_word32 index;                       /* index into buffer */
 } SHA256_CTX;
 
 void
 sha256_init(struct sha256_ctx *ctx);
 
 void
-sha256_update(struct sha256_ctx *ctx, const byte *data, unsigned length);
+sha256_update(struct sha256_ctx *ctx, __const mutils_word8 *data, mutils_word32 length);
 
 void
 sha256_final(struct sha256_ctx *ctx);
 
 void
-sha256_digest(const struct sha256_ctx *ctx, byte *digest);
+sha256_digest(__const struct sha256_ctx *ctx, mutils_word8 *digest);
 
 
 #endif /* NETTLE_SHA_H_INCLUDED */

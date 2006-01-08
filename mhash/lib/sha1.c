@@ -9,7 +9,7 @@
  * Adapted to pike and some cleanup by Niels Möller.
  */
 
-/* $Id: sha1.c,v 1.4 2002/01/26 09:09:45 nmav Exp $ */
+/* $Id: sha1.c,v 1.5 2002/05/26 17:46:16 nmav Exp $ */
 
 /* SHA: NIST's Secure Hash Algorithm */
 
@@ -141,9 +141,9 @@ void sha_init(struct sha_ctx *ctx)
 
    Note that this function destroys the data area */
 
-static void sha_transform(struct sha_ctx *ctx, word32 *data )
+static void sha_transform(struct sha_ctx *ctx, mutils_word32 *data )
 {
-  register word32 A, B, C, D, E;     /* Local vars */
+  register mutils_word32 A, B, C, D, E;     /* Local vars */
 
   /* Set up first buffer and local data buffer */
   A = ctx->digest[0];
@@ -246,9 +246,9 @@ static void sha_transform(struct sha_ctx *ctx, word32 *data )
 }
 
 
-static void sha_block(struct sha_ctx *ctx, word8 *block)
+static void sha_block(struct sha_ctx *ctx, mutils_word8 *block)
 {
-  word32 data[SHA_DATALEN];
+  mutils_word32 data[SHA_DATALEN];
   int i;
   
   /* Update block count */
@@ -262,20 +262,20 @@ static void sha_block(struct sha_ctx *ctx, word8 *block)
   sha_transform(ctx, data);
 }
 
-void sha_update(struct sha_ctx *ctx, word8 *buffer, word32 len)
+void sha_update(struct sha_ctx *ctx, mutils_word8 *buffer, mutils_word32 len)
 {
   if (ctx->index)
     { /* Try to fill partial block */
       unsigned left = SHA_DATASIZE - ctx->index;
       if (len < left)
 	{
-	  memcpy(ctx->block + ctx->index, buffer, len);
+	  mutils_memcpy(ctx->block + ctx->index, buffer, len);
 	  ctx->index += len;
 	  return; /* Finished */
 	}
       else
 	{
-	  memcpy(ctx->block + ctx->index, buffer, left);
+	  mutils_memcpy(ctx->block + ctx->index, buffer, left);
 	  sha_block(ctx, ctx->block);
 	  buffer += left;
 	  len -= left;
@@ -289,7 +289,7 @@ void sha_update(struct sha_ctx *ctx, word8 *buffer, word32 len)
     }
   if ((ctx->index = len))     /* This assignment is intended */
     /* Buffer leftovers */
-    memcpy(ctx->block, buffer, len);
+    mutils_memcpy(ctx->block, buffer, len);
 }
 	  
 /* Final wrapup - pad to SHA_DATASIZE-byte boundary with the bit pattern
@@ -297,7 +297,7 @@ void sha_update(struct sha_ctx *ctx, word8 *buffer, word32 len)
 
 void sha_final(struct sha_ctx *ctx)
 {
-  word32 data[SHA_DATALEN];
+  mutils_word32 data[SHA_DATALEN];
   int i;
   int words;
   
@@ -333,7 +333,7 @@ void sha_final(struct sha_ctx *ctx)
   sha_transform(ctx, data);
 }
 
-void sha_digest(struct sha_ctx *ctx, word8 *s)
+void sha_digest(struct sha_ctx *ctx, mutils_word8 *s)
 {
   int i;
 

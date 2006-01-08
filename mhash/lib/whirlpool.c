@@ -74,7 +74,8 @@
  * employed).
  */
 
-static const word64 C0[256] = {
+static __const mutils_word64 C0[256] =
+{
   0x18186018c07830d8ULL, 0x23238c2305af4626ULL, 0xc6c63fc67ef991b8ULL, 0xe8e887e8136fcdfbULL,
   0x878726874ca113cbULL, 0xb8b8dab8a9626d11ULL, 0x0101040108050209ULL, 0x4f4f214f426e9e0dULL,
   0x3636d836adee6c9bULL, 0xa6a6a2a6590451ffULL, 0xd2d26fd2debdb90cULL, 0xf5f5f3f5fb06f70eULL,
@@ -141,7 +142,8 @@ static const word64 C0[256] = {
   0x2828a0285d885075ULL, 0x5c5c6d5cda31b886ULL, 0xf8f8c7f8933fed6bULL, 0x8686228644a411c2ULL,
 };
 
-static const word64 C1[256] = {
+static __const mutils_word64 C1[256] =
+{
   0xd818186018c07830ULL, 0x2623238c2305af46ULL, 0xb8c6c63fc67ef991ULL, 0xfbe8e887e8136fcdULL,
   0xcb878726874ca113ULL, 0x11b8b8dab8a9626dULL, 0x0901010401080502ULL, 0x0d4f4f214f426e9eULL,
   0x9b3636d836adee6cULL, 0xffa6a6a2a6590451ULL, 0x0cd2d26fd2debdb9ULL, 0x0ef5f5f3f5fb06f7ULL,
@@ -208,7 +210,8 @@ static const word64 C1[256] = {
   0x752828a0285d8850ULL, 0x865c5c6d5cda31b8ULL, 0x6bf8f8c7f8933fedULL, 0xc28686228644a411ULL,
 };
 
-static const word64 C2[256] = {
+static __const mutils_word64 C2[256] =
+{
   0x30d818186018c078ULL, 0x462623238c2305afULL, 0x91b8c6c63fc67ef9ULL, 0xcdfbe8e887e8136fULL,
   0x13cb878726874ca1ULL, 0x6d11b8b8dab8a962ULL, 0x0209010104010805ULL, 0x9e0d4f4f214f426eULL,
   0x6c9b3636d836adeeULL, 0x51ffa6a6a2a65904ULL, 0xb90cd2d26fd2debdULL, 0xf70ef5f5f3f5fb06ULL,
@@ -275,7 +278,8 @@ static const word64 C2[256] = {
   0x50752828a0285d88ULL, 0xb8865c5c6d5cda31ULL, 0xed6bf8f8c7f8933fULL, 0x11c28686228644a4ULL,
 };
 
-static const word64 C3[256] = {
+static __const mutils_word64 C3[256] =
+{
   0x7830d818186018c0ULL, 0xaf462623238c2305ULL, 0xf991b8c6c63fc67eULL, 0x6fcdfbe8e887e813ULL,
   0xa113cb878726874cULL, 0x626d11b8b8dab8a9ULL, 0x0502090101040108ULL, 0x6e9e0d4f4f214f42ULL,
   0xee6c9b3636d836adULL, 0x0451ffa6a6a2a659ULL, 0xbdb90cd2d26fd2deULL, 0x06f70ef5f5f3f5fbULL,
@@ -342,7 +346,8 @@ static const word64 C3[256] = {
   0x8850752828a0285dULL, 0x31b8865c5c6d5cdaULL, 0x3fed6bf8f8c7f893ULL, 0xa411c28686228644ULL,
 };
 
-static const word64 C4[256] = {
+static __const mutils_word64 C4[256] =
+{
   0xc07830d818186018ULL, 0x05af462623238c23ULL, 0x7ef991b8c6c63fc6ULL, 0x136fcdfbe8e887e8ULL,
   0x4ca113cb87872687ULL, 0xa9626d11b8b8dab8ULL, 0x0805020901010401ULL, 0x426e9e0d4f4f214fULL,
   0xadee6c9b3636d836ULL, 0x590451ffa6a6a2a6ULL, 0xdebdb90cd2d26fd2ULL, 0xfb06f70ef5f5f3f5ULL,
@@ -409,7 +414,8 @@ static const word64 C4[256] = {
   0x5d8850752828a028ULL, 0xda31b8865c5c6d5cULL, 0x933fed6bf8f8c7f8ULL, 0x44a411c286862286ULL,
 };
 
-static const word64 C5[256] = {
+static __const mutils_word64 C5[256] =
+{
   0x18c07830d8181860ULL, 0x2305af462623238cULL, 0xc67ef991b8c6c63fULL, 0xe8136fcdfbe8e887ULL,
   0x874ca113cb878726ULL, 0xb8a9626d11b8b8daULL, 0x0108050209010104ULL, 0x4f426e9e0d4f4f21ULL,
   0x36adee6c9b3636d8ULL, 0xa6590451ffa6a6a2ULL, 0xd2debdb90cd2d26fULL, 0xf5fb06f70ef5f5f3ULL,
@@ -476,7 +482,8 @@ static const word64 C5[256] = {
   0x285d8850752828a0ULL, 0x5cda31b8865c5c6dULL, 0xf8933fed6bf8f8c7ULL, 0x8644a411c2868622ULL,
 };
 
-static const word64 C6[256] = {
+static __const mutils_word64 C6[256] =
+{
   0x6018c07830d81818ULL, 0x8c2305af46262323ULL, 0x3fc67ef991b8c6c6ULL, 0x87e8136fcdfbe8e8ULL,
   0x26874ca113cb8787ULL, 0xdab8a9626d11b8b8ULL, 0x0401080502090101ULL, 0x214f426e9e0d4f4fULL,
   0xd836adee6c9b3636ULL, 0xa2a6590451ffa6a6ULL, 0x6fd2debdb90cd2d2ULL, 0xf3f5fb06f70ef5f5ULL,
@@ -543,7 +550,8 @@ static const word64 C6[256] = {
   0xa0285d8850752828ULL, 0x6d5cda31b8865c5cULL, 0xc7f8933fed6bf8f8ULL, 0x228644a411c28686ULL,
 };
 
-static const word64 C7[256] = {
+static __const mutils_word64 C7[256] =
+{
   0x186018c07830d818ULL, 0x238c2305af462623ULL, 0xc63fc67ef991b8c6ULL, 0xe887e8136fcdfbe8ULL,
   0x8726874ca113cb87ULL, 0xb8dab8a9626d11b8ULL, 0x0104010805020901ULL, 0x4f214f426e9e0d4fULL,
   0x36d836adee6c9b36ULL, 0xa6a2a6590451ffa6ULL, 0xd26fd2debdb90cd2ULL, 0xf5f3f5fb06f70ef5ULL,
@@ -610,7 +618,8 @@ static const word64 C7[256] = {
   0x28a0285d88507528ULL, 0x5c6d5cda31b8865cULL, 0xf8c7f8933fed6bf8ULL, 0x86228644a411c286ULL,
 };
 
-static const word64 rc[R + 1] = {
+static __const mutils_word64 rc[R + 1] =
+{
   0x0000000000000000ULL,
   0x1823c6e887b8014fULL,
   0x36a6d2f5796f9152ULL,
@@ -627,74 +636,78 @@ static const word64 rc[R + 1] = {
 /**
  * The core Whirlpool transform.
  */
-static void processBuffer(struct whirlpool_ctx * const ctx) {
-    int i, r;
-    word64 K[8];        /* the round key */
-    word64 block[8];    /* mu(buffer) */
-    word64 state[8];    /* the cipher state */
-    word64 L[8];
-    byte *buffer = ctx->buffer;
+static void processBuffer(struct whirlpool_ctx * __const ctx)
+{
+	mutils_word32 i;
+	mutils_word32 r;
+	mutils_word64 K[8];        /* the round key */
+	mutils_word64 block[8];    /* mu(buffer) */
+	mutils_word64 state[8];    /* the cipher state */
+	mutils_word64 L[8];
+	mutils_word8 *buffer = ctx->buffer;
 
-    /*
-     * map the buffer to a block:
-     */
-    for (i = 0; i < 8; i++, buffer += 8) {
-        block[i] =
-            (((word64)buffer[0]        ) << 56) ^
-            (((word64)buffer[1] & 0xffL) << 48) ^
-            (((word64)buffer[2] & 0xffL) << 40) ^
-            (((word64)buffer[3] & 0xffL) << 32) ^
-            (((word64)buffer[4] & 0xffL) << 24) ^
-            (((word64)buffer[5] & 0xffL) << 16) ^
-            (((word64)buffer[6] & 0xffL) <<  8) ^
-            (((word64)buffer[7] & 0xffL)      );
-    }
-    /*
-     * compute and apply K^0 to the cipher state:
-     */
-    state[0] = block[0] ^ (K[0] = ctx->hash[0]);
-    state[1] = block[1] ^ (K[1] = ctx->hash[1]);
-    state[2] = block[2] ^ (K[2] = ctx->hash[2]);
-    state[3] = block[3] ^ (K[3] = ctx->hash[3]);
-    state[4] = block[4] ^ (K[4] = ctx->hash[4]);
-    state[5] = block[5] ^ (K[5] = ctx->hash[5]);
-    state[6] = block[6] ^ (K[6] = ctx->hash[6]);
-    state[7] = block[7] ^ (K[7] = ctx->hash[7]);
-    /*
-     * iterate over all rounds:
-     */
-    for (r = 1; r <= R; r++) {
-        /*
-         * compute K^r from K^{r-1}:
-         */
-        L[0] =
-            C0[(int)(K[0] >> 56)       ] ^
-            C1[(int)(K[7] >> 48) & 0xff] ^
-            C2[(int)(K[6] >> 40) & 0xff] ^
-            C3[(int)(K[5] >> 32) & 0xff] ^
-            C4[(int)(K[4] >> 24) & 0xff] ^
-            C5[(int)(K[3] >> 16) & 0xff] ^
-            C6[(int)(K[2] >>  8) & 0xff] ^
-            C7[(int)(K[1]      ) & 0xff] ^
-            rc[r];
-        L[1] =
-            C0[(int)(K[1] >> 56)       ] ^
-            C1[(int)(K[0] >> 48) & 0xff] ^
-            C2[(int)(K[7] >> 40) & 0xff] ^
-            C3[(int)(K[6] >> 32) & 0xff] ^
-            C4[(int)(K[5] >> 24) & 0xff] ^
-            C5[(int)(K[4] >> 16) & 0xff] ^
-            C6[(int)(K[3] >>  8) & 0xff] ^
-            C7[(int)(K[2]      ) & 0xff];
-        L[2] =
-            C0[(int)(K[2] >> 56)       ] ^
-            C1[(int)(K[1] >> 48) & 0xff] ^
-            C2[(int)(K[0] >> 40) & 0xff] ^
-            C3[(int)(K[7] >> 32) & 0xff] ^
-            C4[(int)(K[6] >> 24) & 0xff] ^
-            C5[(int)(K[5] >> 16) & 0xff] ^
-            C6[(int)(K[4] >>  8) & 0xff] ^
-            C7[(int)(K[3]      ) & 0xff];
+	/*
+	 * map the buffer to a block:
+	 */
+	for (i = 0; i < 8; i++, buffer += 8)
+	{
+		block[i] =
+			(((mutils_word64)buffer[0]        ) << 56) ^
+			(((mutils_word64)buffer[1] & 0xffL) << 48) ^
+			(((mutils_word64)buffer[2] & 0xffL) << 40) ^
+			(((mutils_word64)buffer[3] & 0xffL) << 32) ^
+			(((mutils_word64)buffer[4] & 0xffL) << 24) ^
+			(((mutils_word64)buffer[5] & 0xffL) << 16) ^
+			(((mutils_word64)buffer[6] & 0xffL) <<  8) ^
+			(((mutils_word64)buffer[7] & 0xffL)      );
+	}
+	/*
+	 * compute and apply K^0 to the cipher state:
+	 */
+	state[0] = block[0] ^ (K[0] = ctx->hash[0]);
+	state[1] = block[1] ^ (K[1] = ctx->hash[1]);
+	state[2] = block[2] ^ (K[2] = ctx->hash[2]);
+	state[3] = block[3] ^ (K[3] = ctx->hash[3]);
+	state[4] = block[4] ^ (K[4] = ctx->hash[4]);
+	state[5] = block[5] ^ (K[5] = ctx->hash[5]);
+	state[6] = block[6] ^ (K[6] = ctx->hash[6]);
+	state[7] = block[7] ^ (K[7] = ctx->hash[7]);
+	/*
+	 * iterate over all rounds:
+	 */
+	for (r = 1; r <= R; r++)
+	{
+		/*
+		 * compute K^r from K^{r-1}:
+		 */
+		L[0] =
+			C0[(int)(K[0] >> 56)       ] ^
+			C1[(int)(K[7] >> 48) & 0xff] ^
+			C2[(int)(K[6] >> 40) & 0xff] ^
+			C3[(int)(K[5] >> 32) & 0xff] ^
+			C4[(int)(K[4] >> 24) & 0xff] ^
+			C5[(int)(K[3] >> 16) & 0xff] ^
+			C6[(int)(K[2] >>  8) & 0xff] ^
+			C7[(int)(K[1]      ) & 0xff] ^
+			rc[r];
+		L[1] =
+			C0[(int)(K[1] >> 56)       ] ^
+			C1[(int)(K[0] >> 48) & 0xff] ^
+			C2[(int)(K[7] >> 40) & 0xff] ^
+			C3[(int)(K[6] >> 32) & 0xff] ^
+			C4[(int)(K[5] >> 24) & 0xff] ^
+			C5[(int)(K[4] >> 16) & 0xff] ^
+			C6[(int)(K[3] >>  8) & 0xff] ^
+			C7[(int)(K[2]      ) & 0xff];
+		L[2] =
+			C0[(int)(K[2] >> 56)       ] ^
+			C1[(int)(K[1] >> 48) & 0xff] ^
+			C2[(int)(K[0] >> 40) & 0xff] ^
+			C3[(int)(K[7] >> 32) & 0xff] ^
+			C4[(int)(K[6] >> 24) & 0xff] ^
+			C5[(int)(K[5] >> 16) & 0xff] ^
+			C6[(int)(K[4] >>  8) & 0xff] ^
+			C7[(int)(K[3]      ) & 0xff];
         L[3] =
             C0[(int)(K[3] >> 56)       ] ^
             C1[(int)(K[2] >> 48) & 0xff] ^
@@ -858,7 +871,7 @@ static void processBuffer(struct whirlpool_ctx * const ctx) {
  */
 void whirlpool_init(struct whirlpool_ctx *ctx)
 {
-  int i;
+  mutils_word32 i;
   ctx->hashlen[0] = ctx->hashlen[1] = 
     ctx->hashlen[2] = ctx->hashlen[3] = 0;
   ctx->index = 0;
@@ -878,16 +891,16 @@ void whirlpool_init(struct whirlpool_ctx *ctx)
 
 
 void
-whirlpool_update(struct whirlpool_ctx *ctx, const byte *data, unsigned length)
+whirlpool_update(struct whirlpool_ctx *ctx, __const mutils_word8 *data, mutils_word32 length)
 {
   if (ctx->index) {	/* Try to fill partial block */
-    unsigned int left = WHIRLPOOL_DATA_SIZE - ctx->index;
+    mutils_word32 left = WHIRLPOOL_DATA_SIZE - ctx->index;
     if (length < left) {
-      memcpy(ctx->buffer + ctx->index, data, length);
+      mutils_memcpy(ctx->buffer + ctx->index, data, length);
       ctx->index += length;
       return;	/* Finished */
     } else {
-      memcpy(ctx->buffer + ctx->index, data, left);
+      mutils_memcpy(ctx->buffer + ctx->index, data, left);
       processBuffer(ctx);
       INCCTR(ctx->hashlen, 512);
       data += left;
@@ -895,13 +908,13 @@ whirlpool_update(struct whirlpool_ctx *ctx, const byte *data, unsigned length)
     }
   }
   while (length >= WHIRLPOOL_DATA_SIZE) {
-    memcpy(ctx->buffer, data, WHIRLPOOL_DATA_SIZE);
+    mutils_memcpy(ctx->buffer, data, WHIRLPOOL_DATA_SIZE);
     processBuffer(ctx);
     INCCTR(ctx->hashlen, 512);
     data += WHIRLPOOL_DATA_SIZE;
     length -= WHIRLPOOL_DATA_SIZE;
   }
-  memcpy(ctx->buffer, data, length);
+  mutils_memcpy(ctx->buffer, data, length);
   ctx->index = length;
 }
 
@@ -909,9 +922,9 @@ whirlpool_update(struct whirlpool_ctx *ctx, const byte *data, unsigned length)
    1 0* (256-bit count of bits processed, MSB-first) */
 void whirlpool_final(struct whirlpool_ctx *ctx)
 {
-  int i;
-  byte * buf;
-  word64 t;
+  mutils_word32 i;
+  mutils_word8 * buf;
+  mutils_word64 t;
 
   i = ctx->index;
 
@@ -923,12 +936,12 @@ void whirlpool_final(struct whirlpool_ctx *ctx)
   
   if (i > WHIRLPOOL_DATA_SIZE - 256/8)
     {
-      memset(ctx->buffer + i, 0, WHIRLPOOL_DATA_SIZE - i);
+      mutils_memset(ctx->buffer + i, 0, WHIRLPOOL_DATA_SIZE - i);
       processBuffer(ctx);
       i = 0;
     }
 
-  memset(ctx->buffer + i, 0, WHIRLPOOL_DATA_SIZE - 256/8 - i);
+  mutils_memset(ctx->buffer + i, 0, WHIRLPOOL_DATA_SIZE - 256/8 - i);
 
   /* 
    * Terminate with length field
@@ -953,21 +966,22 @@ void whirlpool_final(struct whirlpool_ctx *ctx)
 /**
  * Get the hash value from the hashing state.
  */
-void whirlpool_digest(const struct whirlpool_ctx * ctx,
-                    byte * digest) {
-  int i;
+void whirlpool_digest(__const struct whirlpool_ctx * ctx,
+                    mutils_word8 * digest)
+{
+   mutils_word32 i;
     /*
      * return the completed message digest:
      */
     for (i = 0; i < WHIRLPOOL_DIGEST_SIZE/8; i++) {
-        *digest++ = (byte)(ctx->hash[i] >> 56);
-        *digest++ = (byte)(ctx->hash[i] >> 48);
-        *digest++ = (byte)(ctx->hash[i] >> 40);
-        *digest++ = (byte)(ctx->hash[i] >> 32);
-        *digest++ = (byte)(ctx->hash[i] >> 24);
-        *digest++ = (byte)(ctx->hash[i] >> 16);
-        *digest++ = (byte)(ctx->hash[i] >>  8);
-        *digest++ = (byte)(ctx->hash[i]      );
+        *digest++ = (mutils_word8)(ctx->hash[i] >> 56);
+        *digest++ = (mutils_word8)(ctx->hash[i] >> 48);
+        *digest++ = (mutils_word8)(ctx->hash[i] >> 40);
+        *digest++ = (mutils_word8)(ctx->hash[i] >> 32);
+        *digest++ = (mutils_word8)(ctx->hash[i] >> 24);
+        *digest++ = (mutils_word8)(ctx->hash[i] >> 16);
+        *digest++ = (mutils_word8)(ctx->hash[i] >>  8);
+        *digest++ = (mutils_word8)(ctx->hash[i]      );
     }
 }
 

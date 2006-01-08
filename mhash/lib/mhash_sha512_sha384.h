@@ -34,10 +34,10 @@
 
 typedef struct sha512_sha384_ctx
 {
-  word64 state[_SHA512_SHA384_STATE_LENGTH];  /* State variables */
-  word64 bitcount_low, bitcount_high;         /* Bit counter */
-  byte block[SHA512_SHA384_DATA_SIZE];        /* SHA512/384 data buffer */
-  unsigned int index;                         /* index into buffer */
+  mutils_word64 state[_SHA512_SHA384_STATE_LENGTH];  /* State variables */
+  mutils_word64 bitcount_low, bitcount_high;         /* Bit counter */
+  mutils_word8 block[SHA512_SHA384_DATA_SIZE];        /* SHA512/384 data buffer */
+  mutils_word32 index;                         /* index into buffer */
 } SHA512_SHA384_CTX;
 
 void
@@ -47,17 +47,17 @@ void
 sha384_init(struct sha512_sha384_ctx *ctx);
 
 void
-sha512_sha384_update(struct sha512_sha384_ctx *ctx, const byte *data, 
-		      unsigned length);
+sha512_sha384_update(struct sha512_sha384_ctx *ctx, __const mutils_word8 *data, 
+		      mutils_word32 length);
 
 void
 sha512_sha384_final(struct sha512_sha384_ctx *ctx);
 
 void
-sha512_digest(const struct sha512_sha384_ctx *ctx, byte *digest);
+sha512_digest(__const struct sha512_sha384_ctx *ctx, mutils_word8 *digest);
 
 void
-sha384_digest(const struct sha512_sha384_ctx *ctx, byte *digest);
+sha384_digest(__const struct sha512_sha384_ctx *ctx, mutils_word8 *digest);
 
 
 #endif /* __MHASH_SHA512_SHA384_H_INCLUDED */

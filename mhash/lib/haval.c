@@ -106,7 +106,7 @@
 	(((X2) ^ (X0)) & (X5)) ^ ((X3) & (X6)) ^ (X0))
 
 
-#define ROTR(v,n)   (((v) >> ((word32)(n))) | ((v) << (32 - (word32)(n))))
+#define ROTR(v,n)   (((v) >> ((mutils_word32)(n))) | ((v) << (32 - (mutils_word32)(n))))
 
 /* This macro did not work with my gcc, so I removed it.
  * --nikos
@@ -118,19 +118,19 @@ The following macro would generate better code on an Intel platform,
 however it is never used there, and this code when used in e.g
 havalTransform3()
 
-  		t = ((word32 *)in)[i];
+  		t = ((mutils_word32 *)in)[i];
 
 blithely casts byte aligned data to a longword aligned type, causing
 an immediate core dump on a RISC system
 
 #define BYTE_REVERSE(out, in) \
 { \
-	register word32 t; \
-	register int i; \
+	register mutils_word32 t; \
+	register mutils_word8 i; \
 	for (i = 0; i < 32; i++) { \
-		t = ((word32 *)in)[i]; \
+		t = ((mutils_word32 *)in)[i]; \
 		t = ROTR (t, 16); \
-		((word32 *)out)[i] = ((t & 0xFF00FF00UL) >> 8) | ((t & 0x00FF00FFUL) << 8); \
+		((mutils_word32 *)out)[i] = ((t & 0xFF00FF00UL) >> 8) | ((t & 0x00FF00FFUL) << 8); \
 	} \
 }
 
@@ -140,23 +140,22 @@ practice here.
 */
 #define BYTE_REVERSE(out, in, n) \
 { \
-	register int i; \
+	register mutils_word8 i; \
 	for (i = 0; i < n; i++) { \
-                ((byte*)out)[4*i+3] = ((byte*)in)[4*i+0];\
-                ((byte*)out)[4*i+2] = ((byte*)in)[4*i+1];\
-                ((byte*)out)[4*i+1] = ((byte*)in)[4*i+2];\
-                ((byte*)out)[4*i+0] = ((byte*)in)[4*i+3];\
+                ((mutils_word8*)out)[4*i+3] = ((mutils_word8*)in)[4*i+0];\
+                ((mutils_word8*)out)[4*i+2] = ((mutils_word8*)in)[4*i+1];\
+                ((mutils_word8*)out)[4*i+1] = ((mutils_word8*)in)[4*i+2];\
+                ((mutils_word8*)out)[4*i+0] = ((mutils_word8*)in)[4*i+3];\
 	} \
 }
 
-
-static void havalTransform3 (word32 E[8], const byte D[128], word32 T[8])
+static void havalTransform3 (mutils_word32 E[8], __const mutils_word8 D[128], mutils_word32 T[8])
 {
 
 #ifndef WORDS_BIGENDIAN
-	word32 *W = (word32 *)D;
+	mutils_word32 *W = (mutils_word32 *)D;
 #else  /* !LITTLE_ENDIAN */
-	word32 W[32];
+	mutils_word32 W[32];
 	BYTE_REVERSE(W, D, 32);
 #endif /* ?LITTLE_ENDIAN */
 
@@ -278,12 +277,12 @@ static void havalTransform3 (word32 E[8], const byte D[128], word32 T[8])
 } /* havalTransform3 */
 
 
-static void havalTransform4 (word32 E[8], const byte D[128], word32 T[8])
+static void havalTransform4 (mutils_word32 E[8], __const mutils_word8 D[128], mutils_word32 T[8])
 {
 #ifndef WORDS_BIGENDIAN
-	word32 *W = (word32 *)D;
+	mutils_word32 *W = (mutils_word32 *)D;
 #else  /* !LITTLE_ENDIAN */
-	word32 W[32];
+	mutils_word32 W[32];
 	BYTE_REVERSE(W, D, 32);
 #endif /* ?LITTLE_ENDIAN */
 
@@ -442,12 +441,12 @@ static void havalTransform4 (word32 E[8], const byte D[128], word32 T[8])
 } /* havalTransform4 */
 
 
-static void havalTransform5 (word32 E[8], const byte D[128], word32 T[8])
+static void havalTransform5 (mutils_word32 E[8], __const mutils_word8 D[128], mutils_word32 T[8])
 {
 #ifndef WORDS_BIGENDIAN
-	word32 *W = (word32 *)D;
+	mutils_word32 *W = (mutils_word32 *)D;
 #else  /* !LITTLE_ENDIAN */
-	word32 W[32];
+	mutils_word32 W[32];
 	BYTE_REVERSE(W, D, 32);
 #endif /* ?LITTLE_ENDIAN */
 
@@ -643,30 +642,32 @@ static void havalTransform5 (word32 E[8], const byte D[128], word32 T[8])
 
 } /* havalTransform5 */
 
-int havalInit256( havalContext *hcp) {
-	return havalInit( hcp, 3, 256);
+mutils_error havalInit256( havalContext *hcp) {
+	return havalInit(hcp, 3, 256);
 }
-int havalInit224( havalContext *hcp) {
-	return havalInit( hcp, 3, 224);
+mutils_error havalInit224( havalContext *hcp) {
+	return havalInit(hcp, 3, 224);
 }
-int havalInit192( havalContext *hcp) {
-	return havalInit( hcp, 3, 192);
+mutils_error havalInit192( havalContext *hcp) {
+	return havalInit(hcp, 3, 192);
 }
-int havalInit160( havalContext *hcp) {
-	return havalInit( hcp, 3, 160);
+mutils_error havalInit160( havalContext *hcp) {
+	return havalInit(hcp, 3, 160);
 }
-int havalInit128( havalContext *hcp) {
-	return havalInit( hcp, 3, 128);
+mutils_error havalInit128( havalContext *hcp) {
+	return havalInit(hcp, 3, 128);
 }
 
-int havalInit (havalContext *hcp, int passes, int hashLength)
+mutils_error havalInit (havalContext *hcp, mutils_word32 passes, mutils_word32 hashLength)
 {
-	if (hcp == NULL) {
-		return 1; /* bad context */
+	if (hcp == NULL)
+	{
+		return(-MUTILS_INVALID_INPUT_BUFFER); /* bad context */
 	}
 	/* check number of passes: */
-	if (passes != 3 && passes != 4 && passes != 5) {
-		return 2; /* invalid number of passes */
+	if (passes != 3 && passes != 4 && passes != 5)
+	{
+		return(-MUTILS_INVALID_PASSES); /* invalid number of passes */
 	}
 	/* check hash length: */
 	if (hashLength != 128 &&
@@ -674,52 +675,52 @@ int havalInit (havalContext *hcp, int passes, int hashLength)
 		hashLength != 192 &&
 		hashLength != 224 &&
 		hashLength != 256) {
-		return 3; /* invalid hash length */
+		return(-MUTILS_INVALID_SIZE); /* invalid hash length */
 	}
 	/* properly initialize HAVAL context: */
-	mhash_bzero(hcp, sizeof (havalContext));
-	hcp->passes = (word16) passes;
-	hcp->hashLength = (word16) hashLength;
-    hcp->digest[0] = 0x243F6A88UL;
-    hcp->digest[1] = 0x85A308D3UL;
-    hcp->digest[2] = 0x13198A2EUL;
-    hcp->digest[3] = 0x03707344UL;
-    hcp->digest[4] = 0xA4093822UL;
-    hcp->digest[5] = 0x299F31D0UL;
-    hcp->digest[6] = 0x082EFA98UL;
-    hcp->digest[7] = 0xEC4E6C89UL;
-	return 0; /* OK */
+	mutils_bzero(hcp, sizeof (havalContext));
+	hcp->passes = (mutils_word16) passes;
+	hcp->hashLength = (mutils_word16) hashLength;
+	hcp->digest[0] = 0x243F6A88UL;
+	hcp->digest[1] = 0x85A308D3UL;
+	hcp->digest[2] = 0x13198A2EUL;
+	hcp->digest[3] = 0x03707344UL;
+	hcp->digest[4] = 0xA4093822UL;
+	hcp->digest[5] = 0x299F31D0UL;
+	hcp->digest[6] = 0x082EFA98UL;
+	hcp->digest[7] = 0xEC4E6C89UL;
+	return(MUTILS_OK); /* OK */
 } /* havalInit */
 
 
-int havalUpdate (havalContext *hcp, const byte *dataBuffer, size_t dataLength)
+mutils_error havalUpdate (havalContext *hcp, __const mutils_word8 *dataBuffer, mutils_word32 dataLength)
 {
 	if (hcp == NULL) {
-		return 1; /* bad context */
+		return(-MUTILS_INVALID_INPUT_BUFFER); /* bad context */
 	}
 	if (dataBuffer == NULL || dataLength == 0) {
-		return 0; /* nothing to do */
+		return(MUTILS_OK); /* nothing to do */
 	}
 
 /*	assert (hcp->occupied < 128);  invariant */
 
 	/* update bit count: Extra parentheses for Borland C++ --Tines*/
-	if ( ((word32)dataLength << 3) > (0xFFFFFFFFUL - hcp->bitCount[0]) ) {
+	if ( ((mutils_word32)dataLength << 3) > (0xFFFFFFFFUL - hcp->bitCount[0]) ) {
 		hcp->bitCount[1]++;
 	}
-	hcp->bitCount[0] += (word32)dataLength << 3;
+	hcp->bitCount[0] += (mutils_word32)dataLength << 3;
 	
 	/* if the data buffer is not enough to complete */
 	/* the context data block, just append it: */
-	if (hcp->occupied + (word32)dataLength < 128) { /* caveat: typecast avoids 16-bit overflow */
-		memcpy (&hcp->block[hcp->occupied], dataBuffer, dataLength);
+	if (hcp->occupied + (mutils_word32)dataLength < 128) { /* caveat: typecast avoids 16-bit overflow */
+		mutils_memcpy (&hcp->block[hcp->occupied], dataBuffer, dataLength);
 		hcp->occupied += dataLength;
 /*		assert (hcp->occupied < 128); */
-		return 0; /* delay processing */
+		return(MUTILS_OK); /* delay processing */
 	}
 
 	/* complete the context data block: */
-	memcpy (&hcp->block[hcp->occupied], dataBuffer, 128 - hcp->occupied);
+	mutils_memcpy (&hcp->block[hcp->occupied], dataBuffer, 128 - hcp->occupied);
 	dataBuffer += 128 - hcp->occupied;
 	dataLength -= 128 - hcp->occupied;
 
@@ -757,23 +758,23 @@ int havalUpdate (havalContext *hcp, const byte *dataBuffer, size_t dataLength)
 	}
 
 	/* delay processing of remaining data: */
-	memcpy (hcp->block, dataBuffer, dataLength);
+	mutils_memcpy (hcp->block, dataBuffer, dataLength);
 	hcp->occupied = dataLength; /* < 128 */
 	
 /*	assert (hcp->occupied < 128); */
-	return 0; /* OK */
+	return(MUTILS_OK); /* OK */
 } /* havalUpdate */
 
-
-int havalFinal (havalContext *hcp, byte *digest)
+mutils_error havalFinal (havalContext *hcp, mutils_word8 *digest)
 {
-	word32 w;
+	mutils_word32 w;
 
-	if (hcp == NULL) {
-		return 1; /* bad context */
+	if (hcp == NULL)
+	{
+	  return(-MUTILS_INVALID_INPUT_BUFFER); /* bad context */
 	}
 	if (digest == NULL) {
-		return 2; /* bad digest buffer */
+	  return(-MUTILS_INVALID_OUTPUT_BUFFER); /* bad digest buffer */
 	}
 
 /*	assert (hcp->occupied < 128);  invariant */
@@ -784,7 +785,7 @@ int havalFinal (havalContext *hcp, byte *digest)
 	/* pad the message with null bytes to make it 944 (mod 1024) bits long: */
 	if (hcp->occupied++ >= 118) {
 		/* no room for tail data on the current context block */
-		mhash_bzero (&hcp->block[hcp->occupied], 128 - hcp->occupied);
+		mutils_bzero (&hcp->block[hcp->occupied], 128 - hcp->occupied);
 		/* process the completed context data block: */
 		switch (hcp->passes) {
 		case 3:
@@ -797,26 +798,26 @@ int havalFinal (havalContext *hcp, byte *digest)
 			havalTransform5 (hcp->digest, hcp->block, hcp->temp);
 			break;
 		}
-		mhash_bzero (hcp->block, 118);
+		mutils_bzero (hcp->block, 118);
 	} else {
-		mhash_bzero (&hcp->block[hcp->occupied], 118 - hcp->occupied);
+		mutils_bzero (&hcp->block[hcp->occupied], 118 - hcp->occupied);
 	}
 	/* append tail data and process last (padded) message block: */
-	hcp->block[118] = (byte)(
+	hcp->block[118] = (mutils_word8)(
 		((hcp->hashLength & 0x03U) << 6) |
 		((hcp->passes     & 0x07U) << 3) |
 		(HAVAL_VERSION           & 0x07U));
-	hcp->block[119] = (byte) (hcp->hashLength >> 2);
+	hcp->block[119] = (mutils_word8) (hcp->hashLength >> 2);
 	w = hcp->bitCount[0];
-	hcp->block[120] = (byte)(w);
-	hcp->block[121] = (byte)(w >>  8);
-	hcp->block[122] = (byte)(w >> 16);
-	hcp->block[123] = (byte)(w >> 24);
+	hcp->block[120] = (mutils_word8)(w);
+	hcp->block[121] = (mutils_word8)(w >>  8);
+	hcp->block[122] = (mutils_word8)(w >> 16);
+	hcp->block[123] = (mutils_word8)(w >> 24);
 	w = hcp->bitCount[1];
-	hcp->block[124] = (byte)(w);
-	hcp->block[125] = (byte)(w >>  8);
-	hcp->block[126] = (byte)(w >> 16);
-	hcp->block[127] = (byte)(w >> 24);
+	hcp->block[124] = (mutils_word8)(w);
+	hcp->block[125] = (mutils_word8)(w >>  8);
+	hcp->block[126] = (mutils_word8)(w >> 16);
+	hcp->block[127] = (mutils_word8)(w >> 24);
 	switch (hcp->passes) {
 	case 3:
 		havalTransform3 (hcp->digest, hcp->block, hcp->temp);
@@ -857,9 +858,9 @@ int havalFinal (havalContext *hcp, byte *digest)
 			) >> 8) |
 			( (hcp->digest[7] & 0x000000FFUL) << 24);
 #ifndef WORDS_BIGENDIAN
-		memcpy (digest, hcp->digest, 128/8);
+		mutils_memcpy(digest, hcp->digest, 128/8);
 #else
-	    BYTE_REVERSE(digest, hcp->digest, 128/32);
+		BYTE_REVERSE(digest, hcp->digest, 128/32);
 #endif /* ?LITTLE_ENDIAN */
 		break;
 	case 160:
@@ -876,7 +877,7 @@ int havalFinal (havalContext *hcp, byte *digest)
 			ROTR
 			((hcp->digest[7] & 0x0000003FUL) | (hcp->digest[6] & 0xFE000000UL) | (hcp->digest[5] & 0x01F80000UL), 19);
 #ifndef WORDS_BIGENDIAN
-		memcpy (digest, hcp->digest, 160/8);
+		mutils_memcpy (digest, hcp->digest, 160/8);
 #else
 	    BYTE_REVERSE(digest, hcp->digest, 160/32);
 #endif /* ?LITTLE_ENDIAN */
@@ -896,7 +897,7 @@ int havalFinal (havalContext *hcp, byte *digest)
 			ROTR
 			((hcp->digest[7] & 0x0000001FUL) | (hcp->digest[6] & 0xFC000000UL), 26);
 #ifndef WORDS_BIGENDIAN
-		memcpy (digest, hcp->digest, 192/8);
+		mutils_memcpy (digest, hcp->digest, 192/8);
 #else
 	    BYTE_REVERSE(digest, hcp->digest, 192/32);
 #endif /* ?LITTLE_ENDIAN */
@@ -910,14 +911,14 @@ int havalFinal (havalContext *hcp, byte *digest)
 		hcp->digest[1] += (hcp->digest[7] >> 22) & 0x0000001FUL;
 		hcp->digest[0] += (hcp->digest[7] >> 27) & 0x0000001FUL;
 #ifndef WORDS_BIGENDIAN
-		memcpy (digest, hcp->digest, 224/8);
+		mutils_memcpy (digest, hcp->digest, 224/8);
 #else
 	    BYTE_REVERSE(digest, hcp->digest, 224/32);
 #endif /* ?LITTLE_ENDIAN */
 		break;
 	case 256:
 #ifndef WORDS_BIGENDIAN
-		memcpy (digest, hcp->digest, 256/8);
+		mutils_memcpy (digest, hcp->digest, 256/8);
 #else
 	    BYTE_REVERSE(digest, hcp->digest, 256/32);
 #endif /* ?LITTLE_ENDIAN */
@@ -925,8 +926,8 @@ int havalFinal (havalContext *hcp, byte *digest)
 	}
 
 	/* destroy sensitive information: */
-	mhash_bzero (hcp, sizeof (havalContext));
-	return 0; /* OK */
+	mutils_bzero (hcp, sizeof (havalContext));
+		return(MUTILS_OK); /* OK */
 } /* havalFinal */
 
 

@@ -45,20 +45,20 @@
 /* The structure for storing RIPEMD info */
 
 typedef struct ripemd_ctx {
-  word32 digest[RIPEMD_STATESIZE];     /* chaining varialbles */
-  word64 bitcount;                     /* 64-bit bit counter */
-  word8 block[RIPEMD_DATASIZE];        /* RIPEMD data buffer */
-  int index;                           /* index into buffer */
-  int digest_len;                      /* determines the algorithm to use */
+  mutils_word32 digest[RIPEMD_STATESIZE];     /* chaining varialbles */
+  mutils_word64 bitcount;                     /* 64-bit bit counter */
+  mutils_word8 block[RIPEMD_DATASIZE];        /* RIPEMD data buffer */
+  mutils_word32 index;                        /* index into buffer */
+  mutils_word32 digest_len;                   /* determines the algorithm to use */
 } RIPEMD_CTX;
 
 void ripemd128_init(struct ripemd_ctx *ctx);
 void ripemd160_init(struct ripemd_ctx *ctx);
 void ripemd256_init(struct ripemd_ctx *ctx);
 void ripemd320_init(struct ripemd_ctx *ctx);
-void ripemd_update(struct ripemd_ctx *ctx, word8 *buffer, word32 len);
+void ripemd_update(struct ripemd_ctx *ctx, mutils_word8 *buffer, mutils_word32 len);
 void ripemd_final(struct ripemd_ctx *ctx);
-void ripemd_digest(struct ripemd_ctx *ctx, word8 *s);
+void ripemd_digest(struct ripemd_ctx *ctx, mutils_word8 *s);
 
 #endif /* __MHASH_RIPEMD_H */
 

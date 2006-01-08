@@ -35,17 +35,17 @@
 
 typedef struct md2_ctx
 {
-  byte C[MD2_DATA_SIZE];
-  byte X[3 * MD2_DATA_SIZE];
-  byte buffer[MD2_DATA_SIZE]; /* block buffer */
-  int  index;                 /* pointer into buffer */
+  mutils_word8 C[MD2_DATA_SIZE];
+  mutils_word8 X[3 * MD2_DATA_SIZE];
+  mutils_word8 buffer[MD2_DATA_SIZE]; /* block buffer */
+  mutils_word32 index;                 /* pointer into buffer */
 } MD2_CTX;
 
 void md2_init(struct md2_ctx *ctx);
 
-void md2_update(struct md2_ctx *ctx, const byte *data, int length);
+void md2_update(struct md2_ctx *ctx, __const mutils_word8 *data, mutils_word32 length);
 
-void md2_digest(struct md2_ctx *ctx, byte *digest);
+void md2_digest(struct md2_ctx *ctx, mutils_word8 *digest);
 
 
 #endif /* __MHASH_MD2_H_INCLUDED */

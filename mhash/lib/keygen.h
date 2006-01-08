@@ -1,26 +1,27 @@
 
-int _mhash_gen_key_asis(void *keyword, int key_size,
-			unsigned char *password, int plen);
-int _mhash_gen_key_mcrypt(hashid algorithm, void *keyword, int key_size,
-			  void *salt, int salt_size,
-			  unsigned char *password, int plen);
-int _mhash_gen_key_hex(void *keyword, int key_size,
-		       unsigned char *password, int plen);
-int _mhash_gen_key_s2k_simple(hashid algorithm, void *keyword,
-			      int key_size, unsigned char *password,
-			      int plen);
-int _mhash_gen_key_s2k_salted(hashid algorithm, void *keyword,
-			      int key_size, unsigned char *salt,
-			      int salt_size, unsigned char *password,
-			      int plen);
-int _mhash_gen_key_s2k_isalted(hashid algorithm, unsigned long count,
-			       void *keyword, int key_size,
-			       unsigned char *salt, int salt_size,
-			       unsigned char *password, int plen);
-int _mhash_gen_key_pkdes(void *keyword, int key_size,
-			 unsigned char *password, int plen);
-int _mhash_gen_key_crypt(void *keyword, int key_size,
-			 unsigned char *password, int plen, void *salt,
-			 int salt_size);
-int _mhash_gen_key_scrypt(void *keyword, int key_size,
-			  unsigned char *password, int plen);
+mutils_error _mhash_gen_key_asis(void *keyword, mutils_word32 key_size,
+				 mutils_word8 *password, mutils_word32 plen);
+mutils_error _mhash_gen_key_mcrypt(hashid algorithm,
+				   void *keyword, mutils_word32 key_size,
+				   void *salt, mutils_word32 salt_size,
+				   mutils_word8 *password, mutils_word32 plen);
+mutils_error _mhash_gen_key_hex(void *keyword, mutils_word32 key_size,
+				mutils_word8 *password, mutils_word32 plen);
+mutils_error _mhash_gen_key_s2k_simple(hashid algorithm,
+				       void *keyword, mutils_word32 key_size,
+				       mutils_word8 *password, mutils_word32 plen);
+mutils_error _mhash_gen_key_s2k_salted(hashid algorithm,
+				       void *keyword, mutils_word32 key_size,
+				       mutils_word8 *salt, mutils_word32 salt_size,
+				       mutils_word8 *password, mutils_word32 plen);
+mutils_error _mhash_gen_key_s2k_isalted(hashid algorithm, mutils_word64 count,
+					void *keyword, mutils_word32 key_size,
+					mutils_word8 *salt, mutils_word32 salt_size,
+					mutils_word8 *password, mutils_word32 plen);
+mutils_error _mhash_gen_key_pkdes(void *keyword, mutils_word32 key_size,
+				  mutils_word8 *password, mutils_word32 plen);
+mutils_error _mhash_gen_key_crypt(void *keyword, mutils_word32 key_size,
+				  mutils_word8 *password, mutils_word32 plen,
+				  void *salt, mutils_word32 salt_size);
+mutils_error _mhash_gen_key_scrypt(void *keyword, mutils_word32 key_size,
+				   mutils_word8 *password, mutils_word32 plen);
