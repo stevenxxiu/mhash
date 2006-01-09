@@ -21,7 +21,10 @@
 #if !defined(__MTYPES_H)
 #define __MTYPES_H
 
-typedef struct keygen {
+#include <mutils/mutils.h>
+
+typedef struct __KEYGEN
+{
 	hashid		 hash_algorithm[2];
 	mutils_word32	 count;
 	void		*salt;
@@ -33,7 +36,8 @@ typedef void (*HASH_FUNC)(void*, const void*, int);
 typedef void (*FINAL_FUNC)(void*);
 typedef void (*DEINIT_FUNC)(void*, unsigned char*);
 
-typedef struct __MHASH_INSTANCE {
+typedef struct __MHASH_INSTANCE
+{
 	mutils_word32 hmac_key_size;
 	mutils_word32 hmac_block;
 	mutils_word8 *hmac_key;

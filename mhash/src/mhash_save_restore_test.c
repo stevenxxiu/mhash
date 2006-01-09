@@ -10,7 +10,7 @@ int main(void)
 	mutils_word8 *hash2;
 	hashid alg;
 	mutils_word8 mem[1024];
-	size_t mem_size = sizeof(mem);
+	mutils_word32 mem_size = sizeof(mem);
 
 	buf_len = mutils_strlen(buf);
 
@@ -24,7 +24,7 @@ int main(void)
 	for (alg = 0; alg <= mhash_count(); ++alg)
 	{
 		/* if algorithm does not exist */
-		if (mhash_get_hash_name_static( alg) == NULL)
+	  if (mhash_get_hash_name_static(alg) == (mutils_word8 *) NULL)
 			continue;
 
 		printf("Testing save/restore for algorithm %s: ", mhash_get_hash_name(alg));

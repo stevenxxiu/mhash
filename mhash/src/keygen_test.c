@@ -31,7 +31,6 @@
 int main()
 {
 	mutils_word8 *tmp;
-	mutils_word8 tmp2[3];
 	mutils_word8 *password;
 	mutils_word8 *salt;
 	mutils_word32 passlen;
@@ -60,7 +59,6 @@ int main()
 
 	salt = (mutils_word8 *) mutils_malloc(salt_size);
 	key = (mutils_word8 *) mutils_malloc(keysize);
-	tmp = (mutils_word8 *) mutils_malloc(2*keysize+1);
 
 	if ((salt == NULL) || (key == NULL) || (tmp == NULL))
 	{
@@ -76,22 +74,20 @@ int main()
 	
 	mhash_keygen_ext(KEYGEN_MCRYPT, data, key, keysize, password, passlen);
 
-	for (j = 0; j < keysize; j++) {
-		sprintf((char *) tmp2, "%.2x", key[j]);
-		mutils_strcat(tmp, tmp2);
-	}
+	tmp = mutils_asciify(key, keysize);
 
 	result = mutils_strcmp((mutils_word8 *) KEY1, tmp);
 
 	mutils_free(password);
 	mutils_free(key);
-	mutils_free(tmp);
 
 	if (result != 0) {
 		fprintf(stderr, "KEYGEN-Test (KEYGEN_MCRYPT): Failed\n");
 		fprintf(stderr, "Expecting: 0x%s\nGot: 0x%s\n", KEY1, tmp);
 		return(MUTILS_INVALID_RESULT);
 	}
+
+	mutils_free(tmp);
 
 	passlen = sizeof(PASSWORD2);
 	password = (mutils_word8 *) mutils_malloc(passlen + 1);
@@ -110,7 +106,6 @@ int main()
 	
 	salt = (mutils_word8 *) mutils_malloc(salt_size);
 	key = (mutils_word8 *) mutils_malloc(keysize);
-	tmp = (mutils_word8 *) mutils_malloc(2 * keysize + 1);
 	
 	data.hash_algorithm[0] = MHASH_SHA1;
 	data.count = 0;
@@ -121,22 +116,20 @@ int main()
 
 	mutils_memset(tmp, 0, keysize * 2);
 
-	for (j = 0; j < keysize; j++) {
-		sprintf((char *) tmp2, "%.2x", key[j]);
-		mutils_strcat(tmp, tmp2);
-	}
+	tmp = mutils_asciify(key, keysize);
 
 	result = mutils_strcmp((mutils_word8 *) KEY2, tmp);
 
 	mutils_free(password);
 	mutils_free(key);
-	mutils_free(tmp);
 
 	if (mutils_strcmp((mutils_word8 *) KEY2, tmp) != 0) {
 		fprintf(stderr, "KEYGEN-Test (KEYGEN_S2K_SALTED): Failed\n");
 		fprintf(stderr, "Expecting: 0x%s\nGot: 0x%s\n", KEY2, tmp);
 		return(MUTILS_INVALID_RESULT);
 	}
+
+	mutils_free(tmp);
 
 	fprintf(stderr, "KEYGEN-Test: Succeed\n");
 

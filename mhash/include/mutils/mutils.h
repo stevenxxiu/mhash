@@ -93,18 +93,31 @@ typedef char mutils_boolean;
 
 #endif
 
-typedef enum __mutils_error {
-  MUTILS_OK			= 0,
-  MUTILS_UNSPECIFIED_ERROR	= 1000,
-  MUTILS_SYSTEM_RESOURCE_ERROR,
-  MUTILS_INVALID_FUNCTION	= 2000,
-  MUTILS_INVALID_INPUT_BUFFER,
-  MUTILS_INVALID_OUTPUT_BUFFER,
-  MUTILS_INVALID_PASSES,
-  MUTILS_INVALID_FORMAT,
-  MUTILS_INVALID_SIZE,
-  MUTILS_INVALID_RESULT,
-} mutils_error;
+/*
+ * Other than OK, the only defined values should be for a category of error.
+ * Even then, the values shouldn't be assumed. Their only function is to
+ * make it easy to programmatically identify the nature of the error and to
+ * ensure a library upgrade won't break existing binaries, should new error
+ * codes be introduced.
+ */
+
+typedef enum __mutils_error_codes
+{
+	MUTILS_OK			= 0,
+	MUTILS_SYSTEM_ERROR		= 0x100,
+	MUTILS_UNSPECIFIED_ERROR,
+	MUTILS_SYSTEM_RESOURCE_ERROR,
+	MUTILS_PARAMETER_ERROR		= 0x200,
+	MUTILS_INVALID_FUNCTION,
+	MUTILS_INVALID_INPUT_BUFFER,
+	MUTILS_INVALID_OUTPUT_BUFFER,
+	MUTILS_INVALID_PASSES,
+	MUTILS_INVALID_FORMAT,
+	MUTILS_INVALID_SIZE,
+	MUTILS_INVALID_RESULT,
+} mutils_error_codes;
+
+#define mutils_error mutils_word32
 
 #include <mutils/mglobal.h>
 

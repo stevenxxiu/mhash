@@ -19,41 +19,11 @@
  */
 
 
+#define KEYGEN_INTERNALS
 
 #include <libdefs.h>
 #include <mhash_int.h>
 #include <keygen.h>
-
-#define KEYGEN_ENTRY(name, uses_hash_algorithm, uses_count, uses_salt, salt_size, max_key_size) \
-        { (mutils_word8 *) #name, name, uses_hash_algorithm, uses_count, uses_salt, salt_size, max_key_size }
-
-typedef struct mhash_keygen_entry {
-	mutils_word8 *name;
-	keygenid id;
-	mutils_boolean uses_hash_algorithm;
-	mutils_boolean uses_count;
-	mutils_boolean uses_salt;
-	mutils_word32 salt_size;
-	mutils_word32 max_key_size;
-} mhash_keygen_entry;
-
-static __const mhash_keygen_entry keygen_algorithms[] = {
-	KEYGEN_ENTRY(KEYGEN_ASIS, 0, 0, 0, 0, 0),
-	KEYGEN_ENTRY(KEYGEN_PKDES, 0, 0, 0, 0, 0),
-	KEYGEN_ENTRY(KEYGEN_HEX, 0, 0, 0, 0, 0),
-	KEYGEN_ENTRY(KEYGEN_MCRYPT, 1, 0, 1, 0, 0),
-	KEYGEN_ENTRY(KEYGEN_S2K_SIMPLE, 1, 0, 0, 0, 0),
-	KEYGEN_ENTRY(KEYGEN_S2K_SALTED, 1, 0, 1, 8, 0),
-	KEYGEN_ENTRY(KEYGEN_S2K_ISALTED, 1, 1, 1, 8, 0),
-	{0}
-};
-
-#define KEYGEN_LOOP(b) \
-        __const mhash_keygen_entry *p; \
-                for (p = keygen_algorithms; p->name != NULL; p++) { b ; }
-
-#define KEYGEN_ALG_LOOP(a) \
-                        KEYGEN_LOOP(if (p->id == type) { a; break; } )
 
 WIN32DLL_DEFINE
 mutils_boolean mhash_keygen_uses_hash_algorithm(keygenid type)

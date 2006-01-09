@@ -40,6 +40,8 @@ Install the mhash-devel package if you want to develop applications that
 will use the mhash library.
 
 %changelog
+* Sun Jan 8 2006 Jonathan Day <imipak@yahoo.com>
+- Interface cleanup
 * Wed Jan 12 2005 Jonathan Day <imipak@yahoo.com>
 - Finally got round to integrating a lot of people's patches
 * Thu Nov 18 2004 Casper Pedersen <cpedersen[at]c-note.dk>
@@ -85,5 +87,6 @@ rm -rf $RPM_BUILD_ROOT
 %{prefix}/lib/*.la
 %{prefix}/lib/*.so
 %{prefix}/include/*.h
+%{prefix}/include/mutils/*.h
 
 

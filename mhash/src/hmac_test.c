@@ -68,10 +68,8 @@ int main()
 	if (result != 0) {
 		fprintf(stderr, "HMAC-Test: Failed\n");
 		fprintf(stderr, "Digest size: %d\n", mhash_get_block_size(MHASH_MD5));
-		result = strlen(DIGEST1);
-		fprintf(stderr, "Expecting: 0x%s of length %d\n", DIGEST1, result);
-		result = strlen(tmp);
-		fprintf(stderr, "Got: 0x%s of length %d\n", tmp, result);
+		fprintf(stderr, "Expecting: 0x%s\n", DIGEST1);
+		fprintf(stderr, "Got: 0x%s\n", tmp);
 		return(MUTILS_INVALID_RESULT);
 	}
 
