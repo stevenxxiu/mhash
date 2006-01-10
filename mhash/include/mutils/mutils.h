@@ -121,29 +121,30 @@ typedef enum __mutils_error_codes
 
 #include <mutils/mglobal.h>
 
-void *mutils_malloc(const mutils_word32 n);
-void mutils_free(void *ptr);
+void *mutils_malloc(__const mutils_word32 n);
+void mutils_free(__const void *ptr);
 
-void mutils_bzero(void *s, const mutils_word32 n);
+void mutils_bzero(void *s, __const mutils_word32 n);
 
-void mutils_memset(void *dest, const mutils_word8 c, const mutils_word32 n);
-void mutils_memcpy(void *dest, const void *src, const mutils_word32 n);
-void mutils_memmove(void *dest, const void *src, const mutils_word32 n);
-int mutils_memcmp(const void *s1, const void *s2, const mutils_word32 n);
+void mutils_memset(void *dest, __const mutils_word8 c, __const mutils_word32 n);
+void mutils_memcpy(void *dest, __const void *src, __const mutils_word32 n);
+void mutils_memmove(void *dest, __const void *src, __const mutils_word32 n);
+int mutils_memcmp(__const void *s1, __const void *s2, __const mutils_word32 n);
 
-size_t mutils_strlen(const mutils_word8 *str);
-mutils_word8 *mutils_strdup(const mutils_word8 *str);
-mutils_word8 *mutils_strcat(mutils_word8 *dest, const mutils_word8 *src);
-mutils_word8 *mutils_strcpy(mutils_word8 *dest, const mutils_word8 *src);
-mutils_word8 *mutils_strncpy(mutils_word8 *dest, const mutils_word8 *src, const mutils_word32 n);
-int mutils_strcmp(const mutils_word8 *src1, const mutils_word8 *src2);
-int mutils_strncmp(const mutils_word8 *src1, const mutils_word8 *src2, const mutils_word32 n);
-long mutils_strtol(const mutils_word8 *nptr, mutils_word8 **endptr, const mutils_word8 base);
+mutils_word32 mutils_strlen(__const mutils_word8 *str);
+mutils_word8 *mutils_strdup(__const mutils_word8 *str);
+mutils_word8 *mutils_strcat(mutils_word8 *dest, __const mutils_word8 *src);
+mutils_word8 *mutils_strcpy(mutils_word8 *dest, __const mutils_word8 *src);
+mutils_word8 *mutils_strncpy(mutils_word8 *dest, __const mutils_word8 *src, __const mutils_word32 n);
+int mutils_strcmp(__const mutils_word8 *src1, __const mutils_word8 *src2);
+int mutils_strncmp(__const mutils_word8 *src1, __const mutils_word8 *src2, __const mutils_word32 n);
+long mutils_strtol(__const mutils_word8 *nptr, mutils_word8 **endptr, __const mutils_word8 base);
 
 mutils_word32 mutils_word32swap(mutils_word32 x);
 mutils_word32 *mutils_word32nswap(mutils_word32 *x, mutils_word32 n, mutils_boolean destructive);
 
-mutils_word8 *mutils_asciify(mutils_word8 *in, const mutils_word32 len);
+mutils_word8 *mutils_asciify(mutils_word8 *in, __const mutils_word32 len);
+mutils_boolean mutils_thequals(mutils_word8 *text, mutils_word8 *hash, __const mutils_word32 len);
 
 #endif
 

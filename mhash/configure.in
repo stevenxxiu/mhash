@@ -162,10 +162,11 @@ AC_C_BIGENDIAN
 AC_LIBTOOL_WIN32_DLL
 AM_PROG_LIBTOOL
 
+
+
 AC_CONFIG_FILES([Makefile
 		 mhash.spec
 		 include/Makefile
-		 include/mutils/Makefile
 		 doc/Makefile
 		 src/Makefile
 		 lib/Makefile])

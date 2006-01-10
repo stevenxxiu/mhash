@@ -20,7 +20,7 @@
 
 
 /*
-   $Id: bzero.c,v 1.3 2004/05/02 20:03:10 imipak Exp $ 
+   $Id: stdfns.c,v 1.1 2006/01/09 07:27:05 imipak Exp $ 
  */
 
 #include "libdefs.h"
@@ -40,7 +40,7 @@ mutils_malloc(__const mutils_word32 n)
 
 	if (n == 0)
 	{
-		return NULL;
+		return(NULL);
 	}
 
 	ptr = malloc(n);
@@ -55,13 +55,13 @@ mutils_malloc(__const mutils_word32 n)
 
 WIN32DLL_DEFINE
 void
-mutils_free(void *ptr)
+mutils_free(__const void *ptr)
 {
 	if (ptr == NULL)
 	{
 		return;
 	}
-	free(ptr);
+	free((void *) ptr);
 	return;
 }
 
@@ -418,15 +418,35 @@ mutils_asciify(mutils_word8 *in, __const mutils_word32 len)
 	mutils_word8 *buffer = mutils_malloc((2 * len) + 1);
 	mutils_word8 *ptrOut = buffer;
 	mutils_word32 loop;
-	mutils_word8  temp;
 
 	for (loop = 0; loop < len; loop++, ptrIn++)
 	{
-		temp = (*ptrIn & 0xf0) >> 4;
-		*ptrOut++ = mutils_val2char(temp);
-		temp = (*ptrIn & 0x0f);
-		*ptrOut++ = mutils_val2char(temp);
+		*ptrOut++ = mutils_val2char((*ptrIn & 0xf0) >> 4);
+		*ptrOut++ = mutils_val2char((*ptrIn & 0x0f));
 	}
 	return(buffer);
 }
 
+WIN32DLL_DEFINE
+mutils_boolean
+mutils_thequals(mutils_word8 *text, mutils_word8 *hash, __const mutils_word32 len)
+{
+	mutils_word8  *ptrText = text;
+	mutils_word8  *ptrHash = hash;
+	mutils_word32  loop;
+	mutils_word8   temp;
+	mutils_boolean equals;
+
+	for (loop = 0; loop < len; loop++, ptrHash++)
+	{
+		if (mutils_val2char((*ptrHash & 0xf0) >> 4) != *ptrText++)
+		{
+			return(MUTILS_FALSE);
+		}
+		if (mutils_val2char((*ptrHash & 0x0f)) != *ptrText++)
+		{
+			return(MUTILS_FALSE);
+		}
+	}
+	return(MUTILS_TRUE);
+}
