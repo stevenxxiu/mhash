@@ -20,7 +20,7 @@
  */
 
 
-/* $Id: mhash.c,v 1.40 2005/01/13 07:37:00 imipak Exp $ */
+/* $Id: mhash.c,v 1.41 2006/01/08 09:08:29 imipak Exp $ */
 
 #include <libdefs.h>
 
@@ -560,6 +560,12 @@ WIN32DLL_DEFINE
 
 	return(ret);
 }
+
+WIN32DLL_DEFINE void mhash_free(void *ptr)
+{
+        mutils_free(ptr);
+}
+
 
 /*
   Saves the state of a hashing algorithm such that it can be
