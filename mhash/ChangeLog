@@ -1,3 +1,9 @@
+2006-01-01 12:00  imipak
+
+	Virtually all files impacted by forcing unsigned types for unsigned
+	data. Isolated C library calls, will probably steal reimplementations
+	of these functions so that mhash will sit better on embedded platforms.
+
 2002-10-03 13:01  nmav
 
 	* lib/keygen_s2k.c:
