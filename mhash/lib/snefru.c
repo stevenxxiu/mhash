@@ -713,54 +713,64 @@ static __const mutils_word32 SBOX[R * 256 * 2]= {
  */
 void snefru_init(struct snefru_ctx *ctx)
 {
-  ctx->hashlen = 0;
-  ctx->index = 0;
-  mutils_bzero(ctx->hash, SNEFRU256_DIGEST_SIZE);
+	ctx->hashlen = 0;
+	ctx->index = 0;
+	mutils_bzero(ctx->hash, SNEFRU256_DIGEST_SIZE);
 }
 
 
 /**
  * The core snefru transform.
  */
-static void snefru(mutils_word32 *block, int len)
+static void snefru(mutils_word32 *block, mutils_word32 len)
 {
-  __const mutils_word32 st[4] = {16, 8, 16, 24};
-  mutils_word32 isave[SNEFRU256_DIGEST_LEN];
-  mutils_word32 *sbox, x;
-  mutils_word32 i, j;
+	__const mutils_word32 st[4] = {16, 8, 16, 24};
+	mutils_word32 isave[SNEFRU256_DIGEST_LEN];
+	mutils_word32 *sbox, x;
+	mutils_word32 i, j;
+	mutils_word32 *limit;
 
-  mutils_memcpy(isave, block, SNEFRU256_DIGEST_SIZE);
+	mutils_memcpy(isave, block, SNEFRU256_DIGEST_SIZE);
   
-  for (sbox = (mutils_word32*)SBOX; sbox < SBOX + 512 * R; sbox += 2 * 256)
-    for (j = 0; j < 4; j++) {
-      for (i = 0; i < SNEFRU_BLOCK_LEN; i++) {
-	x = sbox[(i << 7 & 0x100) + (block[i] & 0xff)];
-	block[(i + SNEFRU_BLOCK_LEN - 1) % SNEFRU_BLOCK_LEN] ^= x;
-	block[(i + 1) % SNEFRU_BLOCK_LEN] ^= x;
-      }
-      for (i = 0; i < SNEFRU_BLOCK_LEN; i++)
-	block[i] = block[i] >> st[j] | block[i] << (32 - st[j]);
-    }
-  
-  for(i = 0; i < len; i++)
-    block[i] = block[SNEFRU_BLOCK_LEN - 1 - i] ^ isave[i];
+	limit = (mutils_word32 *) SBOX + 512 * R;
+
+	for (sbox = (mutils_word32 *) SBOX; sbox < limit; sbox += 512)
+	{
+		for (j = 0; j < 4; j++)
+		{
+			for (i = 0; i < SNEFRU_BLOCK_LEN; i++)
+			{
+				x = sbox[(i << 7 & 0x100) + (block[i] & 0xff)];
+				block[(i + SNEFRU_BLOCK_LEN - 1) % SNEFRU_BLOCK_LEN] ^= x;
+				block[(i + 1) % SNEFRU_BLOCK_LEN] ^= x;
+			}
+			for (i = 0; i < SNEFRU_BLOCK_LEN; i++)
+			{
+				block[i] = block[i] >> st[j] | block[i] << (32 - st[j]);
+			}
+		}
+	}
+	for (i = 0; i < len; i++)
+	{
+		block[i] = block[SNEFRU_BLOCK_LEN - 1 - i] ^ isave[i];
+	}
 }
 
 
 static void processBuffer(struct snefru_ctx *ctx, int len)
 {
-  mutils_word32 i;
-  mutils_word8 *buf = ctx->buffer;
+	mutils_word32 i;
+	mutils_word8 *buf = ctx->buffer;
 
-  for(i = len; i < SNEFRU_BLOCK_LEN; i++) {
-    ctx->hash[i] = 
-      (mutils_word32)buf[0] << 24 | (mutils_word32)buf[1] << 16 |
-      (mutils_word32)buf[2] << 8 | (mutils_word32)buf[3];
-    buf += 4;
-  }
-  snefru(ctx->hash, len);
+	for(i = len; i < SNEFRU_BLOCK_LEN; i++)
+	{
+		ctx->hash[i] = 
+		  (mutils_word32)buf[0] << 24 | (mutils_word32)buf[1] << 16 |
+		  (mutils_word32)buf[2] << 8 | (mutils_word32)buf[3];
+		buf += 4;
+	}
+	snefru(ctx->hash, len);
 }
-
 
 /**
  * Update the hashing state.
@@ -768,39 +778,44 @@ static void processBuffer(struct snefru_ctx *ctx, int len)
 static void snefru_update(struct snefru_ctx *ctx, __const mutils_word8 *data, mutils_word32 length,
 			  mutils_word32 data_size, mutils_word32 digest_len) 
 {
-  if (ctx->index) {	/* Try to fill partial block */
-    mutils_word32 left = data_size - ctx->index;
-    if (length < left) {
-      mutils_memcpy(ctx->buffer + ctx->index, data, length);
-      ctx->index += length;
-      return;	/* Finished */
-    } else {
-      mutils_memcpy(ctx->buffer + ctx->index, data, left);
-      processBuffer(ctx, digest_len);
-      ctx->hashlen += 8 * data_size;
-      data += left;
-      length -= left;
-    }
-  }
-  while (length >= data_size) {
-    mutils_memcpy(ctx->buffer, data, data_size);
-    processBuffer(ctx, digest_len);
-    ctx->hashlen += 8 * data_size;
-    data += data_size;
-    length -= data_size;
-  }
-  mutils_memcpy(ctx->buffer, data, length);
-  ctx->index = length;
+	if (ctx->index)
+	{	/* Try to fill partial block */
+		mutils_word32 left = data_size - ctx->index;
+		if (length < left)
+		{
+			mutils_memcpy(ctx->buffer + ctx->index, data, length);
+			ctx->index += length;
+			return;	/* Finished */
+		}
+		else
+		{
+			mutils_memcpy(ctx->buffer + ctx->index, data, left);
+			processBuffer(ctx, digest_len);
+			ctx->hashlen += 8 * data_size;
+			data += left;
+			length -= left;
+		}
+	}
+	while (length >= data_size)
+	{
+		mutils_memcpy(ctx->buffer, data, data_size);
+		processBuffer(ctx, digest_len);
+		ctx->hashlen += 8 * data_size;
+		data += data_size;
+		length -= data_size;
+	}
+	mutils_memcpy(ctx->buffer, data, length);
+	ctx->index = length;
 }
 
 void snefru128_update(struct snefru_ctx *ctx, __const mutils_word8 *data, mutils_word32 length)
 {
-  snefru_update(ctx, data, length, SNEFRU128_DATA_SIZE, SNEFRU128_DIGEST_LEN);
+	snefru_update(ctx, data, length, SNEFRU128_DATA_SIZE, SNEFRU128_DIGEST_LEN);
 }
 
 void snefru256_update(struct snefru_ctx *ctx, __const mutils_word8 *data, mutils_word32 length)
 {
-  snefru_update(ctx, data, length, SNEFRU256_DATA_SIZE, SNEFRU256_DIGEST_LEN);
+	snefru_update(ctx, data, length, SNEFRU256_DATA_SIZE, SNEFRU256_DIGEST_LEN);
 }
 
 
@@ -810,60 +825,60 @@ void snefru256_update(struct snefru_ctx *ctx, __const mutils_word8 *data, mutils
  */
 void snefru128_final(struct snefru_ctx *ctx) 
 {
-  if (ctx->index) {    /* pad the last data block if partially filled */
-    mutils_bzero(ctx->buffer + ctx->index, SNEFRU128_DATA_SIZE - ctx->index);
-    processBuffer(ctx, SNEFRU128_DIGEST_LEN);
-    ctx->hashlen += 8 * ctx->index;
-  }
+	if (ctx->index)
+	{    /* pad the last data block if partially filled */
+		mutils_bzero(ctx->buffer + ctx->index, SNEFRU128_DATA_SIZE - ctx->index);
+		processBuffer(ctx, SNEFRU128_DIGEST_LEN);
+		ctx->hashlen += 8 * ctx->index;
+	}
 
-  mutils_bzero(ctx->hash + SNEFRU128_DIGEST_LEN,
-	 SNEFRU_BLOCK_SIZE - SNEFRU128_DIGEST_SIZE - sizeof(ctx->hashlen));
-  ctx->hash[SNEFRU_BLOCK_LEN - 2] = 
-    ctx->hashlen >> 32;
-  ctx->hash[SNEFRU_BLOCK_LEN - 1] = 
-    ctx->hashlen & 0xffffffff;
+	mutils_bzero(ctx->hash + SNEFRU128_DIGEST_LEN,
+		     SNEFRU_BLOCK_SIZE - SNEFRU128_DIGEST_SIZE - sizeof(ctx->hashlen));
+	ctx->hash[SNEFRU_BLOCK_LEN - 2] = ctx->hashlen >> 32;
+	ctx->hash[SNEFRU_BLOCK_LEN - 1] = ctx->hashlen & 0xffffffff;
 
-  snefru(ctx->hash, SNEFRU128_DIGEST_LEN);
+	snefru(ctx->hash, SNEFRU128_DIGEST_LEN);
 }
 
 void snefru256_final(struct snefru_ctx *ctx)
 {
-  if (ctx->index) {    /* pad the last data block if partially filled */
-    mutils_bzero(ctx->buffer + ctx->index, SNEFRU256_DATA_SIZE - ctx->index);
-    processBuffer(ctx, SNEFRU256_DIGEST_LEN);
-    ctx->hashlen += 8 * ctx->index;
-  }
+	if (ctx->index)
+	{    /* pad the last data block if partially filled */
+		mutils_bzero(ctx->buffer + ctx->index, SNEFRU256_DATA_SIZE - ctx->index);
+		processBuffer(ctx, SNEFRU256_DIGEST_LEN);
+		ctx->hashlen += 8 * ctx->index;
+	}
 
-  mutils_bzero(ctx->hash + SNEFRU256_DIGEST_LEN, 
-	 SNEFRU_BLOCK_SIZE - SNEFRU256_DIGEST_SIZE - sizeof(ctx->hashlen));
-  ctx->hash[SNEFRU_BLOCK_LEN - 2] = 
-    ctx->hashlen >> 32;
-  ctx->hash[SNEFRU_BLOCK_LEN - 1] = 
-    ctx->hashlen & 0xffffffff;
+	mutils_bzero(ctx->hash + SNEFRU256_DIGEST_LEN, 
+		     SNEFRU_BLOCK_SIZE - SNEFRU256_DIGEST_SIZE - sizeof(ctx->hashlen));
+	ctx->hash[SNEFRU_BLOCK_LEN - 2] = ctx->hashlen >> 32;
+	ctx->hash[SNEFRU_BLOCK_LEN - 1] = ctx->hashlen & 0xffffffff;
   
-  snefru(ctx->hash, SNEFRU256_DIGEST_LEN);
+	snefru(ctx->hash, SNEFRU256_DIGEST_LEN);
 }
 
 
 static void snefru_digest(__const struct snefru_ctx *ctx, mutils_word8 *digest, mutils_word32 len)
 {
-  mutils_word32 i;
-  for (i = 0; i < len; i++) {
-    *digest++ = ctx->hash[i] >> 24;
-    *digest++ = (ctx->hash[i] >> 16) & 0xff;
-    *digest++ = (ctx->hash[i] >> 8) & 0xff;
-    *digest++ = ctx->hash[i] & 0xff;
-  }
+	mutils_word32 i;
+
+	for (i = 0; i < len; i++)
+	{
+		*digest++ = ctx->hash[i] >> 24;
+		*digest++ = (ctx->hash[i] >> 16) & 0xff;
+		*digest++ = (ctx->hash[i] >> 8) & 0xff;
+		*digest++ = ctx->hash[i] & 0xff;
+	}
 }
 
 void snefru128_digest(__const struct snefru_ctx *ctx, mutils_word8 *digest)
 {
-  snefru_digest(ctx, digest, SNEFRU128_DIGEST_LEN);
+	snefru_digest(ctx, digest, SNEFRU128_DIGEST_LEN);
 }
 
 void snefru256_digest(__const struct snefru_ctx *ctx, mutils_word8 *digest)
 {
-  snefru_digest(ctx, digest, SNEFRU256_DIGEST_LEN);
+	snefru_digest(ctx, digest, SNEFRU256_DIGEST_LEN);
 }
 
 #endif /* ENABLE_SNEFRU */

@@ -20,7 +20,7 @@
 
 
 /*
-   $Id: stdfns.c,v 1.1 2006/01/09 07:27:05 imipak Exp $ 
+   $Id: stdfns.c,v 1.2 2006/01/10 03:47:18 imipak Exp $ 
  */
 
 #include "libdefs.h"
@@ -32,6 +32,13 @@
  * to validate inputs.
  */
 
+/*
+ * FIXME: This only works if we validate inputs ourselves. At present, we don't
+ * check for overflowing buffers. We also assume ranges are 32-bit, but that may
+ * not be the case for 64-bit files even on 32-bit OS'. Once we have malloc
+ * internals in here, we should switch to pure 64-bit code.
+ */
+
 WIN32DLL_DEFINE
 void *
 mutils_malloc(__const mutils_word32 n)
@@ -40,7 +47,8 @@ mutils_malloc(__const mutils_word32 n)
 
 	if (n == 0)
 	{
-		return(NULL);
+		errno = EINVAL;
+		return(NULL);		
 	}
 
 	ptr = malloc(n);
@@ -48,6 +56,10 @@ mutils_malloc(__const mutils_word32 n)
 	if (ptr != NULL)
 	{
 		mutils_bzero(ptr, n);
+	}
+	else
+	{
+		errno = ENOMEM;
 	}
 
 	return(ptr);
@@ -59,6 +71,7 @@ mutils_free(__const void *ptr)
 {
 	if (ptr == NULL)
 	{
+		errno = EINVAL;  
 		return;
 	}
 	free((void *) ptr);
@@ -66,69 +79,165 @@ mutils_free(__const void *ptr)
 }
 
 WIN32DLL_DEFINE
-void
-mutils_bzero(void *s, __const mutils_word32 n)
+void *
+mutils_calloc(__const mutils_word32 count, __const mutils_word32 n)
 {
-	mutils_word8 *stmp = (mutils_word8 *) s;
-	mutils_word32 i;
+	mutils_word32 total;
+	void *ptr;
 
-	if ((s == NULL) || (n == 0))
+	if ((count == 0) || (n == 0))
 	{
-		return;
+		errno = EINVAL;
+		return(NULL);
 	}
 
-	for (i = 0; i < n; i++, stmp++)
+	total = count * n;
+
+	ptr = mutils_malloc(total);
+
+	return(ptr);
+}
+
+WIN32DLL_DEFINE
+void *
+mutils_realloc(__const void *ptr, __const mutils_word32 n)
+{
+	void *result = NULL;
+
+	if (ptr == NULL)
 	{
-		*stmp = '\0';
+		result = mutils_malloc(n);
 	}
+	else
+	{
+		if (n == 0)
+		{
+			mutils_free(ptr);
+		}
+		else
+		{
+			result = realloc((void *) ptr, n);
+		}
+	}
+
+	return(result);
 }
 
 WIN32DLL_DEFINE
 void
-mutils_memset(void *s, __const mutils_word8 c, const mutils_word32 n)
+mutils_bzero(__const void *s, __const mutils_word32 n)
 {
-	mutils_word8 *stmp = (mutils_word8 *) s;
+	mutils_word8  *stmp;
+	mutils_word32 *ltmp = (mutils_word32 *) s;
 	mutils_word32 i;
+	mutils_word32 words;
+	mutils_word32 remainder;
 
 	if ((s == NULL) || (n == 0))
 	{
 		return;
 	}
 
+	words = n >> 2;
+	remainder = n - (words << 2);
 
-	for (i = 0; i < n; i++, stmp++)
+	for (i = 0; i < words; i++, ltmp++)
+	{
+		*ltmp = 0;
+	}
+
+	stmp = (mutils_word8 *) ltmp;
+
+	for (i = 0; i < remainder; i++, stmp++)
+	{
+		*stmp = 0;
+	}
+
+	return;
+}
+
+WIN32DLL_DEFINE
+void *
+mutils_memset(__const void *s, __const mutils_word8 c, __const mutils_word32 n)
+{
+	mutils_word8 *stmp;
+	mutils_word32 *ltmp = (mutils_word32 *) s;
+	mutils_word32 lump;
+	mutils_word32 i;
+	mutils_word32 words;
+	mutils_word32 remainder;
+
+	if ((s == NULL) || (n == 0))
+	{
+		return;
+	}
+
+	lump = (c << 24) + (c << 16) + (c << 8) + c;
+
+	words = n >> 2;
+	remainder = n - (words << 2);
+
+	for (i = 0; i < words; i++, ltmp++)
+	{
+		*ltmp = lump;
+	}
+
+	stmp = (mutils_word8 *) ltmp;
+
+	for (i = 0; i < remainder; i++, stmp++)
 	{
 		*stmp = c;
 	}
+
+	return((void *) s);
 }
 
 WIN32DLL_DEFINE
-void
-mutils_memcpy(void *dest, __const void *src, const mutils_word32 n)
+void *
+mutils_memcpy(__const void *dest, __const void *src, __const mutils_word32 n)
 {
 	mutils_word8 *ptr1;
 	mutils_word8 *ptr2;
+	mutils_word32 *bigptr1;
+	mutils_word32 *bigptr2;
 	mutils_word32 i;
+	mutils_word32 words;
+	mutils_word32 remainder;
 
 	if ((dest == NULL) || (src == NULL) || (n == 0))
 	{
 		return;
 	}
 
-	ptr1 = (mutils_word8 *) dest;
-	ptr2 = (mutils_word8 *) src;
+	words = n >> 2;
+	remainder = n - (words << 2);
 
-	for (i = 0; i < n; i++, ptr1++, ptr2++)
+	bigptr1 = (mutils_word32 *) dest;
+	bigptr2 = (mutils_word32 *) src;
+
+	for (i = 0; i < words; i ++, bigptr1++, bigptr2++)
+	{
+		*bigptr1 = *bigptr2;
+	}
+
+	ptr1 = (mutils_word8 *) bigptr1;
+	ptr2 = (mutils_word8 *) bigptr2;
+
+	for (i = 0; i < remainder; i++, ptr1++, ptr2++)
 	{
 		*ptr1 = *ptr2;
 	}
+
+	return((void *) dest);
 }
 
 #define MIX32(a) \
-        (((mutils_word32)((mutils_word8 *)(a))[0]) | \
-        (((mutils_word32)((mutils_word8 *)(a))[1]) << 8)| \
-        (((mutils_word32)((mutils_word8 *)(a))[2]) << 16)| \
-        (((mutils_word32)((mutils_word8 *)(a))[3]) << 24))
+	((mutils_word32) \
+		(((a & (mutils_word32) 0x000000ffU) << 24) | \
+		 ((a & (mutils_word32) 0x0000ff00U) << 8) | \
+		 ((a & (mutils_word32) 0x00ff0000U) >> 8) | \
+		 ((a & (mutils_word32) 0xff000000U) >> 24)) \
+	)
 
 /*
    Byte swap a 32bit integer 
@@ -151,24 +260,26 @@ mutils_word32swap(mutils_word32 x)
  */
 WIN32DLL_DEFINE
 mutils_word32 *
-mutils_word32nswap(mutils_word32 *x, mutils_word32 n, mutils_boolean destructive)
+mutils_word32nswap(__const mutils_word32 *x, __const mutils_word32 n, __const mutils_boolean destructive)
 {
 	mutils_word32 loop;
 	mutils_word32 *buffer;
 	mutils_word32 *ptr;
+	mutils_word32 total;
 
 	if (destructive == MUTILS_FALSE)
 	{
-		buffer = mutils_malloc(n * 4);
+		total = n << 2;
+		buffer = mutils_malloc(total);
 		if (buffer == NULL)
 		{
 			return(NULL);
 		}
-		mutils_memcpy(buffer, x, n * 4);
+		mutils_memcpy(buffer, x, total);
 	}
 	else
 	{
-		buffer = x;
+		buffer = (mutils_word32 *) x;
 	}
 
 /*
@@ -187,30 +298,47 @@ mutils_word32nswap(mutils_word32 *x, mutils_word32 n, mutils_boolean destructive
 }
 
 WIN32DLL_DEFINE
-void
-mutils_memmove(void *dest, __const void *src, const mutils_word32 n)
+void *
+mutils_memmove(__const void *dest, __const void *src, __const mutils_word32 n)
 {
 	mutils_word8 *ptr1;
 	mutils_word8 *ptr2;
 	mutils_word32 i;
+	mutils_word32 *bigptr1;
+	mutils_word32 *bigptr2;
+	mutils_word32 words;
+	mutils_word32 remainder;
 
 	if ((dest == NULL) || (src == NULL) || (n == 0))
 	{
 		return;
 	}
 
-	ptr1 = (mutils_word8 *) dest;
-	ptr2 = (mutils_word8 *) src;
+	bigptr1 = (mutils_word32 *) dest;
+	bigptr2 = (mutils_word32 *) src;
 
-	for (i = 0; i < n; i++, ptr1++, ptr2++)
+	words = n >> 2;
+	remainder = n - (words << 2);
+
+	for (i = 0; i < words; i++, bigptr1++, bigptr2++)
+	{
+		*bigptr1 = *bigptr2;
+	}
+
+	ptr1 = (mutils_word8 *) bigptr1;
+	ptr2 = (mutils_word8 *) bigptr2;
+
+	for (i = 0; i < remainder; i++, ptr1++, ptr2++)
 	{
 		*ptr1 = *ptr2;
 	}
+
+	return((void *) dest);
 }
 
 WIN32DLL_DEFINE
 int
-mutils_memcmp(__const void *s1, const void *s2, const mutils_word32 n)
+mutils_memcmp(__const void *s1, __const void *s2, __const mutils_word32 n)
 {
 	if (n == 0)
 	{
@@ -280,13 +408,7 @@ mutils_strdup(__const mutils_word8 *str)
 
 	if (ret != NULL)
 	{
-		ptr1 = (mutils_word8 *) str;
-		ptr2 = ret;
-
-		for (len = mutils_strlen(str); len > 0; len--, ptr1++, ptr2++)
-		{
-			*ptr2 = *ptr1;
-		}
+		mutils_memcpy(ret, str, len);
 	}
 
 	return(ret);
@@ -294,48 +416,87 @@ mutils_strdup(__const mutils_word8 *str)
 
 WIN32DLL_DEFINE
 mutils_word8 *
-mutils_strcat(mutils_word8 *dest, __const mutils_word8 *src)
+mutils_strcat(__const mutils_word8 *dest, __const mutils_word8 *src)
 {
+	mutils_word8 *appendAt;
+	mutils_word32 len;
+
 	if (dest == NULL)
 	{
 		return(NULL);
 	}
-	if (src == NULL)
+	else
 	{
-		return(dest);
+		appendAt = (mutils_word8 *) dest + mutils_strlen(dest);
 	}
-	return((mutils_word8 *) strcat((char *) dest, (char *) src));
+	if (src != NULL)
+	{
+		len = mutils_strlen(src) + 1;
+		mutils_memcpy(appendAt, src, len);
+	}
+	return((mutils_word8 *) dest);
 }
 
 WIN32DLL_DEFINE
 mutils_word8 *
-mutils_strcpy(mutils_word8 *dest, __const mutils_word8 *src)
+mutils_strcpy(__const mutils_word8 *dest, __const mutils_word8 *src)
 {
+	mutils_word32 len;
+
 	if (dest == NULL)
 	{
 		return(NULL);
 	}
-	return((mutils_word8 *) strcpy((char *) dest, (char *) src));
+
+	len = mutils_strlen(src) + 1;
+
+	/*
+	 * FIXME: Non-overwritten data in dest MUST be zeroed out.
+	 * We can't just do a strlen, though, as we can't assume
+	 * dest holds a string.
+	 */
+	
+	mutils_memcpy(dest, src, len);
+	
+	return((mutils_word8 *) dest);
 }
 
 WIN32DLL_DEFINE
 mutils_word8 *
-mutils_strncpy(mutils_word8 *dest, __const mutils_word8 *src, const mutils_word32 n)
+mutils_strncpy(__const mutils_word8 *dest, __const mutils_word8 *src, __const mutils_word32 n)
 {
+	mutils_word32 len;
+	mutils_word8 *ptr;
+
 	if (dest == NULL)
 	{
 		return(NULL);
 	}
+
 	if (n == 0)
 	{
 		return(NULL);
 	}
-	return((mutils_word8 *) strncpy((char *) dest, (char *) src, n));
+
+	len = strlen(src) + 1;
+
+	mutils_memcpy(dest, src, len);
+
+	ptr = (mutils_word8 *) dest + len;
+
+	len = n - len;
+
+	if (len > 0)
+	{
+		mutils_bzero(ptr, len);
+	}
+
+	return((mutils_word8 *) dest);
 }
 
 WIN32DLL_DEFINE
 int
-mutils_strcmp(__const mutils_word8 *src1, const mutils_word8 *src2)
+mutils_strcmp(__const mutils_word8 *src1, __const mutils_word8 *src2)
 {
 	if (src1 == NULL)
 	{
@@ -354,7 +515,7 @@ mutils_strcmp(__const mutils_word8 *src1, const mutils_word8 *src2)
 
 WIN32DLL_DEFINE
 int
-mutils_strncmp(__const mutils_word8 *src1, const mutils_word8 *src2, const mutils_word32 n)
+mutils_strncmp(__const mutils_word8 *src1, __const mutils_word8 *src2, __const mutils_word32 n)
 {
 	if (n == 0)
 	{
@@ -362,7 +523,7 @@ mutils_strncmp(__const mutils_word8 *src1, const mutils_word8 *src2, const mutil
 	}
 	if (src1 == NULL)
 	{
-		if (src2 = NULL)
+		if (src2 == NULL)
 		{
 			return(0);
 		}
@@ -377,44 +538,28 @@ mutils_strncmp(__const mutils_word8 *src1, const mutils_word8 *src2, const mutil
 
 WIN32DLL_DEFINE
 long
-mutils_strtol(__const mutils_word8 *nptr, mutils_word8 **endptr, const mutils_word8 base)
+mutils_strtol(__const mutils_word8 *nptr, mutils_word8 **endptr, const __const mutils_word8 base)
 {
 	return(strtol((char *) nptr, (char **) endptr, (int) base));
 }
 
 WIN32DLL_DEFINE
 mutils_word8
-mutils_val2char(mutils_word8 x)
+mutils_val2char(__const mutils_word8 x)
 {
 	mutils_word8 out;
+	static mutils_word8 *table = "0123456789abcdef";
 
-	switch(x)
-	{
-		case 0x0 : { out = '0'; break; }
-		case 0x1 : { out = '1'; break; }
-		case 0x2 : { out = '2'; break; }
-		case 0x3 : { out = '3'; break; }
-		case 0x4 : { out = '4'; break; }
-		case 0x5 : { out = '5'; break; }
-		case 0x6 : { out = '6'; break; }
-		case 0x7 : { out = '7'; break; }
-		case 0x8 : { out = '8'; break; }
-		case 0x9 : { out = '9'; break; }
-		case 0xa : { out = 'a'; break; }
-		case 0xb : { out = 'b'; break; }
-		case 0xc : { out = 'c'; break; }
-		case 0xd : { out = 'd'; break; }
-		case 0xe : { out = 'e'; break; }
-		case 0xf : { out = 'f'; break; }
-	}
+	out = *(table + x);
+
 	return(out);
 }
 
 WIN32DLL_DEFINE
 mutils_word8 *
-mutils_asciify(mutils_word8 *in, __const mutils_word32 len)
+mutils_asciify(__const mutils_word8 *in, __const mutils_word32 len)
 {
-	mutils_word8 *ptrIn = in;
+	mutils_word8 *ptrIn = (mutils_word8 *) in;
 	mutils_word8 *buffer = mutils_malloc((2 * len) + 1);
 	mutils_word8 *ptrOut = buffer;
 	mutils_word32 loop;
@@ -429,10 +574,10 @@ mutils_asciify(mutils_word8 *in, __const mutils_word32 len)
 
 WIN32DLL_DEFINE
 mutils_boolean
-mutils_thequals(mutils_word8 *text, mutils_word8 *hash, __const mutils_word32 len)
+mutils_thequals(__const mutils_word8 *text, __const mutils_word8 *hash, __const mutils_word32 len)
 {
-	mutils_word8  *ptrText = text;
-	mutils_word8  *ptrHash = hash;
+	mutils_word8  *ptrText = (mutils_word8 *) text;
+	mutils_word8  *ptrHash = (mutils_word8 *) hash;
 	mutils_word32  loop;
 	mutils_word8   temp;
 	mutils_boolean equals;

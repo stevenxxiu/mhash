@@ -25,7 +25,7 @@
  *
  * It's ugly, limited and you should hit :q! now
  *
- * $Id: driver.c,v 1.6 2004/05/02 20:13:34 imipak Exp $
+ * $Id: driver.c,v 1.7 2006/01/08 09:08:29 imipak Exp $
  */
 
 #include <mhash.h>
@@ -69,7 +69,7 @@ int main(int argc, char **argv)
 
 	assert(mhash_get_block_size(hashid) <= MAX_DIGEST_SIZE);
 
-	td = mhash_init(hashid);  /* hash stdin until EOF ist reached */
+	td = mhash_init(hashid);  /* hash stdin until EOF is reached */
 
 	do
 	{

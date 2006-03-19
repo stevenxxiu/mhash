@@ -60,7 +60,7 @@ int main()
 	salt = (mutils_word8 *) mutils_malloc(salt_size);
 	key = (mutils_word8 *) mutils_malloc(keysize);
 
-	if ((salt == NULL) || (key == NULL) || (tmp == NULL))
+	if ((salt == NULL) || (key == NULL))
 	{
 		fprintf(stderr, "KEYGEN-Test (KEYGEN_MCRYPT): Failed\n");
 		fprintf(stderr, "Cannot allocate memory.\n");
@@ -75,6 +75,13 @@ int main()
 	mhash_keygen_ext(KEYGEN_MCRYPT, data, key, keysize, password, passlen);
 
 	tmp = mutils_asciify(key, keysize);
+
+	if (tmp == NULL)
+	{
+		fprintf(stderr, "KEYGEN-Test (KEYGEN_MCRYPT): Failed\n");
+		fprintf(stderr, "Cannot allocate memory (2).\n");
+		return(MUTILS_SYSTEM_RESOURCE_ERROR);
+	}
 
 	result = mutils_strcmp((mutils_word8 *) KEY1, tmp);
 

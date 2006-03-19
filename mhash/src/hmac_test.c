@@ -42,8 +42,6 @@ int main()
 	mutils_word32 j;
 	int result;
 
-	mutils_bzero(tmp, sizeof(tmp));
-
 	passlen=sizeof(KEY1) - 1;
 	password = mutils_malloc(passlen + 1);
 	mutils_memcpy(password, (mutils_word8 *) KEY1, passlen);

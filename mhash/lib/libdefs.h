@@ -18,4 +18,6 @@
 
 #define RAND32 (mutils_word32) ((mutils_word32)rand() << 17 ^ (mutils_word32)rand() << 9 ^ rand())
 
+#define MAX_BLOCK_SIZE 128 
+
 #endif

@@ -106,7 +106,7 @@ md2_update(struct md2_ctx *ctx,
 	   __const mutils_word8 *data,
 	   mutils_word32 length)
 {
-	if (ctx->index)
+	if (ctx->index != 0)
 	{
 		/* Try to fill partial block */
 		mutils_word32 left = MD2_DATA_SIZE - ctx->index;
@@ -130,7 +130,7 @@ md2_update(struct md2_ctx *ctx,
 		data += MD2_DATA_SIZE;
 		length -= MD2_DATA_SIZE;
 	}
-	if ((ctx->index = length))     /* This assignment is intended */
+	if ((ctx->index = length) != 0)     /* This assignment is intended */
 		/* Buffer leftovers */
 		mutils_memcpy(ctx->buffer, data, length);
 }

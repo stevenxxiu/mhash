@@ -19,15 +19,30 @@
 
 
 /*
- * The function of this header is to make sure that all system-specific header files that
- * are required are included. In future, this should be done a little bit more intelligently.
- * For now, this will work just fine.
+ * The function of this header is to make sure that all system-specific headers
+ * files that are required are included. In future, this should be done a
+ * little bit more intelligently.
+ *
+ * For now, we're also defining MAXINT and MININT in here, as there are
+ * reported problems with the way we're trying to find it.
  */
 
 #if !defined(__MINCLUDES_H)
 #define __MINCLUDES_H
 
 #include <mutils/mhash_config.h>
+
+#if defined(HAVE_LIMITS_H)
+#include <limits.h>
+#endif
+
+#if defined(HAVE_ERRNO_H)
+#include <errno.h>
+#endif
+
+#if defined(HAVE_ERROR_H)
+#include <error.h>
+#endif
 
 #if defined(HAVE_STDBOOL_H)
 #include <stdbool.h>
@@ -75,10 +90,26 @@
 
 #if defined(HAVE_INTTYPES_H)
 #include <inttypes.h>
-#else
+#endif
+
 #if defined(HAVE_STDINT_H)
 #include <stdint.h>
 #endif
+
+#if !defined(INT_MAX)
+#define INT_MAX ((int) (~0U>>1))
+#endif
+
+#if !defined(MAXINT)
+#define MAXINT INT_MAX
+#endif
+
+#if defined(INT_MIN)
+#define INT_MIN (-INT_MAX - 1)
+#endif
+
+#if defined(MININT)
+#define MININT INT_MIN
 #endif
 
 #endif

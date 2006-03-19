@@ -2,7 +2,7 @@
 
 Summary: Thread-safe hash library
 Name: @PACKAGE@
-Version: @VERSION@
+Version: @MHASH_VERSION@
 Release: 1
 Copyright: LGPL
 Group: System Environment/Libraries

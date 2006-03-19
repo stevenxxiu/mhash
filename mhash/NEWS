@@ -1,10 +1,13 @@
-mhash ChangeLog ($Date: 2005/01/12 17:37:03 $)
+mhash ChangeLog ($Date: 2005/01/12 21:05:05 $)
 ===============================================================================
 
 People
 
    NM - Nikos Mavroyanopoulos <nmav@hellug.gr>
    SS - Sascha Schumann <sascha@schumann.cx>
+
+Version 0.9.6
+- Bunch of patches and speedups. Credits to be added.
 
 Version 0.9.2
 - Added SNEFRU128, SNEFRU256. Reintroduced MD2.

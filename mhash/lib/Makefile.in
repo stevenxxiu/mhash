@@ -60,16 +60,21 @@ libLTLIBRARIES_INSTALL = $(INSTALL)
 LTLIBRARIES = $(lib_LTLIBRARIES)
 libmhash_la_LIBADD =
 am__objects_1 = mhash.lo stdfns.lo
-am__objects_2 = keygen_hex.lo keygen_mcrypt.lo keygen_asis.lo \
+am__objects_2 = hmac.lo
+am__objects_3 = keygen_hex.lo keygen_mcrypt.lo keygen_asis.lo \
 	keygen.lo keygen_s2k.lo
-am__objects_3 = crc32.lo adler32.lo
-am__objects_4 = md2.lo md4.lo md5.lo ripemd.lo
-am__objects_5 = sha1.lo sha256_sha224.lo sha512_sha384.lo
-am__objects_6 = tiger.lo tiger_sboxes.lo
-am__objects_7 = haval.lo gosthash.lo whirlpool.lo snefru.lo
+am__objects_4 = crc32.lo adler32.lo
+am__objects_5 = md2.lo md4.lo md5.lo ripemd.lo
+am__objects_6 = sha1.lo sha256_sha224.lo sha512_sha384.lo
+am__objects_7 = tiger.lo tiger_sboxes.lo
+am__objects_8 = haval.lo
+am__objects_9 = gosthash.lo
+am__objects_10 = whirlpool.lo
+am__objects_11 = snefru.lo
 am_libmhash_la_OBJECTS = $(am__objects_1) $(am__objects_2) \
 	$(am__objects_3) $(am__objects_4) $(am__objects_5) \
-	$(am__objects_6) $(am__objects_7)
+	$(am__objects_6) $(am__objects_7) $(am__objects_8) \
+	$(am__objects_9) $(am__objects_10) $(am__objects_11)
 libmhash_la_OBJECTS = $(am_libmhash_la_OBJECTS)
 DEFAULT_INCLUDES = -I. -I$(srcdir) -I$(top_builddir)/include/mutils
 depcomp = $(SHELL) $(top_srcdir)/depcomp
@@ -98,6 +103,8 @@ AUTOHEADER = @AUTOHEADER@
 AUTOMAKE = @AUTOMAKE@
 AWK = @AWK@
 CC = @CC@
+CCAS = @CCAS@
+CCASFLAGS = @CCASFLAGS@
 CCDEPMODE = @CCDEPMODE@
 CFLAGS = @CFLAGS@
 CPP = @CPP@
@@ -132,7 +139,6 @@ MAINT = @MAINT@
 MAINTAINER_MODE_FALSE = @MAINTAINER_MODE_FALSE@
 MAINTAINER_MODE_TRUE = @MAINTAINER_MODE_TRUE@
 MAKEINFO = @MAKEINFO@
-MHASH_VERSION = @MHASH_VERSION@
 OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
@@ -200,22 +206,28 @@ target_vendor = @target_vendor@
 AM_CPPFLAGS = -I../include
 lib_LTLIBRARIES = libmhash.la
 FRAMEWORK = mhash.c stdfns.c mhash.h mhash_int.h libdefs.h
-KEYGEN = keygen_hex.c keygen_mcrypt.c keygen_asis.c keygen.c keygen_s2k.c \
-		keygen.h
+MAC = hmac.c
+KEYGEN = keygen_hex.c keygen_mcrypt.c keygen_asis.c keygen.c \
+			keygen_s2k.c keygen.h
 
-CRC = crc32.c mhash_crc32.h adler32.c mhash_adler32.h
+CRC = crc32.c mhash_crc32.h \
+			adler32.c mhash_adler32.h
+
 MD_SERIES = md2.c mhash_md2.h md4.c mhash_md4.h md5.c mhash_md5.h \
-		ripemd.c mhash_ripemd.h
+			ripemd.c mhash_ripemd.h
 
 SHA_SERIES = sha1.c sha256_sha224.c sha512_sha384.c \
-		mhash_sha1.h mhash_sha256_sha224.h mhash_sha512_sha384.h
+			mhash_sha1.h mhash_sha256_sha224.h \
+			mhash_sha512_sha384.h
 
 TIGER = tiger.c tiger_sboxes.c mhash_tiger.h
-MISCELLANEOUS = haval.c mhash_haval.h gosthash.c mhash_gost.h \
-		whirlpool.c mhash_whirlpool.h snefru.c mhash_snefru.h
-
-libmhash_la_SOURCES = $(FRAMEWORK) $(KEYGEN) $(CRC) $(MD_SERIES) \
-			$(SHA_SERIES) $(TIGER) $(MISCELLANEOUS)
+HAVAL = haval.c mhash_haval.h
+GOST = gosthash.c mhash_gost.h
+WHIRLPOOL = whirlpool.c mhash_whirlpool.h
+SNEFRU = snefru.c mhash_snefru.h
+libmhash_la_SOURCES = $(FRAMEWORK) $(MAC) $(KEYGEN) $(CRC) $(MD_SERIES) \
+			$(SHA_SERIES) $(TIGER) $(HAVAL) $(GOST) \
+			$(WHIRLPOOL) $(SNEFRU)
 
 libmhash_la_LDFLAGS = -version-info 2
 EXTRA_DIST = libmhash.sym
@@ -292,6 +304,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/crc32.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/gosthash.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/haval.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/hmac.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/keygen.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/keygen_asis.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/keygen_hex.Plo@am__quote@

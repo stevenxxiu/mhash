@@ -124,27 +124,30 @@ typedef enum __mutils_error_codes
 void *mutils_malloc(__const mutils_word32 n);
 void mutils_free(__const void *ptr);
 
-void mutils_bzero(void *s, __const mutils_word32 n);
+void *mutils_calloc(__const mutils_word32 count, __const mutils_word32 n);
+void *mutils_realloc(__const void *ptr, __const mutils_word32 n);
 
-void mutils_memset(void *dest, __const mutils_word8 c, __const mutils_word32 n);
-void mutils_memcpy(void *dest, __const void *src, __const mutils_word32 n);
-void mutils_memmove(void *dest, __const void *src, __const mutils_word32 n);
+void mutils_bzero(__const void *s, __const mutils_word32 n);
+
+void *mutils_memset(__const void *dest, __const mutils_word8 c, __const mutils_word32 n);
+void *mutils_memcpy(__const void *dest, __const void *src, __const mutils_word32 n);
+void *mutils_memmove(__const void *dest, __const void *src, __const mutils_word32 n);
 int mutils_memcmp(__const void *s1, __const void *s2, __const mutils_word32 n);
 
 mutils_word32 mutils_strlen(__const mutils_word8 *str);
 mutils_word8 *mutils_strdup(__const mutils_word8 *str);
-mutils_word8 *mutils_strcat(mutils_word8 *dest, __const mutils_word8 *src);
-mutils_word8 *mutils_strcpy(mutils_word8 *dest, __const mutils_word8 *src);
-mutils_word8 *mutils_strncpy(mutils_word8 *dest, __const mutils_word8 *src, __const mutils_word32 n);
+mutils_word8 *mutils_strcat(__const mutils_word8 *dest, __const mutils_word8 *src);
+mutils_word8 *mutils_strcpy(__const mutils_word8 *dest, __const mutils_word8 *src);
+mutils_word8 *mutils_strncpy(__const mutils_word8 *dest, __const mutils_word8 *src, __const mutils_word32 n);
 int mutils_strcmp(__const mutils_word8 *src1, __const mutils_word8 *src2);
 int mutils_strncmp(__const mutils_word8 *src1, __const mutils_word8 *src2, __const mutils_word32 n);
 long mutils_strtol(__const mutils_word8 *nptr, mutils_word8 **endptr, __const mutils_word8 base);
 
 mutils_word32 mutils_word32swap(mutils_word32 x);
-mutils_word32 *mutils_word32nswap(mutils_word32 *x, mutils_word32 n, mutils_boolean destructive);
+mutils_word32 *mutils_word32nswap(__const mutils_word32 *x, __const mutils_word32 n, __const mutils_boolean destructive);
 
-mutils_word8 *mutils_asciify(mutils_word8 *in, __const mutils_word32 len);
-mutils_boolean mutils_thequals(mutils_word8 *text, mutils_word8 *hash, __const mutils_word32 len);
+mutils_word8 *mutils_asciify(__const mutils_word8 *in, __const mutils_word32 len);
+mutils_boolean mutils_thequals(__const mutils_word8 *text, __const mutils_word8 *hash, __const mutils_word32 len);
 
 #endif
 
