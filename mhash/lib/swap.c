@@ -24,8 +24,8 @@
 /*
    Byte swap a 32bit integer 
  */
-word32
-mhash_byteswap(word32 x)
+mutils_word32
+mhash_byteswap(mutils_word32 x)
 {
 	register char *cp, tmp;
 

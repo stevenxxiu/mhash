@@ -1,9 +1,9 @@
 /*
  *    Copyright (C) 2005 Jonathan Day, Nikos Mavroyanopoulos
  *
- *    This library is free software; you can redistribute it and/or modify it 
- *    under the terms of the GNU Library General Public License as published 
- *    by the Free Software Foundation; either version 2 of the License, or 
+ *    This library is free software; you can redistribute it and/or modify it
+ *    under the terms of the GNU Library General Public License as published
+ *    by the Free Software Foundation; either version 2 of the License, or
  *    (at your option) any later version.
  *
  *    This library is distributed in the hope that it will be useful,
@@ -25,7 +25,13 @@
 
 #if defined(const)
 #define __const const
-#endif 
+#endif
+
+#ifdef WIN32
+# define WIN32DLL_DEFINE __declspec( dllexport)
+#else
+# define WIN32DLL_DEFINE
+#endif
 
 /* FIXME: We're assuming we've a standard integer types header and that it has been included
  * correctly.
@@ -121,33 +127,33 @@ typedef enum __mutils_error_codes
 
 #include <mutils/mglobal.h>
 
-void *mutils_malloc(__const mutils_word32 n);
-void mutils_free(__const void *ptr);
+WIN32DLL_DEFINE void *mutils_malloc(__const mutils_word32 n);
+WIN32DLL_DEFINE void mutils_free(__const void *ptr);
 
-void *mutils_calloc(__const mutils_word32 count, __const mutils_word32 n);
-void *mutils_realloc(__const void *ptr, __const mutils_word32 n);
+WIN32DLL_DEFINE void *mutils_calloc(__const mutils_word32 count, __const mutils_word32 n);
+WIN32DLL_DEFINE void *mutils_realloc(__const void *ptr, __const mutils_word32 n);
 
-void mutils_bzero(__const void *s, __const mutils_word32 n);
+WIN32DLL_DEFINE void mutils_bzero(__const void *s, __const mutils_word32 n);
 
-void *mutils_memset(__const void *dest, __const mutils_word8 c, __const mutils_word32 n);
-void *mutils_memcpy(__const void *dest, __const void *src, __const mutils_word32 n);
-void *mutils_memmove(__const void *dest, __const void *src, __const mutils_word32 n);
-int mutils_memcmp(__const void *s1, __const void *s2, __const mutils_word32 n);
+WIN32DLL_DEFINE void *mutils_memset(__const void *dest, __const mutils_word8 c, __const mutils_word32 n);
+WIN32DLL_DEFINE void *mutils_memcpy(__const void *dest, __const void *src, __const mutils_word32 n);
+WIN32DLL_DEFINE void *mutils_memmove(__const void *dest, __const void *src, __const mutils_word32 n);
+WIN32DLL_DEFINE int mutils_memcmp(__const void *s1, __const void *s2, __const mutils_word32 n);
 
-mutils_word32 mutils_strlen(__const mutils_word8 *str);
-mutils_word8 *mutils_strdup(__const mutils_word8 *str);
-mutils_word8 *mutils_strcat(__const mutils_word8 *dest, __const mutils_word8 *src);
-mutils_word8 *mutils_strcpy(__const mutils_word8 *dest, __const mutils_word8 *src);
-mutils_word8 *mutils_strncpy(__const mutils_word8 *dest, __const mutils_word8 *src, __const mutils_word32 n);
-int mutils_strcmp(__const mutils_word8 *src1, __const mutils_word8 *src2);
-int mutils_strncmp(__const mutils_word8 *src1, __const mutils_word8 *src2, __const mutils_word32 n);
-long mutils_strtol(__const mutils_word8 *nptr, mutils_word8 **endptr, __const mutils_word8 base);
+WIN32DLL_DEFINE mutils_word32 mutils_strlen(__const mutils_word8 *str);
+WIN32DLL_DEFINE mutils_word8 *mutils_strdup(__const mutils_word8 *str);
+WIN32DLL_DEFINE mutils_word8 *mutils_strcat(__const mutils_word8 *dest, __const mutils_word8 *src);
+WIN32DLL_DEFINE mutils_word8 *mutils_strcpy(__const mutils_word8 *dest, __const mutils_word8 *src);
+WIN32DLL_DEFINE mutils_word8 *mutils_strncpy(__const mutils_word8 *dest, __const mutils_word8 *src, __const mutils_word32 n);
+WIN32DLL_DEFINE int mutils_strcmp(__const mutils_word8 *src1, __const mutils_word8 *src2);
+WIN32DLL_DEFINE int mutils_strncmp(__const mutils_word8 *src1, __const mutils_word8 *src2, __const mutils_word32 n);
+WIN32DLL_DEFINE long mutils_strtol(__const mutils_word8 *nptr, mutils_word8 **endptr, __const mutils_word8 base);
 
-mutils_word32 mutils_word32swap(mutils_word32 x);
-mutils_word32 *mutils_word32nswap(__const mutils_word32 *x, __const mutils_word32 n, __const mutils_boolean destructive);
+WIN32DLL_DEFINE mutils_word32 mutils_word32swap(mutils_word32 x);
+WIN32DLL_DEFINE mutils_word32 *mutils_word32nswap(__const mutils_word32 *x, __const mutils_word32 n, __const mutils_boolean destructive);
 
-mutils_word8 *mutils_asciify(__const mutils_word8 *in, __const mutils_word32 len);
-mutils_boolean mutils_thequals(__const mutils_word8 *text, __const mutils_word8 *hash, __const mutils_word32 len);
+WIN32DLL_DEFINE mutils_word8 *mutils_asciify(__const mutils_word8 *in, __const mutils_word32 len);
+WIN32DLL_DEFINE mutils_boolean mutils_thequals(__const mutils_word8 *text, __const mutils_word8 *hash, __const mutils_word32 len);
 
 #endif
 
