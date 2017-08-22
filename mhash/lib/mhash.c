@@ -358,7 +358,8 @@ MHASH mhash_init_int(__const hashid type)
 
 /* plaintext should be a multiple of the algorithm's block size */
 
-mutils_boolean mhash(MHASH td, __const void *plaintext, mutils_word32 size)
+WIN32DLL_DEFINE
+	mutils_boolean mhash(MHASH td, __const void *plaintext, mutils_word32 size)
 {
 	
 	if (td->hash_func!=NULL)
